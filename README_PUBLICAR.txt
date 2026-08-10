@@ -1,17 +1,18 @@
-Family Finance - Etapa 2
+FAMILY FINANCE - PACOTE CORRIGIDO
 
-Arquivos gerados:
+Publique todos os arquivos e pastas no GitHub Pages:
+
 - index.html
+- sw.js
 - css/styles.css
 - js/app.js
-- sw.js
+- manifest.json e icons/ se já existirem no seu repositório
 
-Como publicar no GitHub Pages:
-1. Envie/substitua o index.html na raiz do repositório.
-2. Envie a pasta css inteira.
-3. Envie a pasta js inteira.
-4. Substitua o sw.js na raiz.
-5. Mantenha os arquivos que já existem: manifest.json e pasta icons/.
+IMPORTANTE:
+Não teste login abrindo o arquivo baixado direto pelo celular, pois o navegador abre como content:// ou file://.
+Para login, Supabase e sincronização em tempo real funcionarem, abra pelo link HTTPS do GitHub Pages.
 
-Importante:
-Depois de publicar, se o celular continuar abrindo versão antiga, limpe o cache/PWA ou abra o site em aba anônima para forçar atualização do service worker.
+Correção desta versão:
+- mensagem clara quando o app for aberto como arquivo local/Downloads;
+- tratamento melhor para erro TypeError: Failed to fetch no login/cadastro;
+- service worker com cache atualizado.

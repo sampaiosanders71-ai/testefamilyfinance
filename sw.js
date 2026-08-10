@@ -1,4 +1,4 @@
-const CACHE_NAME = 'family-finance-split-v2-2026-08-09';
+const CACHE_NAME = 'family-finance-split-v3-login-fix-2026-08-10';
 const CORE_ASSETS = [
   './',
   './index.html',

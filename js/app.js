@@ -41,10 +41,27 @@ function isChartReady() {
 function isPDFReady() {
     return !!(window.jspdf && window.jspdf.jsPDF);
 }
+
+function isLocalFileContext() {
+    const proto = window.location && window.location.protocol ? window.location.protocol : '';
+    return proto === 'file:' || proto === 'content:' || window.location.origin === 'null';
+}
+function isFetchFailure(error) {
+    const msg = String((error && error.message) || error || '').toLowerCase();
+    return msg.includes('failed to fetch') || msg.includes('networkerror') || msg.includes('network request failed') || msg.includes('load failed');
+}
+function connectionErrorMessage(action = 'entrar') {
+    if (isLocalFileContext()) {
+        return `Não foi possível ${action}. Você abriu o app como arquivo local/Downloads. Para conectar ao Supabase, abra pelo link publicado no GitHub Pages/HTTPS, não pelo arquivo baixado.`;
+    }
+    return `Não foi possível ${action}. Verifique a internet e tente novamente. Se continuar, recarregue o app pelo link publicado.`;
+}
+
 function renderDependencyWarning() {
     const el = document.getElementById('dependency-warning');
     if (!el) return;
     const missing = [];
+    if (isLocalFileContext()) missing.push('ambiente local');
     if (!sb) missing.push('servidor');
     if (!isChartReady()) missing.push('gráficos');
     if (!isPDFReady()) missing.push('PDF');
@@ -55,7 +72,7 @@ function renderDependencyWarning() {
         el.innerHTML = '';
         return;
     }
-    const detail = invoiceStatusSyncMessage || `Algumas funções podem ficar indisponíveis agora: ${missing.join(', ')}. Tente recarregar quando a internet estabilizar.`;
+    const detail = isLocalFileContext() ? 'Você está abrindo o app como arquivo local/Downloads. Para login e sincronização em tempo real, use o link publicado no GitHub Pages/HTTPS.' : (invoiceStatusSyncMessage || `Algumas funções podem ficar indisponíveis agora: ${missing.join(', ')}. Tente recarregar quando a internet estabilizar.`);
     el.classList.remove('hidden');
     el.innerHTML = `<i data-lucide="wifi-off"></i><span><b>Conexão limitada</b><span>${escapeHtml(detail)}</span></span>`;
     safeCreateIcons();
@@ -1123,6 +1140,7 @@ async function handleAuth() {
             });
             if (error) {
                 if (error.message.includes('USERNAME_TAKEN')) { await showAlert("Usuário já existe. Escolha outro."); }
+                else if (isFetchFailure(error)) { await showAlert(connectionErrorMessage('cadastrar')); }
                 else { await showAlert("Erro ao cadastrar: " + error.message); }
                 return;
             }
@@ -1140,7 +1158,7 @@ async function handleAuth() {
             const { data, error } = await sb.rpc('login_user', {
                 p_username: u, p_password: p
             });
-            if (error) { await showAlert("Erro ao entrar: " + error.message); return; }
+            if (error) { await showAlert(isFetchFailure(error) ? connectionErrorMessage('entrar') : ("Erro ao entrar: " + error.message)); return; }
             if (!data || data.length === 0) { await showAlert("Usuário ou senha incorretos."); return; }
             // data[0] = { id, display_name }
             currentUser = u;
@@ -1151,7 +1169,7 @@ async function handleAuth() {
             entrarNoApp();
         }
     } catch (e) {
-        await showAlert("Erro inesperado: " + e.message);
+        await showAlert(isFetchFailure(e) ? connectionErrorMessage('entrar') : ("Erro inesperado: " + e.message));
     } finally {
         btn.disabled = false; btn.textContent = btnTxt;
     }
