@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Family Finance</title>
+
+    <!-- Estrutura separada: css/styles.css e js/app.js -->
+
+    <!-- PWA: manifest e tema -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#FF7A00">
+
+    <!-- PWA: configuração iOS (iPhone/iPad) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Finance">
+    <link rel="apple-touch-icon" href="icons/icon-180.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="icons/icon-167.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png">
+
+    <!-- PWA: ícone padrão -->
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <script>
+        // Aplica o tema salvo IMEDIATAMENTE (evita piscar no tema errado ao abrir)
+        (function() {
+            var t = localStorage.getItem('ff_theme') || 'light';
+            if (t !== 'light') document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+    <div id="monitoring-mode" class="monitoring-banner hidden">
+        👁️ MONITORANDO: <span id="monitored-user"></span> 
+        <button onclick="exitMonitoring()" style="background: white; border: none; color: black; padding: 4px 12px; border-radius: 999px; margin-left: 10px; cursor: pointer; font-weight: 800; font-size: 0.7rem;">SAIR</button>
+    </div>
+    <div id="loading-screen" class="loading-screen hidden">
+        <img id="loading-logo" alt="">
+        <div class="loading-spinner"></div>
+        <div class="loading-msg">Carregando dados...</div>
+    </div>
+    <div id="action-loading" class="action-loading hidden" aria-live="polite" aria-busy="true">
+        <div class="action-loading-card">
+            <span class="action-loading-spinner" aria-hidden="true"></span>
+            <span id="action-loading-text">Salvando...</span>
+        </div>
+    </div>
+    <div id="view-auth" class="auth-screen" data-enter-form="true">
+        <img class="auth-watermark" id="auth-watermark" alt="">
+        <div class="auth-card">
+            <img id="auth-logo" alt="Family Finance" style="width: 110px; height: auto; margin: 0 auto 1.2rem; display: block;">
+            <h1 style="font-weight: 700; font-size: 2.5rem; margin-bottom: 0.3rem; letter-spacing: -1px;"><span style="color: var(--black);">family</span> <span style="color: var(--orange);">finance</span></h1>
+            <p style="color: var(--text-muted); font-size: 0.72rem; font-weight: 600; letter-spacing: 3px; margin-bottom: 2.5rem;">ORGANIZE. PLANEJE. REALIZE.</p>
+            <h2 style="font-weight: 700; font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--black);" id="auth-welcome">Bem-vindo de volta!</h2>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 2.5rem; line-height: 1.45;" id="auth-subtitle">Faça login para continuar cuidando do futuro da sua família.</p>
+            <div class="input-icon-wrap">
+                <i data-lucide="user" class="field-icon"></i>
+                <input type="text" id="auth-user" placeholder="Usuário" autocomplete="username" autocapitalize="none">
+            </div>
+            <div class="input-icon-wrap">
+                <i data-lucide="lock" class="field-icon"></i>
+                <input type="password" id="auth-pass" placeholder="Senha" autocomplete="current-password">
+                <button type="button" class="pass-eye" id="pass-eye-btn" onclick="toggleAuthPassword()" aria-label="Mostrar senha"><i data-lucide="eye"></i></button>
+            </div>
+            <button class="btn-primary" id="auth-btn" data-enter-submit="true" onclick="handleAuth()">Entrar</button>
+            <p class="auth-toggle" onclick="toggleAuthMode()"><span id="auth-toggle-text">Não tem conta?</span> <b id="auth-toggle-link">Cadastre-se</b></p>
+            <div class="auth-security">
+                <i data-lucide="shield-check" class="sec-icon" style="width:34px; height:34px;"></i>
+                <div>
+                    <div class="sec-title">Seus dados estão protegidos</div>
+                    <div class="sec-desc">Utilizamos criptografia para manter<br>suas informações seguras.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar" id="sidebar" role="navigation" aria-label="Menu lateral de configurações">
+        <div class="sidebar-top">
+            <div>
+                <span class="sidebar-kicker">Central do app</span>
+                <h2>Ajustes</h2>
+                <p>Perfil, aparência, família, dados e suporte em um só lugar.</p>
+            </div>
+            <button type="button" class="sidebar-close" onclick="toggleSidebar()" aria-label="Fechar menu"><i data-lucide="x"></i></button>
+        </div>
+
+
+        <!-- PERFIL E SEGURANÇA -->
+        <section class="sidebar-module" data-enter-form="true">
+            <div class="sidebar-module-head">
+                <span class="sidebar-module-icon"><i data-lucide="user-circle"></i></span>
+                <div>
+                    <h3>Perfil e segurança</h3>
+                    <p>Nome de exibição e senha da conta.</p>
+                </div>
+            </div>
+            <div class="sidebar-field-group">
+                <label for="pref-display-name">Nome de exibição</label>
+                <input type="text" id="pref-display-name" placeholder="Nome Exibição" autocomplete="name">
+                <button type="button" class="btn-primary sidebar-save-btn" data-enter-submit="true" onclick="saveProfile()"><i data-lucide="save"></i> Salvar nome</button>
+            </div>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-field-group">
+                <label for="pass-current">Trocar senha</label>
+                <input type="password" id="pass-current" placeholder="Senha atual" autocomplete="current-password">
+                <input type="password" id="pass-new" placeholder="Nova senha" autocomplete="new-password">
+                <input type="password" id="pass-confirm" placeholder="Confirmar nova senha" autocomplete="new-password">
+                <button type="button" class="btn-primary sidebar-save-btn" data-enter-submit="true" onclick="changePassword()"><i data-lucide="lock-keyhole"></i> Atualizar senha</button>
+            </div>
+        </section>
+
+        <!-- APARÊNCIA E NAVEGAÇÃO -->
+        <section class="sidebar-module">
+            <div class="sidebar-module-head">
+                <span class="sidebar-module-icon"><i data-lucide="palette"></i></span>
+                <div>
+                    <h3>Aparência e navegação</h3>
+                    <p>Tema visual e abas exibidas no rodapé.</p>
+                </div>
+            </div>
+            <div class="sidebar-field-group">
+                <label>Tema</label>
+                <div class="theme-selector sidebar-theme-selector">
+                    <button type="button" class="theme-opt" id="theme-opt-light" onclick="setTheme('light')"><i data-lucide="sun"></i> Claro</button>
+                    <button type="button" class="theme-opt" id="theme-opt-dark" onclick="setTheme('dark')"><i data-lucide="moon"></i> Escuro</button>
+                </div>
+            </div>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-field-group">
+                <div class="sidebar-subtitle-row">
+                    <label>Visibilidade das abas</label>
+                    <span>Rodapé</span>
+                </div>
+                <div id="visibility-controls" class="sidebar-toggle-list"></div>
+            </div>
+        </section>
+
+        <!-- FAMÍLIA -->
+        <section class="sidebar-module">
+            <div class="sidebar-module-head">
+                <span class="sidebar-module-icon"><i data-lucide="users"></i></span>
+                <div>
+                    <h3>Família</h3>
+                    <p>Convites, permissões e monitoramento familiar.</p>
+                </div>
+            </div>
+            <div class="sidebar-action-list">
+                <button type="button" class="sidebar-btn" onclick="openFamilyFromSidebar()"><i data-lucide="users"></i> Monitoramento familiar</button>
+            </div>
+        </section>
+
+        <!-- DADOS E ORGANIZAÇÃO -->
+        <section class="sidebar-module">
+            <div class="sidebar-module-head">
+                <span class="sidebar-module-icon"><i data-lucide="database"></i></span>
+                <div>
+                    <h3>Dados e organização</h3>
+                    <p>Categorias, exportação e backup.</p>
+                </div>
+            </div>
+            <div class="sidebar-action-list">
+                <button type="button" class="sidebar-btn" onclick="openCatManager()"><i data-lucide="tags"></i> Gerenciar categorias</button>
+                <button type="button" class="sidebar-btn" onclick="exportToCSV()"><i data-lucide="file-spreadsheet"></i> Exportar CSV</button>
+                <button type="button" class="sidebar-btn" onclick="exportBackup()"><i data-lucide="file-json"></i> Exportar dados (JSON)</button>
+            </div>
+        </section>
+
+        <!-- SUPORTE -->
+        <section class="sidebar-module">
+            <div class="sidebar-module-head">
+                <span class="sidebar-module-icon"><i data-lucide="help-circle"></i></span>
+                <div>
+                    <h3>Suporte</h3>
+                    <p>Reveja o tutorial de uso do aplicativo.</p>
+                </div>
+            </div>
+            <div class="sidebar-action-list">
+                <button type="button" class="sidebar-btn" onclick="toggleSidebar(); openTutorial();"><i data-lucide="book-open"></i> Ver tutorial novamente</button>
+            </div>
+        </section>
+
+        <div class="sidebar-logout-area">
+            <button type="button" class="sidebar-btn danger sidebar-logout-btn" onclick="handleLogout()"><i data-lucide="log-out"></i> Sair da conta</button>
+        </div>
+    </div>
+    <div id="modal-noti" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="notification-title">
+        <div class="modal-content notification-modal-content">
+            <div class="notification-header">
+                <div>
+                    <h3 id="notification-title" class="notification-title"><i data-lucide="bell-ring"></i> Notificações</h3>
+                    <p class="notification-subtitle">Alertas importantes sobre seu mês.</p>
+                </div>
+                <button type="button" class="notification-close" onclick="closeNotifications()" aria-label="Fechar notificações"><i data-lucide="x"></i></button>
+            </div>
+            <div class="notification-toolbar">
+                <span id="noti-count-text" class="notification-counter">Carregando...</span>
+                <button type="button" id="noti-read-all" class="notification-read-all" onclick="markAllNotificationsRead()">Marcar lidas</button>
+            </div>
+            <div id="noti-list" class="notification-list" aria-live="polite"></div>
+        </div>
+    </div>
+    <div id="modal-annual" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+                <h3 style="font-size:1rem; font-weight:800;"><span id="annual-card-name"></span>: Evolução</h3>
+                <button onclick="closeAnnualModal()" style="background:none; border:none;"><i data-lucide="x"></i></button>
+            </div>
+            <div style="height:280px;"><canvas id="chartAnnual"></canvas></div>
+        </div>
+    </div>
+    <div id="modal-dre" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                <h3 style="font-size:1rem; font-weight:800; display:flex; align-items:center; gap:6px;">
+                    DRE — <span id="dre-month-label"></span>
+                    <button onclick="toggleDREHelp()" style="background:none; border:none; cursor:pointer; color:var(--orange); display:inline-flex; align-items:center;" aria-label="O que é DRE?"><i data-lucide="help-circle" style="width:18px; height:18px;"></i></button>
+                </h3>
+                <button onclick="closeDRE()" style="background:none; border:none;"><i data-lucide="x"></i></button>
+            </div>
+            <p style="font-size:0.7rem; color:var(--text-muted); margin-bottom:1.2rem;">Demonstração do Resultado do Exercício</p>
+            <div id="dre-help" class="hidden" style="background:#EEF2FF; border-radius:12px; padding:14px; margin-bottom:1.2rem; font-size:0.8rem; line-height:1.5; color:#3730A3;">
+                <b style="display:block; margin-bottom:6px;">O que é uma DRE?</b>
+                A DRE (Demonstração do Resultado do Exercício) é um relatório contábil que mostra, de forma organizada, <b>quanto você ganhou, quanto gastou e o que sobrou</b> num período.
+                <br><br>
+                <b style="display:block; margin-bottom:6px;">Como funciona para você?</b>
+                Ela parte da sua <b>receita</b> (salário, rendas), subtrai suas <b>despesas</b> (contas, cartão, gastos do dia a dia) e chega ao <b>resultado líquido</b> — o que de fato sobrou ou faltou no mês.
+                <br><br>
+                <b style="display:block; margin-bottom:6px;">Como ajuda na organização?</b>
+                Vendo a DRE todo mês, você identifica <b>onde o dinheiro está indo</b>, quais categorias pesam mais, e se você está no azul ou no vermelho. A <b>margem líquida</b> (o % que sobra da sua renda) é um ótimo termômetro: quanto maior, mais saudável está sua vida financeira.
+            </div>
+            <div id="dre-content"></div>
+        </div>
+    </div>
+    <div id="modal-cat" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                <h3 style="font-size:1rem; font-weight:800;">Gerenciar Categorias</h3>
+                <button onclick="closeCatManager()" style="background:none; border:none;"><i data-lucide="x"></i></button>
+            </div>
+            <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:1rem;">Adicione categorias próprias. As categorias padrão não podem ser removidas.</p>
+            <div style="display:flex; gap:8px; margin-bottom:1rem;">
+                <input type="text" id="new-cat-name" placeholder="Nova categoria" data-enter-submit="true" style="margin-bottom:0;">
+                <button class="btn-primary" style="width:auto; padding:0 18px;" onclick="addCategory()">Adicionar</button>
+            </div>
+            <div id="cat-list"></div>
+        </div>
+    </div>
+    <div id="modal-meta-add" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                <h3 style="font-size:1rem; font-weight:800;">Adicionar à Meta</h3>
+                <button onclick="closeAddToMeta()" style="background:none; border:none;"><i data-lucide="x"></i></button>
+            </div>
+            <input type="hidden" id="meta-add-id">
+            <p id="meta-add-info" style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:12px;"></p>
+            <input type="number" id="meta-add-val" placeholder="Quanto guardar agora? (R$)" data-enter-submit="true">
+            <button class="btn-primary" data-enter-submit="true" onclick="submitAddToMeta()">Guardar</button>
+        </div>
+    </div>
+    <div id="modal-meta-edit" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                <h3 style="font-size:1rem; font-weight:800;">Editar Meta</h3>
+                <button onclick="closeEditMeta()" style="background:none; border:none;"><i data-lucide="x"></i></button>
+            </div>
+            <input type="hidden" id="meta-edit-id">
+            <input type="text" id="meta-edit-nome" placeholder="Nome da meta">
+            <input type="number" id="meta-edit-total" placeholder="Valor total (R$)">
+            <input type="number" id="meta-edit-entrada" placeholder="Valor já poupado (R$)">
+            <button class="btn-primary" onclick="submitEditMeta()">Salvar Alterações</button>
+        </div>
+    </div>
+    <div id="modal-history" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                <h3 id="history-title" style="font-size:1rem; font-weight:800;">Histórico</h3>
+                <button onclick="closeHistory()" style="background:none; border:none;"><i data-lucide="x"></i></button>
+            </div>
+            <div class="history-filter-grid">
+                <select id="hist-filter-kind" onchange="renderHistoryModal()" aria-label="Filtrar por tipo"></select>
+                <select id="hist-filter-month" onchange="renderHistoryModal()" aria-label="Filtrar por mês"></select>
+                <select id="hist-filter-cat" onchange="renderHistoryModal()" aria-label="Filtrar por categoria"></select>
+                <select id="hist-filter-sort" onchange="renderHistoryModal()" aria-label="Ordenar histórico">
+                    <option value="date-desc">Mais recentes</option>
+                    <option value="date-asc">Mais antigos</option>
+                    <option value="value-desc">Maior valor</option>
+                    <option value="value-asc">Menor valor</option>
+                    <option value="desc-asc">Descrição A-Z</option>
+                </select>
+                <input type="date" id="hist-filter-start" onchange="renderHistoryModal()" aria-label="Data inicial">
+                <input type="date" id="hist-filter-end" onchange="renderHistoryModal()" aria-label="Data final">
+                <input class="history-filter-full" type="search" id="hist-filter-search" placeholder="Buscar por descrição, categoria ou cartão" oninput="renderHistoryModal()" aria-label="Buscar no histórico">
+            </div>
+            <div id="history-summary" class="history-summary hidden"></div>
+            <div id="history-source-warning" class="history-warning hidden"></div>
+            <div id="history-modal-list"></div>
+        </div>
+    </div>
+    <div id="modal-edit" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1.5rem;">
+                <h3 id="edit-modal-title">Editar Lançamento</h3>
+                <button onclick="closeEditModal()" style="background:none; border:none;"><i data-lucide="x"></i></button>
+            </div>
+            <div id="edit-form">
+                <small id="edit-recurring-warning" style="display: none; color: var(--orange); font-weight: 600; margin-bottom: 12px; background: var(--orange-soft); padding: 6px 12px; border-radius: 8px;">Esta é uma transação recorrente. Editar afeta apenas esta ocorrência.</small>
+                <input type="hidden" id="edit-type">
+                <input type="hidden" id="edit-id">
+                <input type="hidden" id="edit-card-id">
+                <div id="edit-debit-fields">
+                    <label style="font-size:0.8rem; font-weight:700;">Tipo</label>
+                    <select id="edit-t-type" onchange="populateEditCategories()"><option value="despesa">Despesa</option><option value="receita">Receita</option></select>
+                </div>
+                <label style="font-size:0.8rem; font-weight:700;">Descrição</label>
+                <input type="text" id="edit-desc" placeholder="Descrição">
+                <label style="font-size:0.8rem; font-weight:700;">Valor</label>
+                <input type="number" id="edit-val" placeholder="Valor">
+                <label style="font-size:0.8rem; font-weight:700;">Categoria</label>
+                <select id="edit-cat"></select>
+                <label style="font-size:0.8rem; font-weight:700;">Data</label>
+                <input type="date" id="edit-date">
+                <button class="btn-primary" style="margin-top:10px;" onclick="saveEdit()">Salvar Alterações</button>
+            </div>
+        </div>
+    </div>
+    <div id="modal-alert" class="modal-overlay hidden" style="z-index: 6000;" role="dialog" aria-modal="true" aria-labelledby="alert-message">
+        <div class="modal-content alert-modal">
+            <div id="alert-icon" class="alert-modal-icon info"><i data-lucide="info"></i></div>
+            <p id="alert-message" style="margin-bottom: 20px; font-weight: 700; font-size: 1rem; color: var(--black); line-height:1.45;"></p>
+            <button type="button" class="btn-primary" onclick="resolveAlert()">OK</button>
+        </div>
+    </div>
+    <div id="modal-confirm" class="modal-overlay hidden" style="z-index: 6000;">
+        <div class="modal-content" style="max-width: 360px; text-align: center;">
+            <div id="confirm-icon" class="confirm-icon hidden"><i data-lucide="alert-triangle"></i></div>
+            <p id="confirm-message" style="margin-bottom: 20px; font-weight: 600; font-size: 1.02rem; color: var(--black); line-height:1.35;"></p>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button id="confirm-cancel" class="btn-primary" onclick="resolveConfirm(false)" style="background: #E5E7EB; color: var(--black);">Cancelar</button>
+                <button id="confirm-ok" class="btn-primary" onclick="resolveConfirm(true)">Confirmar</button>
+            </div>
+        </div>
+    </div>
+    <div id="modal-recurring-delete" class="modal-overlay hidden" style="z-index: 6000;">
+        <div class="modal-content" style="max-width: 380px; text-align: center;">
+            <p id="recurring-delete-message" style="margin-bottom: 20px; font-weight: 600; font-size: 1.1rem; color: var(--black);"></p>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button class="btn-primary" onclick="resolveRecurringDelete('future')">Esta e futuras ocorrências</button>
+                <button class="btn-primary" onclick="resolveRecurringDelete('one')">Apenas esta ocorrência</button>
+                <button class="btn-primary" onclick="resolveRecurringDelete('cancel')" style="background: var(--text-secondary); color: white;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    <div id="modal-convert-recurring" class="modal-overlay hidden" style="z-index: 6000;">
+        <div class="modal-content" style="max-width: 380px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1.5rem;">
+                <h3 style="font-weight: 800; font-size: 1.1rem;">Converter em Recorrente</h3>
+                <button onclick="closeConvertModal()" style="background:none; border:none;"><i data-lucide="x"></i></button>
+            </div>
+            <input type="hidden" id="convert-id">
+            <p id="convert-info-text" style="font-size:0.85rem; margin-bottom: 1rem; color: #444;"></p>
+            <label style="font-size:0.8rem; font-weight:700;">Quantos meses no total? (de 2 a 60)</label>
+            <input type="number" id="convert-months" min="2" max="60" value="12" style="margin-top: 5px; margin-bottom: 0.8rem;">
+            <p style="font-size:0.7rem; color:var(--text-secondary); margin-bottom:1.5rem;">A transação original receberá vínculo recorrente e novas ocorrências mensais serão criadas.</p>
+            <button class="btn-primary" onclick="submitConvert()">Gerar Série Recorrente</button>
+        </div>
+    </div>
+    <header id="main-header" class="hidden">
+        <div id="header-brand" style="display: flex; align-items: center; gap: 8px;"></div>
+        <div class="header-actions">
+            <button class="icon-btn" onclick="openNotifications()" aria-label="Abrir alertas">
+                <i data-lucide="bell"></i><div id="noti-dot" class="noti-badge hidden" aria-label="Notificações não lidas">0</div>
+            </button>
+            <button class="icon-btn" onclick="toggleSidebar()" aria-label="Abrir ajustes"><i data-lucide="menu"></i></button>
+        </div>
+    </header>
+    <main id="app-main" class="container hidden">
+        <div id="dependency-warning" class="dependency-warning hidden"></div>
+        <div id="smart-tips" class="tip-bar hidden"><i data-lucide="lightbulb" style="color:var(--orange);"></i><span id="tip-text"></span></div>
+        <div id="view-dash" class="tab-content">
+            <div id="greeting-card">
+                <div id="greeting-content"></div>
+            </div>
+            <div id="invoice-reminders-container"></div>
+            <!-- Navegação de mês -->
+            <div class="dash-month-card" aria-label="Selecionar mês do dashboard">
+                <div class="dash-month-nav">
+                    <button class="dash-icon-btn" onclick="prevMonth()" aria-label="Mês anterior"><i data-lucide="chevron-left"></i></button>
+                    <div style="text-align:center;">
+                        <p class="dash-month-cap">Mês de referência</p>
+                        <h2 class="dash-month-label" id="month-selector-label"></h2>
+                    </div>
+                    <button class="dash-icon-btn" onclick="nextMonth()" aria-label="Próximo mês"><i data-lucide="chevron-right"></i></button>
+                    <button class="dash-btn-today" onclick="goToToday()">Hoje</button>
+                </div>
+            </div>
+            <!-- Avisos rápidos de orçamento -->
+            <div id="dash-budget-alerts-top" class="dash-budget-alerts-top hidden" aria-live="polite"></div>
+            <!-- Card de saldo laranja grande -->
+            <div class="dash-balance-card">
+                <img class="dash-balance-watermark" id="dash-bal-watermark" alt="">
+                <div class="bal-label">Saldo atual</div>
+                <div class="bal-value" id="stat-balance">R$ 0,00</div>
+                <div class="dash-balance-divider"></div>
+                <div class="bal-label">Resultado do mês</div>
+                <div class="bal-value" id="stat-month-result" style="font-size: 1.5rem;">R$ 0,00</div>
+                <div id="month-result-note"></div>
+                <button class="bal-eye" onclick="toggleDashVisibility()" id="dash-eye-btn" aria-label="Esconder valores"><i data-lucide="eye"></i></button>
+            </div>
+            <!-- Botões DRE / PDF -->
+            <div class="dash-action-row">
+                <button class="dash-btn-dre" onclick="openDRE()" aria-label="Ver DRE do mês"><i data-lucide="file-text" style="width:18px;height:18px;"></i> Ver DRE do mês</button>
+                <button class="dash-btn-pdf" onclick="exportMonthPDF()" aria-label="Baixar relatório em PDF"><i data-lucide="download" style="width:18px;height:18px;"></i> Baixar PDF</button>
+            </div>
+            <!-- Cards Receitas / Despesas -->
+            <div class="dash-stat-grid">
+                <div class="dash-stat-card">
+                    <div class="ds-head">
+                        <span class="ds-label">Receitas</span>
+                        <span class="ds-icon ds-icon-rec"><i data-lucide="trending-up" style="width:20px;height:20px;"></i></span>
+                    </div>
+                    <div class="ds-value ds-value-rec" id="stat-receitas">R$ 0,00</div>
+                    <div class="ds-sub" id="stat-receitas-pct">0% do mês</div>
+                </div>
+                <div class="dash-stat-card">
+                    <div class="ds-head">
+                        <span class="ds-label">Despesas</span>
+                        <span class="ds-icon ds-icon-desp"><i data-lucide="trending-down" style="width:20px;height:20px;"></i></span>
+                    </div>
+                    <div class="ds-value ds-value-desp" id="stat-despesas">R$ 0,00</div>
+                    <div class="ds-sub" id="stat-despesas-pct">0% do mês</div>
+                </div>
+            </div>
+            <!-- Resumo do mês -->
+            <details class="dash-collapsible dash-quiet-section" id="dash-section-summary">
+                <summary>Resumo do mês</summary>
+                <div class="dash-collapsible-body">
+                    <div id="dash-smart-summary"></div>
+                </div>
+            </details>
+            <!-- Status do orçamento -->
+            <details class="dash-collapsible dash-quiet-section" id="dash-budget-status-card">
+                <summary>Orçamento do mês</summary>
+                <div class="dash-collapsible-body">
+                    <div id="dash-budget-status-content"></div>
+                </div>
+            </details>
+            <!-- Gráfico categorias -->
+            <details class="dash-collapsible" id="dash-section-categories">
+                <summary>Gastos por categoria</summary>
+                <div class="dash-collapsible-body">
+                    <div id="dash-top-expense-insight"></div>
+                    <div style="height: 220px; margin: 0.3rem 0 1rem;"><canvas id="chartCategorias"></canvas></div>
+                    <div id="category-details"></div>
+                </div>
+            </details>
+            <!-- Gráfico evolução -->
+            <details class="dash-collapsible" id="dash-section-evolution">
+                <summary>Evolução dos últimos 12 meses</summary>
+                <div class="dash-collapsible-body">
+                    <div style="height: 240px; margin: 0.3rem 0 0;"><canvas id="chartEvolution"></canvas></div>
+                </div>
+            </details>
+            <details class="dash-collapsible" id="dash-section-metas">
+                <summary>Metas ativas</summary>
+                <div class="dash-collapsible-body">
+                    <div id="dash-metas-list"></div>
+                </div>
+            </details>
+        </div>
+        <div id="view-trans" class="tab-content hidden">
+            <div id="panel-add-trans" class="card" data-enter-form="true">
+                <h3>Novo lançamento</h3>
+                <select id="t-type" onchange="populateCategories()"><option value="despesa">Despesa</option><option value="receita">Receita</option></select>
+                <input type="text" id="t-desc" placeholder="Descrição"><input type="number" id="t-val" placeholder="Valor"><select id="t-cat"></select><input type="date" id="t-date">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.8rem;">
+                    <input type="checkbox" id="t-recurring" onchange="toggleRecurringFields()" style="width: auto; margin-bottom: 0; cursor: pointer;">
+                    <label for="t-recurring" style="font-size: 0.85rem; font-weight: 600; cursor: pointer; user-select: none;">Repetir todo mês</label>
+                </div>
+                <div id="recurring-fields" style="display: none; margin-bottom: 0.8rem;">
+                    <label style="font-size:0.8rem; font-weight:700;">Quantos meses no total?</label>
+                    <input type="number" id="t-recurring-months" min="2" max="60" value="12" style="margin-top: 4px;">
+                </div>
+                <button class="btn-primary" data-enter-submit="true" onclick="addTransaction()">Concluir</button>
+            </div>
+            <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
+                    <h3>Lançamentos recentes</h3>
+                    <button onclick="openHistory('debit')" aria-label="Ver histórico de lançamentos" class="btn-primary" style="width:auto; padding:6px 12px; font-size:0.72rem; margin:0;">Ver histórico</button>
+                </div>
+                <div id="recent-debit"></div>
+            </div>
+        </div>
+        <div id="view-card" class="tab-content hidden">
+            <div id="panel-add-cc" class="card" data-enter-form="true">
+                <h3>Novo cartão</h3>
+                <input type="text" id="cc-name" placeholder="Nome"><input type="number" id="cc-limit" placeholder="Limite"><input type="number" id="cc-closing" placeholder="Dia de Fechamento (1-31)">
+                <input type="number" id="cc-due" placeholder="Vencimento (opcional)" min="1" max="31">
+                <input type="number" id="cc-juros" placeholder="Juros rotativo % ao mês (padrão 12)" min="0" max="50" step="0.1">
+                <button class="btn-primary" data-enter-submit="true" onclick="addCreditCard()">Salvar</button>
+            </div>
+            <div id="cc-list-container"></div>
+            <div id="panel-add-cc-exp" class="card hidden" data-enter-form="true">
+                <h3 id="cc-target-label" style="margin-bottom: 1rem"></h3>
+                <input type="hidden" id="cc-id-target">
+                <input type="text" id="cc-exp-desc" placeholder="Descrição">
+                <input type="number" id="cc-exp-val" placeholder="Valor Total">
+                <input type="number" id="cc-exp-parc" placeholder="Parcelas" value="1">
+                <select id="cc-exp-cat"></select><input type="date" id="cc-exp-date">
+                <div style="display: flex; align-items: center; gap: 8px; margin: 8px 0;">
+                    <input type="checkbox" id="cc-recurring" onchange="toggleCCRecurringFields()" style="width: auto; margin-bottom: 0; cursor: pointer;">
+                    <label for="cc-recurring" style="font-size: 0.85rem; font-weight: 600; cursor: pointer; user-select: none;">Repetir todo mês (assinatura)</label>
+                </div>
+                <div id="cc-recurring-fields" style="display: none; margin-bottom: 0.8rem;">
+                    <label style="font-size: 0.75rem; color: var(--text-muted);">Por quantos meses?</label>
+                    <input type="number" id="cc-recurring-months" min="2" max="60" value="12" style="margin-top: 4px;">
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; margin: 8px 0;">
+                    <input type="checkbox" id="cc-pixfuturo" onchange="toggleCCPixFuturo()" style="width: auto; margin-bottom: 0; cursor: pointer;">
+                    <label for="cc-pixfuturo" style="font-size: 0.85rem; font-weight: 600; cursor: pointer; user-select: none;">Pix crédito — cobrar em fatura específica</label>
+                </div>
+                <div id="cc-pixfuturo-fields" style="display: none; margin-bottom: 0.8rem;">
+                    <label style="font-size: 0.75rem; color: var(--text-muted);">Cobrar na fatura de:</label>
+                    <div style="display:flex; gap:8px; margin-top:4px;">
+                        <select id="cc-pixfuturo-mes" style="margin-bottom:0; flex:1;"></select>
+                        <select id="cc-pixfuturo-ano" style="margin-bottom:0; flex:1;"></select>
+                    </div>
+                </div>
+                <button class="btn-primary" data-enter-submit="true" onclick="addCCExpense()">Registrar compra</button>
+            </div>
+            <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
+                    <h3>Compras recentes</h3>
+                    <button onclick="openHistory('credit')" aria-label="Ver histórico de compras no cartão" class="btn-primary" style="width:auto; padding:6px 12px; font-size:0.72rem; margin:0;">Ver histórico</button>
+                </div>
+                <div id="recent-credit"></div>
+            </div>
+        </div>
+        <div id="view-metas" class="tab-content hidden">
+            <div id="panel-add-meta" class="card" data-enter-form="true">
+                <h3>Criar Meta</h3>
+                <input type="text" id="m-nome" placeholder="Ex: Viagem"><input type="number" id="m-total" placeholder="Valor Total"><input type="number" id="m-entrada" placeholder="Início">
+                <button class="btn-primary" data-enter-submit="true" onclick="addMeta()">Salvar Meta</button>
+            </div>
+            <div id="metas-container"></div>
+        </div>
+        <div id="view-budget" class="tab-content hidden">
+            <div class="card">
+              <h3>Simulador 50/30/20</h3>
+              <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:12px;">Informe sua renda e ajuste os percentuais. A soma deve dar 100%.</p>
+              <label style="font-size:0.8rem; font-weight:600;">Renda mensal (R$)</label>
+              <input type="number" id="sim-income" placeholder="Ex: 3000" oninput="saveBudgetSim()" style="margin-bottom:12px;">
+              <div style="display:flex; flex-direction:column; gap:10px;">
+                <div>
+                  <label style="font-size:0.8rem;">Necessidades: <span id="sim-needs-val">50</span>%</label>
+                  <input type="range" id="sim-needs" min="0" max="100" value="50" oninput="saveBudgetSim()" style="width:100%;">
+                </div>
+                <div>
+                  <label style="font-size:0.8rem;">Desejos: <span id="sim-wants-val">30</span>%</label>
+                  <input type="range" id="sim-wants" min="0" max="100" value="30" oninput="saveBudgetSim()" style="width:100%;">
+                </div>
+                <div>
+                  <label style="font-size:0.8rem;">Poupança/Investir: <span id="sim-savings-val">20</span>%</label>
+                  <input type="range" id="sim-savings" min="0" max="100" value="20" oninput="saveBudgetSim()" style="width:100%;">
+                </div>
+              </div>
+              <div id="sim-warning" style="color:#E74C3C; font-size:0.75rem; margin-top:8px;"></div>
+              <div id="sim-result" style="margin-top:14px;"></div>
+            </div>
+            <div id="panel-add-budget" class="card">
+                <h3>Orçamento Mensal</h3>
+                <p style="font-size:0.75rem; color:var(--text-muted); margin-top: 4px; margin-bottom: 20px; line-height: 1.4;">Defina quanto pretende gastar por categoria.</p>
+                <div id="budget-inputs-container" style="display:flex; flex-direction:column; gap:12px; margin-bottom: 20px;"></div>
+                <button class="btn-primary" style="background:#555;" onclick="clearAllBudgets()">Limpar Todos os Orçamentos</button>
+            </div>
+            <div class="card">
+                <h3>Acompanhamento de Orçamentos</h3>
+                <div id="budget-progress-container" style="display:flex; flex-direction:column; gap:12px; margin-top: 15px;"></div>
+            </div>
+        </div>
+        <div id="view-cloud" class="tab-content hidden">
+            <button onclick="switchTab('dash', null)" style="background:none; border:none; color:#FF7A00; font-weight:700; font-size:0.9rem; cursor:pointer; padding:0 0 12px 0; display:flex; align-items:center; gap:6px;" aria-label="Voltar para o início">
+                <i data-lucide="arrow-left" style="width:18px; height:18px;"></i> Voltar ao Início
+            </button>
+            <div class="card family-invite-card" data-enter-form="true">
+                <h3><i data-lucide="users" style="width:20px;height:20px;color:var(--orange);"></i> Família e permissões</h3>
+                <p class="family-helper">Convide alguém apenas se houver confiança para compartilhar dados financeiros. A pessoa precisa aceitar antes de qualquer monitoramento.</p>
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="invite-target" placeholder="Usuário ex: joao" style="margin:0" aria-label="Usuário que receberá o convite">
+                    <button class="btn-primary" data-enter-submit="true" style="width:auto; padding:0 20px; white-space:nowrap;" onclick="sendInvite()">Convidar</button>
+                </div>
+                <div class="family-trust-note">
+                    <i data-lucide="shield-alert"></i>
+                    <span>Compartilhe acesso somente com pessoas de confiança. Permissões aceitas podem ser revogadas a qualquer momento.</span>
+                </div>
+            </div>
+            <div class="card">
+                <h3>📨 Convites recebidos</h3>
+                <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom: 12px;">Pessoas que querem monitorar suas finanças.</p>
+                <div id="invites-received" class="family-list">
+                    <div class="family-empty-state compact" role="status">
+                        <span class="family-empty-icon"><i data-lucide="mail-check"></i></span>
+                        <h4>Nenhum convite recebido</h4>
+                        <p>Quando alguém solicitar acesso, o pedido aparecerá aqui para você aceitar ou recusar.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <h3>👀 Perfis que você monitora</h3>
+                <div id="monitor-list" class="family-list">
+                    <div class="family-empty-state" role="status">
+                        <span class="family-empty-icon"><i data-lucide="eye"></i></span>
+                        <h4>Nenhum familiar conectado</h4>
+                        <p>Convide uma pessoa de confiança para acompanhar as finanças dela com permissão.</p>
+                        <button type="button" class="btn-primary family-empty-action" onclick="focusFamilyInviteInput()">Enviar convite</button>
+                        <span class="family-empty-note">O acesso só funciona depois que a pessoa aceitar.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <h3>🔒 Quem monitora você</h3>
+                <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom: 12px;">Pessoas com permissão de ver seus dados. Você pode revogar quando quiser.</p>
+                <div id="watchers-list" class="family-list">
+                    <div class="family-empty-state compact" role="status">
+                        <span class="family-empty-icon"><i data-lucide="lock-keyhole"></i></span>
+                        <h4>Ninguém monitora você</h4>
+                        <p>Quando você aceitar um convite, a pessoa autorizada aparecerá aqui com opção de revogar acesso.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <nav id="bottom-nav" class="nav-mobile hidden">
+        <button id="nav-dash" class="nav-item active" onclick="switchTab('dash', this)" aria-label="Abrir início"><i data-lucide="home"></i>Início</button>
+        <button id="nav-trans" class="nav-item" onclick="switchTab('trans', this)" aria-label="Abrir lançamentos"><i data-lucide="banknote"></i>Lançamentos</button>
+        <button id="nav-card" class="nav-item" onclick="switchTab('card', this)" aria-label="Abrir cartões"><i data-lucide="credit-card"></i>Cartões</button>
+        <button id="nav-metas" class="nav-item" onclick="switchTab('metas', this)" aria-label="Abrir metas"><i data-lucide="target"></i>Metas</button>
+        <button id="nav-budget" class="nav-item" onclick="switchTab('budget', this)" aria-label="Abrir orçamento"><i data-lucide="wallet"></i>Orçamento</button>
+    </nav>
+    <div id="tutorial-overlay" class="hidden" style="position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:9000; display:flex; align-items:center; justify-content:center; padding:20px;">
+        <div style="background:#FFFFFF; border-radius:24px; max-width:420px; width:100%; padding:28px; text-align:center; position:relative;">
+            <div id="tutorial-content"></div>
+            <div style="display:flex; gap:8px; justify-content:center; margin:20px 0;" id="tutorial-dots"></div>
+            <div style="display:flex; gap:10px;">
+                <button id="tutorial-skip" class="btn-primary" style="background:#EEEEEE; color:var(--text-secondary);" onclick="closeTutorial()">Pular</button>
+                <button id="tutorial-next" class="btn-primary" onclick="nextTutorialStep()">Próximo</button>
+            </div>
+        </div>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>
