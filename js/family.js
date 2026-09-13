@@ -10,21 +10,29 @@ export async function listFamilyData() {
   ]);
   if (inviteError) throw inviteError;
   if (linkError) throw linkError;
+
   const ids = new Set([user.id]);
   (links || []).forEach(link => { ids.add(link.owner_user_id); ids.add(link.viewer_user_id); });
-  (invites || []).forEach(inv => ids.add(inv.inviter_user_id));
-  const { data: profiles, error: profileError } = await supabase.from('ff2_profiles').select('user_id,display_name').in('user_id', [...ids]);
+  (invites || []).forEach(inv => { ids.add(inv.inviter_user_id); ids.add(inv.invitee_user_id); });
+
+  const { data: profiles, error: profileError } = await supabase
+    .from('ff2_profiles')
+    .select('user_id,username,display_name')
+    .in('user_id', [...ids]);
   if (profileError) throw profileError;
   return { user, invites: invites || [], links: links || [], profiles: profiles || [] };
 }
 
-export async function sendFamilyInvite(email) {
-  const user = await getCurrentUser();
-  const normalized = String(email || '').trim().toLowerCase();
-  if (!normalized || normalized === String(user.email || '').toLowerCase()) throw new Error('Informe outro e-mail.');
-  const { data, error } = await supabase.from('ff2_family_invites').insert({ inviter_user_id: user.id, invitee_email: normalized }).select('*').single();
+export async function sendFamilyInvite(username) {
+  const normalized = String(username || '').trim().toLowerCase();
+  const { data, error } = await supabase.rpc('ff2_send_family_invite', { p_username: normalized });
   if (error) {
-    if (String(error.code) === '23505') throw new Error('Já existe um convite pendente para este e-mail.');
+    const raw = `${error.message || ''} ${error.details || ''}`;
+    if (raw.includes('INVALID_USERNAME')) throw new Error('Informe um nome de usuário válido.');
+    if (raw.includes('USERNAME_NOT_FOUND')) throw new Error('Usuário não encontrado.');
+    if (raw.includes('CANNOT_INVITE_SELF')) throw new Error('Escolha outro usuário.');
+    if (raw.includes('ALREADY_LINKED')) throw new Error('Esse usuário já acompanha seus dados.');
+    if (raw.includes('INVITE_ALREADY_PENDING')) throw new Error('Já existe um convite pendente para esse usuário.');
     throw error;
   }
   return data;

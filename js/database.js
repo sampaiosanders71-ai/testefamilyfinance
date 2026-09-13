@@ -9,11 +9,17 @@ export async function getCurrentUser() {
 
 export async function ensureProfile(user) {
   if (!user) throw new Error('Usuário ausente.');
-  const existing = await supabase.from('ff2_profiles').select('user_id,display_name,theme,currency,onboarding_completed').eq('user_id', user.id).maybeSingle();
+  const fields = 'user_id,username,display_name,theme,currency,onboarding_completed';
+  const existing = await supabase.from('ff2_profiles').select(fields).eq('user_id', user.id).maybeSingle();
   if (existing.error) throw existing.error;
   if (existing.data) return existing.data;
-  const fallbackName = user.user_metadata?.display_name || user.email?.split('@')[0] || 'Usuário';
-  const created = await supabase.from('ff2_profiles').insert({ user_id: user.id, display_name: fallbackName }).select('user_id,display_name,theme,currency,onboarding_completed').single();
+
+  const username = String(user.user_metadata?.username || `user-${String(user.id).slice(0, 8)}`).toLowerCase();
+  const displayName = user.user_metadata?.display_name || username;
+  const created = await supabase.from('ff2_profiles')
+    .insert({ user_id: user.id, username, display_name: displayName })
+    .select(fields)
+    .single();
   if (created.error) throw created.error;
   return created.data;
 }

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'family-finance-shell-20260913';
+const CACHE_NAME = 'family-finance-shell-20260913-username-password';
 const CORE_ASSETS = [
   './',
   './index.html',
