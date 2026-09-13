@@ -1,0 +1,3 @@
+export const SUPABASE_URL = 'https://wggxeqfkxpwdefpzubyc.supabase.co';
+export const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndnZ3hlcWZreHB3ZGVmcHp1YnljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyMTgxNTAsImV4cCI6MjA5Njc5NDE1MH0.PycTTC4c3TSOT3MGhuGuX3HsSb06SqJzngigZ80X4UI';
+export const APP_ENV = 'rebuild-test';
