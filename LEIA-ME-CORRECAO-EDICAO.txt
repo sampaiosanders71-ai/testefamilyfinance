@@ -1,0 +1,17 @@
+FAMILY FINANCE — CORREÇÃO DE SALVAMENTO DE ALTERAÇÕES
+
+Arquivos para publicar juntos:
+- index.html
+- sw.js
+- manifest.json
+
+O que foi corrigido:
+- edição de lançamentos não depende mais do cabeçalho de sessão do navegador;
+- edição de compras no cartão usa RPC com token explícito;
+- edição de metas usa RPC com token explícito;
+- edição de cartão usa RPC com token explícito;
+- orçamento/simulador usa sessão explícita;
+- pré-validação de gravação também deixou de depender do cabeçalho customizado;
+- cache do PWA renovado.
+
+A estrutura necessária no Supabase já foi aplicada.

@@ -3653,19 +3653,26 @@ async function addCardNuvem(card) {
 
 async function updateCardNuvem(id, campos) {
     if (!await ensureCloudMutationReady('updateCardNuvem')) return false;
-    if (!sb || !currentUserId) return false;
+    if (!sb || !currentUserId || !currentSessionToken) return false;
     try {
-        const dbCampos = {};
-        if ('name' in campos) dbCampos.name = campos.name;
-        if ('limit' in campos) dbCampos.card_limit = campos.limit;
-        if ('day' in campos) dbCampos.closing_day = campos.day;
-        if ('dueDay' in campos) dbCampos.due_day = campos.dueDay || null;
-        if ('jurosRotativo' in campos) dbCampos.juros_rotativo = campos.jurosRotativo != null ? campos.jurosRotativo : null;
-        const { error } = await sb.from('cards').update(dbCampos)
-            .eq('id', id).eq('user_id', currentUserId);
-        if (error) { lastSupabaseWriteError = error; console.log('Erro update cartão:', error.message); return false; }
-        const c = cardsCache.find(x => String(x.id) === String(id));
-        if (c) Object.assign(c, campos);
+        const atual = cardsCache.find(x => String(x.id) === String(id));
+        if (!atual) { lastSupabaseWriteError = new Error('CARD_NOT_FOUND'); return false; }
+        const merged = { ...atual, ...campos };
+        const { data, error } = await sb.rpc('ff_update_card', {
+            p_token: currentSessionToken,
+            p_id: id,
+            p_name: merged.name,
+            p_limit: Number(merged.limit),
+            p_closing_day: Number(merged.day),
+            p_due_day: merged.dueDay ? Number(merged.dueDay) : null,
+            p_juros_rotativo: merged.jurosRotativo != null ? Number(merged.jurosRotativo) : null
+        });
+        if (error || data !== true) {
+            lastSupabaseWriteError = error || new Error('CARD_UPDATE_REJECTED');
+            console.log('Erro update cartão:', error?.message || 'operação rejeitada');
+            return false;
+        }
+        Object.assign(atual, campos);
         return true;
     } catch (e) { lastSupabaseWriteError = e; console.log(e); return false; }
 }
@@ -3721,18 +3728,27 @@ async function addCardExpensesNuvem(cardId, expenses) {
 
 async function updateCardExpenseNuvem(cardId, expId, campos) {
     if (!await ensureCloudMutationReady('updateCardExpenseNuvem')) return false;
-    if (!sb || !currentUserId) return false;
+    if (!sb || !currentUserId || !currentSessionToken) return false;
     try {
-        const dbCampos = {};
-        if ('desc' in campos) dbCampos.description = campos.desc;
-        if ('val' in campos) dbCampos.val = campos.val;
-        if ('date' in campos) dbCampos.date = campos.date;
-        if ('cat' in campos) dbCampos.cat = campos.cat;
-        const { error } = await sb.from('card_expenses').update(dbCampos)
-            .eq('id', expId).eq('user_id', currentUserId);
-        if (error) { lastSupabaseWriteError = error; console.log('Erro update gasto:', error.message); return false; }
         const c = cardsCache.find(x => String(x.id) === String(cardId));
-        if (c) { const ex = c.expenses.find(e => String(e.id) === String(expId)); if (ex) Object.assign(ex, campos); }
+        const atual = c?.expenses?.find(e => String(e.id) === String(expId));
+        if (!atual) { lastSupabaseWriteError = new Error('CARD_EXPENSE_NOT_FOUND'); return false; }
+        const merged = { ...atual, ...campos };
+        const { data, error } = await sb.rpc('ff_update_card_expense', {
+            p_token: currentSessionToken,
+            p_id: expId,
+            p_card_id: cardId,
+            p_description: merged.desc,
+            p_val: Number(merged.val),
+            p_date: merged.date,
+            p_cat: merged.cat || null
+        });
+        if (error || data !== true) {
+            lastSupabaseWriteError = error || new Error('CARD_EXPENSE_UPDATE_REJECTED');
+            console.log('Erro update gasto:', error?.message || 'operação rejeitada');
+            return false;
+        }
+        Object.assign(atual, campos);
         return true;
     } catch (e) { lastSupabaseWriteError = e; console.log(e); return false; }
 }
@@ -3844,21 +3860,26 @@ async function addDebitBatchNuvem(arr) {
 
 async function updateDebitNuvem(id, campos) {
     if (!await ensureCloudMutationReady('updateDebitNuvem')) return false;
-    if (!sb || !currentUserId) return false;
+    if (!sb || !currentUserId || !currentSessionToken) return false;
     try {
-        // Traduz campos do app pro banco
-        const dbCampos = {};
-        if ('desc' in campos) dbCampos.description = campos.desc;
-        if ('val' in campos) dbCampos.val = campos.val;
-        if ('date' in campos) dbCampos.date = campos.date;
-        if ('cat' in campos) dbCampos.cat = campos.cat;
-        if ('type' in campos) dbCampos.type = campos.type;
-        if ('recurringGroupId' in campos) dbCampos.recurring_group_id = campos.recurringGroupId || null;
-        const { error } = await sb.from('transactions').update(dbCampos)
-            .eq('id', id).eq('user_id', currentUserId);
-        if (error) { lastSupabaseWriteError = error; console.log('Erro update transação:', error.message); return false; }
-        const t = debitCache.find(x => String(x.id) === String(id));
-        if (t) Object.assign(t, campos);
+        const atual = debitCache.find(x => String(x.id) === String(id));
+        if (!atual) { lastSupabaseWriteError = new Error('TRANSACTION_NOT_FOUND'); return false; }
+        const merged = { ...atual, ...campos };
+        const { data, error } = await sb.rpc('ff_update_transaction', {
+            p_token: currentSessionToken,
+            p_id: id,
+            p_description: merged.desc,
+            p_val: Number(merged.val),
+            p_date: merged.date,
+            p_cat: merged.cat || null,
+            p_type: merged.type
+        });
+        if (error || data !== true) {
+            lastSupabaseWriteError = error || new Error('TRANSACTION_UPDATE_REJECTED');
+            console.log('Erro update transação:', error?.message || 'operação rejeitada');
+            return false;
+        }
+        Object.assign(atual, campos);
         return true;
     } catch (e) { lastSupabaseWriteError = e; console.log(e); return false; }
 }
@@ -3926,14 +3947,25 @@ async function addMetaNuvem(meta) {
 
 async function updateMetaNuvem(id, campos) {
     if (!await ensureCloudMutationReady('updateMetaNuvem')) return false;
-    if (!sb || !currentUserId) return false;
+    if (!sb || !currentUserId || !currentSessionToken) return false;
     try {
-        const { error } = await sb.from('goals').update(campos)
-            .eq('id', id).eq('user_id', currentUserId);
-        if (error) { lastSupabaseWriteError = error; console.log('Erro update meta:', error.message); return false; }
-        // Atualiza o cache
-        const m = metasCache.find(x => String(x.id) === String(id));
-        if (m) Object.assign(m, campos);
+        const atual = metasCache.find(x => String(x.id) === String(id));
+        if (!atual) { lastSupabaseWriteError = new Error('GOAL_NOT_FOUND'); return false; }
+        const merged = { ...atual, ...campos };
+        const { data, error } = await sb.rpc('ff_update_goal', {
+            p_token: currentSessionToken,
+            p_id: id,
+            p_nome: merged.nome,
+            p_total: Number(merged.total),
+            p_entrada: Number(merged.entrada || 0),
+            p_concluida: merged.concluida || null
+        });
+        if (error || data !== true) {
+            lastSupabaseWriteError = error || new Error('GOAL_UPDATE_REJECTED');
+            console.log('Erro update meta:', error?.message || 'operação rejeitada');
+            return false;
+        }
+        Object.assign(atual, campos);
         return true;
     } catch (e) { lastSupabaseWriteError = e; console.log(e); return false; }
 }
@@ -4706,15 +4738,18 @@ async function ensureSecureWriteSession(options = {}) {
     rebuildSupabaseClient(currentSessionToken);
     if (!sb) return { ok: false, kind: 'connection', error: new Error('SUPABASE_UNAVAILABLE') };
     try {
-        let request = sb.rpc('validate_ff_session');
-        request = applySessionHeader(request);
-        const { data, error } = await withLoadTimeout(request, 'sessão de gravação', 9000);
+        // Escritas validam o token no corpo da RPC. Isso evita depender de cabeçalhos
+        // customizados em Safari/iOS, WebView ou navegadores com CORS mais restritivo.
+        const { data, error } = await withLoadTimeout(
+            sb.rpc('ff_validate_token', { p_token: currentSessionToken }),
+            'sessão de gravação',
+            9000
+        );
         if (error) {
             invalidateSecureWriteSessionCache();
             return { ok: false, kind: classifyWriteError(error), error };
         }
-        const row = data && data[0];
-        if (!row || String(row.id) !== String(currentUserId)) {
+        if (!data || String(data) !== String(currentUserId)) {
             invalidateSecureWriteSessionCache();
             return { ok: false, kind: 'session', error: new Error('INVALID_SESSION') };
         }
@@ -5923,19 +5958,26 @@ async function loadBudgets() {
 
 let budgetWriteQueue = Promise.resolve();
 async function salvarBudgetsNuvem(snapshot = budgetsCache) {
-    if (!sb || !currentUserId) return false;
+    if (!sb || !currentUserId || !currentSessionToken) return false;
     const payload = JSON.parse(JSON.stringify(snapshot || { budgets: {}, budgetSim: null }));
     const write = async () => {
         try {
+            const ready = await ensureCloudMutationReady('salvar orçamento');
+            if (!ready) return false;
             const result = await withLoadTimeout(
-                sb.rpc('set_budgets', { p_id: currentUserId, p_budgets: payload }),
+                sb.rpc('ff_set_budgets', { p_token: currentSessionToken, p_budgets: payload }),
                 'salvar orçamento',
                 12000
             );
-            const { error } = result || {};
-            if (error) { console.log('Erro ao salvar orçamentos:', error.message); return false; }
+            const { data, error } = result || {};
+            if (error || data !== true) {
+                lastSupabaseWriteError = error || new Error('BUDGET_UPDATE_REJECTED');
+                console.log('Erro ao salvar orçamentos:', error?.message || 'operação rejeitada');
+                return false;
+            }
             return true;
         } catch (e) {
+            lastSupabaseWriteError = e;
             console.log('Erro ao salvar orçamentos:', e);
             return false;
         }
@@ -5943,6 +5985,8 @@ async function salvarBudgetsNuvem(snapshot = budgetsCache) {
     budgetWriteQueue = budgetWriteQueue.catch(() => false).then(write);
     return budgetWriteQueue;
 }
+
+// Carrega orçamentos de um usuário monitorado
 
 // Carrega orçamentos de um usuário monitorado
 async function loadMonitorBudgets(ownerId) {
