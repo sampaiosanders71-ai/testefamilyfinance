@@ -1471,6 +1471,939 @@ input[data-money-input="true"] { font-variant-numeric: tabular-nums; }
         }
         .dependency-retry:disabled { opacity: 0.55; cursor: wait; }
 
+
+
+/* ============================================================
+   RECONSTRUÇÃO FAMILY FINANCE — ETAPAS 1 A 6
+   1. Base estrutural do app
+   2. Sistema visual unificado
+   3. Dashboard desktop reconstruído
+   4. Dashboard mobile reconstruído
+   5. Versões PC/mobile consolidadas por breakpoint
+   6. Comportamento e ações dos módulos padronizados
+   ============================================================ */
+:root {
+    --ff-sidebar-w: 248px;
+    --ff-topbar-h: 72px;
+    --ff-radius-xl: 24px;
+    --ff-radius-lg: 18px;
+    --ff-radius-md: 14px;
+    --ff-space-1: 6px;
+    --ff-space-2: 10px;
+    --ff-space-3: 14px;
+    --ff-space-4: 18px;
+    --ff-space-5: 24px;
+    --ff-space-6: 32px;
+    --ff-panel: var(--white);
+    --ff-panel-soft: color-mix(in srgb, var(--white) 88%, var(--surface-soft) 12%);
+    --ff-line: color-mix(in srgb, var(--gray-border) 88%, transparent 12%);
+    --ff-accent: var(--orange);
+    --ff-accent-soft: color-mix(in srgb, var(--orange) 14%, transparent 86%);
+    --ff-text: var(--black);
+    --ff-muted: var(--text-secondary);
+    --ff-subtle: var(--text-muted);
+    --ff-card-shadow: 0 18px 48px -34px rgba(0,0,0,.45);
+}
+.ff-desktop-only { display: none; }
+
+
+.ff-dashboard-grid,
+.ff-dashboard-main,
+.ff-dashboard-side { min-width: 0; }
+.ff-overview-grid { display: grid; gap: 10px; margin-bottom: 12px; }
+.ff-overview-card,
+.ff-side-card,
+.ff-tip-card {
+    background: var(--white);
+    border: 1px solid var(--gray-border);
+    border-radius: 16px;
+}
+.ff-overview-card,
+.ff-side-card { padding: 14px; margin-bottom: 10px; }
+.ff-card-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; }
+.ff-card-title { display:flex; align-items:center; gap:9px; min-width:0; }
+.ff-card-title-icon { width:34px; height:34px; border-radius:11px; display:grid; place-items:center; background:var(--surface-soft); color:var(--black); flex:0 0 auto; }
+.ff-card-title-icon i { width:17px; height:17px; }
+.ff-card-title h3 { font-size:.88rem; margin:0; }
+.ff-card-title p { font-size:.66rem; color:var(--text-muted); margin-top:2px; }
+.ff-link-btn { border:0; background:transparent; color:var(--text-muted); font-size:.66rem; font-weight:700; cursor:pointer; white-space:nowrap; }
+.ff-side-primary { width:100%; min-height:42px; margin-top:8px; border:1px solid var(--orange); border-radius:12px; background:transparent; color:var(--orange); font-size:.74rem; font-weight:800; cursor:pointer; }
+.ff-empty-dashboard { text-align:center; color:var(--text-secondary); padding:18px 8px; }
+.ff-empty-dashboard .ff-empty-icon { width:48px; height:48px; margin:0 auto 10px; display:grid; place-items:center; border-radius:50%; background:var(--surface-soft); color:var(--text-muted); }
+.ff-empty-dashboard .ff-empty-icon i { width:21px; height:21px; }
+.ff-empty-dashboard strong { display:block; color:var(--black); font-size:.8rem; margin-bottom:4px; }
+.ff-empty-dashboard span { display:block; font-size:.67rem; line-height:1.45; }
+.ff-dashboard-analytics { display:grid; gap:10px; }
+.ff-tip-card { margin-top:10px; padding:12px 14px; display:flex; align-items:center; gap:10px; }
+.ff-tip-icon { width:34px; height:34px; border-radius:11px; display:grid; place-items:center; background:rgba(245,184,0,.12); color:#E4AE00; flex:0 0 auto; }
+.ff-tip-icon i { width:18px; height:18px; }
+.ff-tip-copy { min-width:0; flex:1; }
+.ff-tip-copy strong { display:block; font-size:.76rem; margin-bottom:2px; }
+.ff-tip-copy span { display:block; color:var(--text-secondary); font-size:.65rem; line-height:1.4; }
+.ff-tip-close { width:34px; height:34px; border:0; background:transparent; color:var(--text-muted); cursor:pointer; }
+.ff-balance-status,
+.ff-balance-updated { display:none; }
+@media (max-width: 1023px) {
+    .ff-dash-heading { display:block; }
+    .ff-dashboard-side { display:grid; gap:10px; }
+    .ff-overview-grid { grid-template-columns:1fr; }
+    .ff-dashboard-analytics { grid-template-columns:1fr; }
+    .ff-dashboard-analytics .dash-collapsible { margin-bottom:0; }
+}
+
+@media (min-width: 1024px) {
+    body {
+        padding-bottom: 0;
+        background:
+            radial-gradient(circle at 76% -8%, rgba(255,122,0,.08), transparent 27%),
+            var(--gray-bg);
+    }
+    #main-header, #bottom-nav { display: none !important; }
+
+    .ff-desktop-only:not(.hidden) { display: flex; }
+    .ff-desktop-sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        width: var(--ff-sidebar-w);
+        z-index: 1300;
+        flex-direction: column;
+        padding: 22px 14px 18px;
+        background: color-mix(in srgb, var(--white) 96%, var(--surface-soft) 4%);
+        border-right: 1px solid var(--ff-line);
+        box-shadow: 10px 0 38px -34px rgba(0,0,0,.55);
+    }
+    .ff-desktop-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 48px;
+        padding: 4px 10px 22px;
+        border-bottom: 1px solid var(--ff-line);
+        margin-bottom: 18px;
+    }
+    .ff-desktop-brand img { width: 36px; height: 36px; object-fit: contain; }
+    .ff-desktop-brand strong {
+        font-family: var(--font-title);
+        font-size: 1.02rem;
+        letter-spacing: -.035em;
+        white-space: nowrap;
+    }
+    .ff-desktop-brand strong span { color: var(--ff-accent); }
+    .ff-desktop-nav { display: flex; flex-direction: column; gap: 6px; }
+    .ff-desktop-nav-btn,
+    .ff-desktop-footer-btn {
+        width: 100%;
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        border: 1px solid transparent;
+        background: transparent;
+        color: var(--ff-muted);
+        border-radius: 13px;
+        padding: 0 14px;
+        font-weight: 650;
+        font-size: .85rem;
+        cursor: pointer;
+        transition: background .16s ease, border-color .16s ease, color .16s ease, transform .16s ease;
+        text-align: left;
+    }
+    .ff-desktop-nav-btn i,
+    .ff-desktop-footer-btn i { width: 19px; height: 19px; flex: 0 0 auto; }
+    .ff-desktop-nav-btn:hover,
+    .ff-desktop-footer-btn:hover {
+        background: var(--ff-panel-soft);
+        color: var(--ff-text);
+        border-color: var(--ff-line);
+        transform: translateX(2px);
+    }
+    .ff-desktop-nav-btn.active {
+        color: var(--ff-accent);
+        background: linear-gradient(90deg, var(--ff-accent-soft), color-mix(in srgb, var(--ff-accent-soft) 35%, transparent));
+        border-color: color-mix(in srgb, var(--ff-accent) 30%, transparent 70%);
+        box-shadow: inset 3px 0 0 var(--ff-accent);
+    }
+    .ff-desktop-sidebar-spacer { flex: 1; }
+    .ff-desktop-sidebar-footer {
+        border-top: 1px solid var(--ff-line);
+        padding-top: 14px;
+        display: grid;
+        gap: 6px;
+    }
+    .ff-desktop-footer-btn.danger { color: #E85C52; }
+
+    .ff-desktop-topbar {
+        position: fixed;
+        left: var(--ff-sidebar-w);
+        right: 0;
+        top: 0;
+        height: var(--ff-topbar-h);
+        z-index: 1200;
+        align-items: center;
+        justify-content: space-between;
+        gap: 22px;
+        padding: 0 30px;
+        background: color-mix(in srgb, var(--gray-bg) 88%, var(--white) 12%);
+        backdrop-filter: blur(18px);
+        border-bottom: 1px solid var(--ff-line);
+    }
+    .ff-desktop-search {
+        width: min(590px, 54vw);
+        height: 44px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 14px;
+        background: var(--ff-panel);
+        border: 1px solid var(--ff-line);
+        border-radius: 13px;
+    }
+    .ff-desktop-search i { width: 18px; height: 18px; color: var(--ff-subtle); }
+    .ff-desktop-search input {
+        width: 100%;
+        border: 0;
+        margin: 0;
+        padding: 0;
+        background: transparent;
+        color: var(--ff-text);
+        font-size: .82rem;
+        outline: none;
+    }
+    .ff-desktop-search input::placeholder { color: var(--ff-subtle); }
+    .ff-desktop-top-actions { display: flex; align-items: center; gap: 12px; }
+    .ff-top-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 13px;
+        border: 1px solid var(--ff-line);
+        background: var(--ff-panel);
+        color: var(--ff-text);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: relative;
+    }
+    .ff-top-icon i { width: 19px; height: 19px; }
+    .ff-desktop-profile {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 5px 10px 5px 6px;
+        border: 1px solid var(--ff-line);
+        background: var(--ff-panel);
+        color: var(--ff-text);
+        border-radius: 999px;
+        cursor: pointer;
+    }
+    .ff-desktop-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, color-mix(in srgb, var(--ff-accent) 28%, var(--surface-soft)), var(--surface-soft));
+        color: var(--ff-text);
+        font-weight: 800;
+    }
+    .ff-desktop-profile span { font-size: .8rem; font-weight: 750; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .ff-desktop-profile i { width: 15px; height: 15px; color: var(--ff-subtle); }
+
+    #app-main.container {
+        width: auto;
+        max-width: none;
+        margin: 0 0 0 var(--ff-sidebar-w);
+        padding: calc(var(--ff-topbar-h) + 28px) 30px 42px;
+    }
+    #app-main > .tab-content:not(#view-dash) { max-width: 1180px; margin: 0 auto; }
+    #app-main .card {
+        border-radius: var(--ff-radius-lg);
+        border-color: var(--ff-line);
+        box-shadow: var(--ff-card-shadow);
+    }
+    #app-main input,
+    #app-main select,
+    #app-main textarea {
+        border-radius: 13px;
+        border-color: var(--ff-line);
+        background: var(--ff-panel-soft);
+    }
+    #app-main .btn-primary { border-radius: 13px; }
+
+    #view-dash {
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 0;
+        background: transparent;
+        min-height: calc(100vh - var(--ff-topbar-h) - 70px);
+    }
+    .ff-dash-heading {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 22px;
+        align-items: center;
+        margin-bottom: 18px;
+    }
+    #greeting-card { margin: 0; }
+    .dash-greeting-name { font-size: clamp(1.7rem, 2.4vw, 2.2rem); margin-bottom: 3px; letter-spacing: -.045em; }
+    .dash-greeting-status { margin: 0; font-size: .92rem; }
+    .dash-month-card {
+        min-width: 330px;
+        margin: 0;
+        padding: 10px 12px;
+        border-radius: var(--ff-radius-lg);
+        background: var(--ff-panel);
+        border-color: var(--ff-line);
+        box-shadow: none;
+    }
+    #view-dash .dash-month-nav { justify-content: space-between; gap: 8px; }
+    #view-dash .dash-month-label { min-width: 160px; font-size: .92rem; }
+    #view-dash .dash-icon-btn { width: 36px; height: 36px; border-radius: 11px; }
+    #view-dash .dash-btn-today { display: none !important; }
+
+    .ff-dashboard-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 340px;
+        gap: 18px;
+        align-items: start;
+    }
+    .ff-dashboard-main,
+    .ff-dashboard-side { min-width: 0; }
+    .ff-dashboard-side { display: grid; gap: 16px; }
+
+    .dash-balance-card {
+        min-height: 220px;
+        margin-bottom: 14px;
+        padding: 24px 26px;
+        border-radius: var(--ff-radius-xl);
+        box-shadow: 0 28px 62px -40px rgba(255,122,0,.78);
+        background:
+            radial-gradient(circle at 86% 20%, rgba(255,255,255,.16), transparent 21%),
+            linear-gradient(130deg, #FF942D 0%, #FF7A00 56%, #F96900 100%);
+    }
+    .dash-balance-watermark { width: 320px; height: 320px; right: -56px; opacity: .07; }
+    .dash-balance-card .bal-label { font-size: .82rem; }
+    .dash-balance-card .bal-value { font-size: clamp(2.55rem, 4vw, 3.35rem); }
+    .dash-balance-divider { margin: 18px 0 14px; }
+    .dash-balance-card .bal-eye { width: 46px; height: 46px; right: 20px; bottom: 20px; }
+    .ff-balance-status {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 3;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 10px;
+        border-radius: 999px;
+        background: rgba(0,0,0,.16);
+        color: #fff;
+        font-size: .68rem;
+        font-weight: 750;
+        backdrop-filter: blur(8px);
+    }
+    .ff-balance-status::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+    .ff-balance-updated {
+        display: block;
+        position: absolute;
+        left: 26px;
+        bottom: 13px;
+        z-index: 2;
+        color: rgba(255,255,255,.72);
+        font-size: .63rem;
+        font-weight: 600;
+    }
+
+    .dash-action-row { gap: 10px; margin-bottom: 14px; }
+    .dash-action-row button {
+        justify-content: flex-start;
+        min-height: 58px;
+        padding: 0 18px;
+        background: var(--ff-panel);
+        color: var(--ff-text);
+        border: 1px solid var(--ff-line);
+        border-radius: var(--ff-radius-lg);
+        box-shadow: none;
+    }
+    .dash-action-row button:hover { border-color: color-mix(in srgb, var(--ff-accent) 55%, var(--ff-line)); }
+    .dash-btn-pdf { background: var(--ff-panel) !important; color: var(--ff-text) !important; }
+
+    .dash-stat-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+    .dash-stat-card {
+        min-height: 112px;
+        padding: 16px;
+        border-radius: var(--ff-radius-lg);
+        background: var(--ff-panel);
+        border-color: var(--ff-line);
+    }
+    .dash-stat-card .ds-head { margin-bottom: 8px; }
+    .dash-stat-card .ds-icon { width: 38px; height: 38px; }
+    .dash-stat-card .ds-value { font-size: 1.28rem; }
+    .ff-stat-predicted .ds-icon { background: rgba(255,122,0,.16); color: var(--ff-accent); }
+    .ff-stat-predicted .ds-value { color: var(--ff-accent); }
+
+    .ff-overview-grid {
+        display: grid;
+        grid-template-columns: 1.18fr 1fr;
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+    .ff-overview-card,
+    .ff-side-card,
+    .ff-tip-card {
+        background: var(--ff-panel);
+        border: 1px solid var(--ff-line);
+        border-radius: var(--ff-radius-lg);
+        box-shadow: var(--ff-card-shadow);
+    }
+    .ff-overview-card { min-height: 178px; padding: 16px; }
+    .ff-card-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+    .ff-card-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+    }
+    .ff-card-title-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 11px;
+        display: grid;
+        place-items: center;
+        background: var(--ff-panel-soft);
+        color: var(--ff-text);
+        flex: 0 0 auto;
+    }
+    .ff-card-title-icon i { width: 18px; height: 18px; }
+    .ff-card-title h3 { font-size: .92rem; margin: 0; }
+    .ff-card-title p { color: var(--ff-subtle); font-size: .68rem; margin-top: 2px; }
+    .ff-link-btn {
+        border: 0;
+        background: transparent;
+        color: var(--ff-subtle);
+        font-size: .68rem;
+        font-weight: 700;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+    .ff-link-btn:hover { color: var(--ff-accent); }
+
+    .ff-side-card { min-height: 250px; padding: 16px; }
+    .ff-side-card .ff-card-head { margin-bottom: 10px; }
+    .ff-reminders-slot:empty,
+    .ff-goals-slot:empty {
+        min-height: 160px;
+        display: grid;
+        place-items: center;
+    }
+    .ff-empty-dashboard {
+        width: 100%;
+        text-align: center;
+        color: var(--ff-muted);
+        padding: 18px 10px;
+    }
+    .ff-empty-dashboard .ff-empty-icon {
+        width: 52px;
+        height: 52px;
+        margin: 0 auto 12px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: var(--ff-panel-soft);
+        color: var(--ff-subtle);
+    }
+    .ff-empty-dashboard .ff-empty-icon i { width: 22px; height: 22px; }
+    .ff-empty-dashboard strong { display: block; color: var(--ff-text); font-size: .82rem; margin-bottom: 4px; }
+    .ff-empty-dashboard span { display: block; font-size: .68rem; line-height: 1.45; }
+    .ff-side-primary {
+        width: 100%;
+        min-height: 42px;
+        margin-top: 10px;
+        border: 1px solid color-mix(in srgb, var(--ff-accent) 72%, transparent 28%);
+        border-radius: 12px;
+        background: transparent;
+        color: var(--ff-accent);
+        font-size: .74rem;
+        font-weight: 800;
+        cursor: pointer;
+    }
+    .ff-side-primary:hover { background: var(--ff-accent-soft); }
+
+    .ff-dashboard-analytics {
+        margin-top: 14px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    .ff-dashboard-analytics .dash-collapsible { margin: 0; }
+    .ff-dashboard-analytics .dash-collapsible:last-child { grid-column: 1 / -1; }
+
+    .ff-tip-card {
+        margin-top: 14px;
+        padding: 13px 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .ff-tip-icon { width: 36px; height: 36px; border-radius: 11px; display: grid; place-items: center; background: rgba(245,184,0,.12); color: #E4AE00; }
+    .ff-tip-icon i { width: 19px; height: 19px; }
+    .ff-tip-copy { min-width: 0; flex: 1; }
+    .ff-tip-copy strong { display: block; font-size: .78rem; margin-bottom: 2px; }
+    .ff-tip-copy span { display: block; font-size: .68rem; color: var(--ff-muted); }
+    .ff-tip-close { width: 34px; height: 34px; border: 0; background: transparent; color: var(--ff-subtle); cursor: pointer; }
+
+    #invoice-reminders { margin-bottom: 0 !important; }
+    #invoice-reminders > div { border-radius: 13px !important; }
+    #dash-metas-list > div { margin-bottom: 8px !important; }
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+    :root { --ff-sidebar-w: 224px; }
+    .ff-dashboard-grid { grid-template-columns: 1fr; }
+    .ff-dashboard-side { grid-template-columns: 1fr 1fr; }
+    .ff-side-card { min-height: 230px; }
+    .ff-overview-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* ===== ETAPAS 4 E 5 — MOBILE REAL + CONSOLIDAÇÃO RESPONSIVA ===== */
+.ff-mobile-only { display: none; }
+.ff-module-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+.ff-module-heading { min-width: 0; }
+.ff-module-kicker {
+    display: block;
+    color: var(--orange);
+    font-size: .66rem;
+    font-weight: 850;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+}
+.ff-module-heading h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    line-height: 1.12;
+    letter-spacing: -.035em;
+}
+.ff-module-heading p {
+    color: var(--text-secondary);
+    font-size: .78rem;
+    margin-top: 4px;
+    line-height: 1.4;
+}
+.ff-module-primary {
+    flex: 0 0 auto;
+    min-height: 42px;
+    padding: 0 15px;
+    border: 1px solid color-mix(in srgb, var(--orange) 68%, transparent);
+    border-radius: 12px;
+    background: var(--orange);
+    color: #fff;
+    font-size: .75rem;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    cursor: pointer;
+}
+.ff-module-primary i { width: 16px; height: 16px; }
+.ff-module-primary.secondary { background: var(--white); color: var(--orange); }
+
+@media (max-width: 1023px) {
+    :root { --ff-mobile-gutter: 14px; }
+    body {
+        padding-bottom: calc(78px + env(safe-area-inset-bottom));
+        background:
+            radial-gradient(circle at 86% -4%, rgba(255,122,0,.07), transparent 26%),
+            var(--gray-bg);
+    }
+    .ff-mobile-only:not(.hidden) { display: flex; }
+    #main-header {
+        min-height: 64px;
+        padding: 8px var(--ff-mobile-gutter);
+        background: color-mix(in srgb, var(--white) 94%, var(--surface-soft) 6%);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid var(--ff-line);
+    }
+    #header-brand { min-width: 0; }
+    #header-brand img { max-height: 34px !important; width: auto !important; }
+    #main-header .header-actions { gap: 4px; }
+    #main-header .icon-btn {
+        width: 42px;
+        height: 42px;
+        display: grid;
+        place-items: center;
+        border-radius: 13px;
+        color: var(--black);
+    }
+    #main-header .icon-btn:active { background: var(--surface-soft); }
+
+    #app-main.container {
+        width: 100%;
+        max-width: none;
+        padding: 0 var(--ff-mobile-gutter) 24px;
+    }
+    #view-dash {
+        margin: 0 calc(var(--ff-mobile-gutter) * -1);
+        padding: 16px var(--ff-mobile-gutter) 26px;
+        min-height: auto;
+        background: transparent;
+    }
+    .ff-dash-heading {
+        display: grid;
+        grid-template-columns: minmax(0,1fr);
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+    #greeting-card { padding: 0 2px; }
+    .dash-greeting-name {
+        font-size: clamp(1.42rem, 6.4vw, 1.78rem);
+        letter-spacing: -.04em;
+        margin-bottom: 2px;
+    }
+    .dash-greeting-status {
+        font-size: .78rem;
+        margin-bottom: 0;
+        line-height: 1.35;
+    }
+    .dash-month-card {
+        width: 100%;
+        border-radius: 16px;
+        padding: 7px 9px;
+        background: var(--white);
+        border: 1px solid var(--gray-border);
+        box-shadow: none;
+    }
+    .dash-month-nav { justify-content: space-between; gap: 6px; }
+    .dash-month-cap { font-size: .57rem; letter-spacing: .05em; }
+    .dash-month-label { font-size: .83rem; min-width: 0; }
+    .dash-icon-btn { width: 36px; height: 36px; border-radius: 11px; }
+    .dash-btn-today { font-size: .65rem; padding: 7px 9px; }
+
+    .ff-mobile-quickbar {
+        display: grid !important;
+        grid-template-columns: repeat(4, minmax(0,1fr));
+        gap: 8px;
+        margin: 0 0 12px;
+    }
+    .ff-mobile-quick {
+        min-width: 0;
+        min-height: 62px;
+        padding: 8px 4px;
+        border: 1px solid var(--gray-border);
+        border-radius: 15px;
+        background: var(--white);
+        color: var(--black);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        font-size: .61rem;
+        font-weight: 750;
+        cursor: pointer;
+        text-align: center;
+    }
+    .ff-mobile-quick i { width: 18px; height: 18px; color: var(--orange); }
+    .ff-mobile-quick:active { transform: scale(.98); background: var(--surface-soft); }
+
+    .ff-dashboard-grid { display: block; }
+    .dash-balance-card {
+        min-height: 190px;
+        margin-bottom: 10px;
+        padding: 19px 18px 17px;
+        border-radius: 22px;
+        box-shadow: 0 24px 50px -40px rgba(255,122,0,.9);
+    }
+    .dash-balance-watermark { width: 230px; height: 230px; right: -68px; opacity: .08; }
+    .dash-balance-card .bal-value { font-size: clamp(2.35rem, 11vw, 3rem); }
+    .dash-balance-card #stat-month-result { font-size: 1.35rem !important; }
+    .dash-balance-card .bal-eye { width: 44px; height: 44px; right: 16px; bottom: 16px; border-radius: 13px; }
+    .dash-balance-card .bal-edit { width: 34px; height: 34px; }
+    .ff-balance-status {
+        display: inline-flex;
+        top: 14px;
+        right: 14px;
+        padding: 6px 8px;
+        font-size: .58rem;
+        background: rgba(0,0,0,.14);
+    }
+    .ff-balance-updated { display: none; }
+
+    .dash-action-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+    .dash-action-row button {
+        min-height: 48px;
+        margin: 0;
+        border-radius: 15px;
+        padding: 0 10px;
+        font-size: .69rem;
+        justify-content: center;
+        box-shadow: none;
+    }
+    .dash-action-row button i { width: 17px; height: 17px; }
+
+    .dash-stat-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+    .dash-stat-card {
+        min-height: 98px;
+        padding: 13px;
+        border-radius: 16px;
+        box-shadow: none;
+    }
+    .dash-stat-card.ff-stat-predicted { grid-column: 1 / -1; min-height: 88px; }
+    .dash-stat-card .ds-value { font-size: 1.1rem; }
+    .dash-stat-card .ds-label { font-size: .68rem; }
+    .dash-stat-card .ds-icon { width: 34px; height: 34px; border-radius: 11px; }
+    .dash-stat-card .ds-sub { font-size: .61rem; }
+
+    .ff-overview-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 8px; }
+    .ff-overview-card, .ff-side-card {
+        min-height: 0;
+        margin: 0;
+        padding: 14px;
+        border-radius: 17px;
+        box-shadow: none;
+    }
+    .ff-overview-card + .ff-overview-card { margin-top: 0; }
+    .ff-card-head { margin-bottom: 10px; }
+    .ff-card-title-icon { width: 34px; height: 34px; }
+    .ff-card-title h3 { font-size: .82rem; }
+    .ff-card-title p { font-size: .62rem; }
+    .ff-link-btn { font-size: .62rem; }
+
+    .ff-dashboard-side { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 8px; }
+    .ff-reminders-slot:empty, .ff-goals-slot:empty { min-height: 0; }
+    .ff-empty-dashboard { padding: 12px 6px; }
+    .ff-empty-dashboard .ff-empty-icon { width: 42px; height: 42px; margin-bottom: 8px; }
+    .ff-empty-dashboard strong { font-size: .75rem; }
+    .ff-empty-dashboard span { font-size: .62rem; }
+    .ff-side-primary { min-height: 40px; margin-top: 6px; }
+
+    .ff-dashboard-analytics {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+        margin-top: 8px;
+    }
+    .ff-dashboard-analytics .dash-collapsible,
+    .ff-dashboard-analytics .dash-collapsible:last-child { grid-column: auto; margin: 0; }
+    .dash-collapsible { border-radius: 16px; }
+    .dash-collapsible summary { font-size: .76rem; padding: 13px 14px; }
+    .ff-tip-card {
+        margin-top: 8px;
+        padding: 11px 12px;
+        border-radius: 16px;
+        box-shadow: none;
+    }
+    .ff-tip-copy strong { font-size: .72rem; }
+    .ff-tip-copy span { font-size: .61rem; }
+
+    .nav-mobile {
+        height: calc(66px + env(safe-area-inset-bottom));
+        padding: 7px 4px calc(7px + env(safe-area-inset-bottom));
+        background: color-mix(in srgb, var(--white) 96%, var(--surface-soft) 4%);
+        border-top: 1px solid var(--ff-line);
+        box-shadow: 0 -16px 32px -30px rgba(0,0,0,.75);
+        gap: 1px;
+    }
+    .nav-mobile .nav-item {
+        min-width: 0;
+        min-height: 48px;
+        border-radius: 12px;
+        padding: 5px 2px;
+        font-size: .54rem;
+        font-weight: 700;
+        gap: 3px;
+    }
+    .nav-mobile .nav-item i { width: 18px; height: 18px; }
+    .nav-mobile .nav-item.active { background: var(--orange-soft); color: var(--orange); }
+
+    .ff-module-header {
+        align-items: flex-start;
+        margin: 16px 0 12px;
+    }
+    .ff-module-heading h2 { font-size: 1.34rem; }
+    .ff-module-heading p { font-size: .72rem; max-width: 230px; }
+    .ff-module-primary { min-height: 40px; padding: 0 12px; font-size: .68rem; }
+    #app-main > .tab-content:not(#view-dash) > .card,
+    #app-main > .tab-content:not(#view-dash) > [id$="-container"] > .card {
+        border-radius: 18px;
+        box-shadow: none;
+    }
+}
+
+@media (max-width: 430px) {
+    :root { --ff-mobile-gutter: 12px; }
+    .ff-mobile-quickbar { gap: 6px; }
+    .ff-mobile-quick { min-height: 58px; font-size: .57rem; border-radius: 14px; }
+    .ff-balance-status { max-width: 122px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .dash-balance-card { padding-left: 16px; padding-right: 16px; }
+    .dash-action-row button { font-size: .63rem; }
+    .ff-module-primary span { display: none; }
+    .ff-module-primary { width: 42px; padding: 0; }
+}
+
+@media (min-width: 1024px) {
+    .ff-mobile-quickbar { display: none !important; }
+    #view-cloud .ff-cloud-back { display: none !important; }
+    .ff-module-header { margin: 0 0 18px; }
+    #app-main > .tab-content:not(#view-dash) > .card {
+        border-radius: var(--ff-radius-lg);
+        border: 1px solid var(--ff-line);
+        box-shadow: var(--ff-card-shadow);
+    }
+}
+
+
+
+/* ===== ETAPA 8 — RESPONSIVIDADE FINAL ===== */
+html { text-size-adjust: 100%; -webkit-text-size-adjust: 100%; }
+.tab-content, .card, .modal-content, .ff-dashboard-main, .ff-dashboard-side { min-width: 0; }
+.card, .ff-overview-card, .ff-side-card { overflow-wrap: anywhere; }
+.modal-overlay {
+    padding-left: max(14px, env(safe-area-inset-left));
+    padding-right: max(14px, env(safe-area-inset-right));
+    padding-top: max(14px, env(safe-area-inset-top));
+    padding-bottom: max(14px, env(safe-area-inset-bottom));
+}
+.modal-content {
+    width: min(100%, 520px);
+    max-height: min(90dvh, 760px);
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+}
+.modal-content input,
+.modal-content select,
+.modal-content textarea,
+.tab-content input,
+.tab-content select,
+.tab-content textarea { max-width: 100%; }
+
+/* Tablet: mantém leitura de desktop sem espremer os cards. */
+@media (min-width: 768px) and (max-width: 1023px) {
+    :root { --ff-mobile-gutter: 22px; }
+    #app-main.container { padding-left: var(--ff-mobile-gutter); padding-right: var(--ff-mobile-gutter); }
+    .ff-dashboard-side { grid-template-columns: 1fr 1fr; }
+    .ff-overview-grid { grid-template-columns: 1fr 1fr; }
+    .ff-dashboard-analytics { grid-template-columns: 1fr 1fr; }
+    .ff-dashboard-analytics .dash-collapsible:last-child { grid-column: 1 / -1; }
+    .dash-stat-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    .dash-stat-card.ff-stat-predicted { grid-column: auto; }
+    .ff-mobile-quickbar { grid-template-columns: repeat(4, minmax(110px,1fr)); }
+    .ff-module-header { align-items: center; }
+    .ff-module-heading p { max-width: 560px; }
+}
+
+@media (max-width: 767px) {
+    .tab-content:not(#view-dash) > .card,
+    .tab-content:not(#view-dash) > [id$="-container"] > .card,
+    #cc-list-container > .card,
+    #metas-container > .card {
+        padding: 16px;
+        border-radius: 18px;
+        margin-bottom: 10px;
+    }
+    .tab-content:not(#view-dash) .card h3 {
+        font-size: .92rem;
+        line-height: 1.25;
+    }
+    .tab-content input:not([type="checkbox"]):not([type="range"]):not([type="hidden"]),
+    .tab-content select,
+    .modal-content input:not([type="checkbox"]):not([type="range"]):not([type="hidden"]),
+    .modal-content select {
+        min-height: 46px;
+        font-size: 16px; /* evita zoom automático no Safari/iOS */
+    }
+    .tab-content .btn-primary,
+    .modal-content .btn-primary,
+    .ff-module-primary,
+    .ff-side-primary {
+        min-height: 44px;
+        touch-action: manipulation;
+    }
+    .modal-overlay { align-items: flex-end; }
+    .modal-content {
+        width: 100%;
+        max-width: none !important;
+        max-height: calc(92dvh - env(safe-area-inset-top));
+        border-radius: 22px 22px 0 0 !important;
+        padding: 18px 16px calc(18px + env(safe-area-inset-bottom));
+    }
+    #modal-history .modal-content { max-height: calc(96dvh - env(safe-area-inset-top)); }
+    .history-filter-grid { grid-template-columns: 1fr; gap: 8px; }
+    .history-filter-grid .history-filter-full { grid-column: auto; }
+    .family-invite-card > div[style*="display:flex"] { flex-direction: column; align-items: stretch !important; }
+    .family-invite-card > div[style*="display:flex"] .btn-primary { width: 100% !important; }
+    #cc-pixfuturo-fields > div[style*="display:flex"] { flex-direction: column; }
+    #cc-pixfuturo-fields select { width: 100%; flex: 0 0 auto !important; }
+    #budget-inputs-container > div[style*="display:flex"] { gap: 8px !important; }
+    #budget-inputs-container > div[style*="display:flex"] > span { flex: 1 1 auto; min-width: 0; }
+    #budget-inputs-container > div[style*="display:flex"] > div { width: min(145px, 46vw) !important; flex: 0 0 auto; }
+    #recent-debit > div,
+    #recent-credit > div { min-width: 0; }
+    .ff-module-heading { min-width: 0; }
+    .ff-module-heading h2 { overflow-wrap: anywhere; }
+}
+
+@media (max-width: 430px) {
+    #app-main.container { padding-left: 12px; padding-right: 12px; }
+    #view-dash { padding-left: 12px; padding-right: 12px; }
+    .ff-mobile-quickbar { grid-template-columns: repeat(4, minmax(0,1fr)); }
+    .ff-mobile-quick { padding-inline: 2px; }
+    .ff-mobile-quick span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .dash-action-row { grid-template-columns: 1fr; }
+    .dash-action-row button { justify-content: flex-start; padding-inline: 14px; }
+    .dash-stat-grid { grid-template-columns: 1fr 1fr; }
+    .dash-stat-card.ff-stat-predicted { grid-column: 1 / -1; }
+    .ff-module-header { gap: 8px; }
+    .ff-module-heading p { max-width: 205px; }
+    .nav-mobile .nav-item { font-size: .5rem; }
+    #budget-inputs-container > div[style*="display:flex"] { align-items: flex-start !important; flex-direction: column; }
+    #budget-inputs-container > div[style*="display:flex"] > div { width: 100% !important; }
+}
+
+@media (max-width: 360px) {
+    :root { --ff-mobile-gutter: 10px; }
+    .ff-mobile-quickbar { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .ff-mobile-quick { min-height: 52px; flex-direction: row; justify-content: flex-start; padding: 8px 10px; }
+    .dash-stat-grid { grid-template-columns: 1fr; }
+    .dash-stat-card.ff-stat-predicted { grid-column: auto; }
+    .dash-balance-card .bal-value { font-size: 2.15rem; }
+    .ff-module-heading p { display: none; }
+}
+
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1023px) {
+    .modal-content { max-height: 94dvh; }
+    .nav-mobile { height: calc(58px + env(safe-area-inset-bottom)); }
+    body { padding-bottom: calc(66px + env(safe-area-inset-bottom)); }
+}
+
 </style>
 </head>
 <body>
@@ -1870,104 +2803,176 @@ input[data-money-input="true"] { font-variant-numeric: tabular-nums; }
             <button class="icon-btn" onclick="toggleSidebar()" aria-label="Abrir ajustes"><i data-lucide="menu"></i></button>
         </div>
     </header>
+
+    <!-- Desktop shell — Etapa 1 -->
+    <aside id="desktop-sidebar" class="ff-desktop-sidebar ff-desktop-only hidden" aria-label="Navegação principal">
+        <div class="ff-desktop-brand">
+            <img id="desktop-brand-logo" alt="">
+            <strong>family <span>finance</span></strong>
+        </div>
+        <nav class="ff-desktop-nav">
+            <button class="ff-desktop-nav-btn active" data-tab="dash" onclick="switchTab('dash', this)"><i data-lucide="home"></i> Início</button>
+            <button class="ff-desktop-nav-btn" data-tab="trans" onclick="switchTab('trans', this)"><i data-lucide="banknote"></i> Lançamentos</button>
+            <button class="ff-desktop-nav-btn" data-tab="card" onclick="switchTab('card', this)"><i data-lucide="credit-card"></i> Cartões</button>
+            <button class="ff-desktop-nav-btn" data-tab="metas" onclick="switchTab('metas', this)"><i data-lucide="target"></i> Metas</button>
+            <button class="ff-desktop-nav-btn" data-tab="budget" onclick="switchTab('budget', this)"><i data-lucide="wallet"></i> Orçamento</button>
+            <button class="ff-desktop-nav-btn" data-tab="cloud" onclick="switchTab('cloud', this)"><i data-lucide="users"></i> Família</button>
+        </nav>
+        <div class="ff-desktop-sidebar-spacer"></div>
+        <div class="ff-desktop-sidebar-footer">
+            <button class="ff-desktop-footer-btn" onclick="toggleSidebar()"><i data-lucide="settings"></i> Configurações</button>
+            <button class="ff-desktop-footer-btn danger" onclick="handleLogout()"><i data-lucide="log-out"></i> Sair</button>
+        </div>
+    </aside>
+    <div id="desktop-topbar" class="ff-desktop-topbar ff-desktop-only hidden">
+        <label class="ff-desktop-search" aria-label="Buscar no histórico financeiro">
+            <i data-lucide="search"></i>
+            <input id="desktop-global-search" type="search" placeholder="Buscar por lançamentos, cartões, categorias..." onkeydown="handleDesktopGlobalSearch(event)">
+        </label>
+        <div class="ff-desktop-top-actions">
+            <button class="ff-top-icon" onclick="openNotifications()" aria-label="Abrir notificações">
+                <i data-lucide="bell"></i>
+                <span id="desktop-noti-dot" class="noti-badge hidden">0</span>
+            </button>
+            <button class="ff-desktop-profile" onclick="toggleSidebar()" aria-label="Abrir configurações da conta">
+                <span class="ff-desktop-avatar" id="desktop-user-initial">U</span>
+                <span id="desktop-user-name">Usuário</span>
+                <i data-lucide="chevron-down"></i>
+            </button>
+        </div>
+    </div>
     <main id="app-main" class="container hidden">
         <div id="dependency-warning" class="dependency-warning hidden"></div>
         <div id="smart-tips" class="tip-bar hidden"><i data-lucide="lightbulb" style="color:var(--orange);"></i><span id="tip-text"></span></div>
         <div id="view-dash" class="tab-content">
-            <div id="greeting-card">
-                <div id="greeting-content"></div>
-            </div>
-            <div id="invoice-reminders-container"></div>
-            <!-- Navegação de mês -->
-            <div class="dash-month-card" aria-label="Selecionar mês do dashboard">
-                <div class="dash-month-nav">
-                    <button class="dash-icon-btn" onclick="prevMonth()" aria-label="Mês anterior"><i data-lucide="chevron-left"></i></button>
-                    <div style="text-align:center;">
-                        <p class="dash-month-cap">Mês de referência</p>
-                        <h2 class="dash-month-label" id="month-selector-label"></h2>
+            <div class="ff-dash-heading">
+                <div id="greeting-card"><div id="greeting-content"></div></div>
+                <div class="dash-month-card" aria-label="Selecionar mês do dashboard">
+                    <div class="dash-month-nav">
+                        <button class="dash-icon-btn" onclick="prevMonth()" aria-label="Mês anterior"><i data-lucide="chevron-left"></i></button>
+                        <div style="text-align:center;">
+                            <p class="dash-month-cap">Mês de referência</p>
+                            <h2 class="dash-month-label" id="month-selector-label"></h2>
+                        </div>
+                        <button class="dash-icon-btn" onclick="nextMonth()" aria-label="Próximo mês"><i data-lucide="chevron-right"></i></button>
+                        <button class="dash-btn-today" onclick="goToToday()">Hoje</button>
                     </div>
-                    <button class="dash-icon-btn" onclick="nextMonth()" aria-label="Próximo mês"><i data-lucide="chevron-right"></i></button>
-                    <button class="dash-btn-today" onclick="goToToday()">Hoje</button>
                 </div>
             </div>
-            <!-- Avisos rápidos de orçamento -->
+
+            <div class="ff-mobile-quickbar ff-mobile-only" aria-label="Atalhos rápidos">
+                <button class="ff-mobile-quick" onclick="openModulePrimaryAction('trans')"><i data-lucide="plus-circle"></i><span>Lançamento</span></button>
+                <button class="ff-mobile-quick" onclick="openModulePrimaryAction('card')"><i data-lucide="credit-card"></i><span>Cartão</span></button>
+                <button class="ff-mobile-quick" onclick="openModulePrimaryAction('metas')"><i data-lucide="target"></i><span>Meta</span></button>
+                <button class="ff-mobile-quick" onclick="switchTab('cloud', null)"><i data-lucide="users"></i><span>Família</span></button>
+            </div>
+
             <div id="dash-budget-alerts-top" class="dash-budget-alerts-top hidden" aria-live="polite"></div>
-            <!-- Card de saldo laranja grande -->
-            <div class="dash-balance-card">
-                <img class="dash-balance-watermark" id="dash-bal-watermark" alt="">
-                <div class="bal-label-row">
-                    <div class="bal-label">Saldo atual</div>
-                    <button class="bal-edit" id="balance-adjust-btn" onclick="openBalanceAdjustment()" aria-label="Ajustar saldo atual"><i data-lucide="pencil"></i></button>
-                </div>
-                <div class="bal-value" id="stat-balance">R$ 0,00</div>
-                <div class="dash-balance-divider"></div>
-                <div class="bal-label">Resultado do mês</div>
-                <div class="bal-value" id="stat-month-result" style="font-size: 1.5rem;">R$ 0,00</div>
-                <div id="month-result-note"></div>
-                <button class="bal-eye" onclick="toggleDashVisibility()" id="dash-eye-btn" aria-label="Esconder valores"><i data-lucide="eye"></i></button>
-            </div>
-            <!-- Botões DRE / PDF -->
-            <div class="dash-action-row">
-                <button class="dash-btn-dre" onclick="openDRE()" aria-label="Ver DRE do mês"><i data-lucide="file-text" style="width:18px;height:18px;"></i> Ver DRE do mês</button>
-                <button class="dash-btn-pdf" onclick="exportMonthPDF()" aria-label="Baixar relatório em PDF"><i data-lucide="download" style="width:18px;height:18px;"></i> Baixar PDF</button>
-            </div>
-            <!-- Cards Receitas / Despesas -->
-            <div class="dash-stat-grid">
-                <div class="dash-stat-card">
-                    <div class="ds-head">
-                        <span class="ds-label">Receitas</span>
-                        <span class="ds-icon ds-icon-rec"><i data-lucide="trending-up" style="width:20px;height:20px;"></i></span>
+
+            <div class="ff-dashboard-grid">
+                <section class="ff-dashboard-main">
+                    <div class="dash-balance-card">
+                        <img class="dash-balance-watermark" id="dash-bal-watermark" alt="">
+                        <span class="ff-balance-status" id="ff-balance-status">Tudo sob controle</span>
+                        <div class="bal-label-row">
+                            <div class="bal-label">Saldo atual</div>
+                            <button class="bal-edit" id="balance-adjust-btn" onclick="openBalanceAdjustment()" aria-label="Ajustar saldo atual"><i data-lucide="pencil"></i></button>
+                        </div>
+                        <div class="bal-value" id="stat-balance">R$ 0,00</div>
+                        <div class="dash-balance-divider"></div>
+                        <div class="bal-label">Resultado do mês</div>
+                        <div class="bal-value" id="stat-month-result" style="font-size: 1.55rem;">R$ 0,00</div>
+                        <div id="month-result-note"></div>
+                        <span class="ff-balance-updated" id="ff-last-update">Atualizado agora</span>
+                        <button class="bal-eye" onclick="toggleDashVisibility()" id="dash-eye-btn" aria-label="Esconder valores"><i data-lucide="eye"></i></button>
                     </div>
-                    <div class="ds-value ds-value-rec" id="stat-receitas">R$ 0,00</div>
-                    <div class="ds-sub" id="stat-receitas-pct">0% do mês</div>
-                </div>
-                <div class="dash-stat-card">
-                    <div class="ds-head">
-                        <span class="ds-label">Despesas</span>
-                        <span class="ds-icon ds-icon-desp"><i data-lucide="trending-down" style="width:20px;height:20px;"></i></span>
+
+                    <div class="dash-action-row">
+                        <button class="dash-btn-dre" onclick="openDRE()" aria-label="Ver DRE do mês"><i data-lucide="file-text"></i> Ver DRE do mês</button>
+                        <button class="dash-btn-pdf" onclick="exportMonthPDF()" aria-label="Baixar relatório em PDF"><i data-lucide="download"></i> Baixar PDF</button>
                     </div>
-                    <div class="ds-value ds-value-desp" id="stat-despesas">R$ 0,00</div>
-                    <div class="ds-sub" id="stat-despesas-pct">0% do mês</div>
-                </div>
+
+                    <div class="dash-stat-grid">
+                        <div class="dash-stat-card">
+                            <div class="ds-head"><span class="ds-label">Receitas</span><span class="ds-icon ds-icon-rec"><i data-lucide="trending-up"></i></span></div>
+                            <div class="ds-value ds-value-rec" id="stat-receitas">R$ 0,00</div>
+                            <div class="ds-sub" id="stat-receitas-pct">0% do mês</div>
+                        </div>
+                        <div class="dash-stat-card">
+                            <div class="ds-head"><span class="ds-label">Despesas</span><span class="ds-icon ds-icon-desp"><i data-lucide="trending-down"></i></span></div>
+                            <div class="ds-value ds-value-desp" id="stat-despesas">R$ 0,00</div>
+                            <div class="ds-sub" id="stat-despesas-pct">0% do mês</div>
+                        </div>
+                        <div class="dash-stat-card ff-stat-predicted">
+                            <div class="ds-head"><span class="ds-label">Saldo previsto</span><span class="ds-icon"><i data-lucide="coins"></i></span></div>
+                            <div class="ds-value" id="stat-saldo-previsto">R$ 0,00</div>
+                            <div class="ds-sub">Com lançamentos agendados</div>
+                        </div>
+                    </div>
+
+                    <div class="ff-overview-grid">
+                        <section class="ff-overview-card">
+                            <div class="ff-card-head">
+                                <div class="ff-card-title"><span class="ff-card-title-icon"><i data-lucide="bar-chart-3"></i></span><div><h3>Resumo do mês</h3><p>Receitas, despesas e resultado</p></div></div>
+                            </div>
+                            <div id="dash-smart-summary"></div>
+                        </section>
+                        <section class="ff-overview-card">
+                            <div class="ff-card-head">
+                                <div class="ff-card-title"><span class="ff-card-title-icon"><i data-lucide="pie-chart"></i></span><div><h3>Orçamento do mês</h3><p>Seu controle de gastos</p></div></div>
+                                <button class="ff-link-btn" onclick="switchTab('budget', document.getElementById('nav-budget'))">Ver detalhes</button>
+                            </div>
+                            <div id="dash-budget-status-content"></div>
+                        </section>
+                    </div>
+                </section>
+
+                <aside class="ff-dashboard-side">
+                    <section class="ff-side-card">
+                        <div class="ff-card-head">
+                            <div class="ff-card-title"><span class="ff-card-title-icon"><i data-lucide="calendar-days"></i></span><div><h3>Próximos vencimentos</h3><p>Faturas que exigem atenção</p></div></div>
+                            <button class="ff-link-btn" onclick="switchTab('card', document.getElementById('nav-card'))">Ver todos</button>
+                        </div>
+                        <div id="invoice-reminders-container" class="ff-reminders-slot"></div>
+                    </section>
+
+                    <section class="ff-side-card">
+                        <div class="ff-card-head">
+                            <div class="ff-card-title"><span class="ff-card-title-icon"><i data-lucide="target"></i></span><div><h3>Metas</h3><p>Acompanhe seus objetivos</p></div></div>
+                            <button class="ff-link-btn" onclick="switchTab('metas', document.getElementById('nav-metas'))">Ver todas</button>
+                        </div>
+                        <div id="dash-metas-list" class="ff-goals-slot"></div>
+                        <button class="ff-side-primary" onclick="openModulePrimaryAction('metas')">+ Nova meta</button>
+                    </section>
+                </aside>
             </div>
-            <!-- Resumo do mês -->
-            <details class="dash-collapsible dash-quiet-section" id="dash-section-summary">
-                <summary>Resumo do mês</summary>
-                <div class="dash-collapsible-body">
-                    <div id="dash-smart-summary"></div>
-                </div>
-            </details>
-            <!-- Status do orçamento -->
-            <details class="dash-collapsible dash-quiet-section" id="dash-budget-status-card">
-                <summary>Orçamento do mês</summary>
-                <div class="dash-collapsible-body">
-                    <div id="dash-budget-status-content"></div>
-                </div>
-            </details>
-            <!-- Gráfico categorias -->
-            <details class="dash-collapsible" id="dash-section-categories">
-                <summary>Gastos por categoria</summary>
-                <div class="dash-collapsible-body">
-                    <div id="dash-top-expense-insight"></div>
-                    <div style="height: 220px; margin: 0.3rem 0 1rem;"><canvas id="chartCategorias"></canvas></div>
-                    <div id="category-details"></div>
-                </div>
-            </details>
-            <!-- Gráfico evolução -->
-            <details class="dash-collapsible" id="dash-section-evolution">
-                <summary>Evolução dos últimos 12 meses</summary>
-                <div class="dash-collapsible-body">
-                    <div style="height: 240px; margin: 0.3rem 0 0;"><canvas id="chartEvolution"></canvas></div>
-                </div>
-            </details>
-            <details class="dash-collapsible" id="dash-section-metas">
-                <summary>Metas ativas</summary>
-                <div class="dash-collapsible-body">
-                    <div id="dash-metas-list"></div>
-                </div>
-            </details>
+
+            <div class="ff-dashboard-analytics">
+                <details class="dash-collapsible" id="dash-section-categories">
+                    <summary>Gastos por categoria</summary>
+                    <div class="dash-collapsible-body">
+                        <div id="dash-top-expense-insight"></div>
+                        <div style="height:220px; margin:.3rem 0 1rem;"><canvas id="chartCategorias"></canvas></div>
+                        <div id="category-details"></div>
+                    </div>
+                </details>
+                <details class="dash-collapsible" id="dash-section-evolution">
+                    <summary>Evolução dos últimos 12 meses</summary>
+                    <div class="dash-collapsible-body"><div style="height:240px; margin:.3rem 0 0;"><canvas id="chartEvolution"></canvas></div></div>
+                </details>
+            </div>
+
+            <div class="ff-tip-card" id="ff-daily-tip">
+                <span class="ff-tip-icon"><i data-lucide="lightbulb"></i></span>
+                <div class="ff-tip-copy"><strong>Dica do dia</strong><span>Mantenha seus lançamentos em dia para ter uma visão mais precisa da sua vida financeira.</span></div>
+                <button class="ff-tip-close" onclick="document.getElementById('ff-daily-tip').remove()" aria-label="Fechar dica"><i data-lucide="x"></i></button>
+            </div>
         </div>
         <div id="view-trans" class="tab-content hidden">
+            <div class="ff-module-header">
+                <div class="ff-module-heading"><span class="ff-module-kicker">Movimentações</span><h2>Lançamentos</h2><p>Registre e acompanhe receitas e despesas em um só lugar.</p></div>
+                <button class="ff-module-primary" onclick="focusModulePanel('panel-add-trans','t-desc')"><i data-lucide="plus"></i><span>Novo lançamento</span></button>
+            </div>
             <div id="panel-add-trans" class="card" data-enter-form="true">
                 <h3>Novo lançamento</h3>
                 <select id="t-type" onchange="populateCategories()"><option value="despesa">Despesa</option><option value="receita">Receita</option></select>
@@ -1991,6 +2996,10 @@ input[data-money-input="true"] { font-variant-numeric: tabular-nums; }
             </div>
         </div>
         <div id="view-card" class="tab-content hidden">
+            <div class="ff-module-header">
+                <div class="ff-module-heading"><span class="ff-module-kicker">Crédito</span><h2>Cartões</h2><p>Gerencie limites, faturas, parcelas e compras recorrentes.</p></div>
+                <button class="ff-module-primary" onclick="focusModulePanel('panel-add-cc','cc-name')"><i data-lucide="plus"></i><span>Novo cartão</span></button>
+            </div>
             <div id="panel-add-cc" class="card" data-enter-form="true">
                 <h3>Novo cartão</h3>
                 <input type="text" id="cc-name" placeholder="Nome"><input type="number" id="cc-limit" placeholder="Limite"><input type="number" id="cc-closing" placeholder="Dia de Fechamento (1-31)">
@@ -2036,6 +3045,10 @@ input[data-money-input="true"] { font-variant-numeric: tabular-nums; }
             </div>
         </div>
         <div id="view-metas" class="tab-content hidden">
+            <div class="ff-module-header">
+                <div class="ff-module-heading"><span class="ff-module-kicker">Objetivos</span><h2>Metas</h2><p>Transforme planos em objetivos financeiros acompanháveis.</p></div>
+                <button class="ff-module-primary" onclick="focusModulePanel('panel-add-meta','m-nome')"><i data-lucide="plus"></i><span>Nova meta</span></button>
+            </div>
             <div id="panel-add-meta" class="card" data-enter-form="true">
                 <h3>Criar Meta</h3>
                 <input type="text" id="m-nome" placeholder="Ex: Viagem"><input type="number" id="m-total" placeholder="Valor Total"><input type="number" id="m-entrada" placeholder="Início">
@@ -2044,6 +3057,10 @@ input[data-money-input="true"] { font-variant-numeric: tabular-nums; }
             <div id="metas-container"></div>
         </div>
         <div id="view-budget" class="tab-content hidden">
+            <div class="ff-module-header">
+                <div class="ff-module-heading"><span class="ff-module-kicker">Planejamento</span><h2>Orçamento</h2><p>Defina limites e acompanhe quanto ainda pode gastar.</p></div>
+                <button class="ff-module-primary secondary" onclick="focusModulePanel('panel-add-budget', null)"><i data-lucide="sliders-horizontal"></i><span>Ajustar</span></button>
+            </div>
             <div class="card">
               <h3>Simulador 50/30/20</h3>
               <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:12px;">Informe sua renda e ajuste os percentuais. A soma deve dar 100%.</p>
@@ -2078,7 +3095,11 @@ input[data-money-input="true"] { font-variant-numeric: tabular-nums; }
             </div>
         </div>
         <div id="view-cloud" class="tab-content hidden">
-            <button onclick="switchTab('dash', null)" style="background:none; border:none; color:#FF7A00; font-weight:700; font-size:0.9rem; cursor:pointer; padding:0 0 12px 0; display:flex; align-items:center; gap:6px;" aria-label="Voltar para o início">
+            <div class="ff-module-header">
+                <div class="ff-module-heading"><span class="ff-module-kicker">Compartilhamento</span><h2>Família</h2><p>Controle quem pode acompanhar informações financeiras da família.</p></div>
+                <button class="ff-module-primary" onclick="focusModulePanel(null,'invite-target')"><i data-lucide="user-plus"></i><span>Convidar</span></button>
+            </div>
+            <button class="ff-cloud-back" onclick="switchTab('dash', null)" style="background:none; border:none; color:#FF7A00; font-weight:700; font-size:0.9rem; cursor:pointer; padding:0 0 12px 0; display:flex; align-items:center; gap:6px;" aria-label="Voltar para o início">
                 <i data-lucide="arrow-left" style="width:18px; height:18px;"></i> Voltar ao Início
             </button>
             <div class="card family-invite-card" data-enter-form="true">
@@ -2364,6 +3385,8 @@ function revealAppShell() {
     document.getElementById('main-header').classList.remove('hidden');
     document.getElementById('app-main').classList.remove('hidden');
     document.getElementById('bottom-nav').classList.remove('hidden');
+    document.getElementById('desktop-sidebar')?.classList.remove('hidden');
+    document.getElementById('desktop-topbar')?.classList.remove('hidden');
     try {
         renderAll();
         applyVisibility();
@@ -2613,6 +3636,7 @@ async function loadCards() {
 }
 
 async function addCardNuvem(card) {
+    if (!await ensureCloudMutationReady('addCardNuvem')) return null;
     if (!sb || !currentUserId) return null;
     try {
         const { data, error } = await sb.from('cards').insert({
@@ -2620,14 +3644,15 @@ async function addCardNuvem(card) {
             closing_day: card.day, due_day: card.dueDay || null,
             juros_rotativo: card.jurosRotativo != null ? card.jurosRotativo : null, paid: false
         }).select().single();
-        if (error) { console.log('Erro add cartão:', error.message); return null; }
+        if (error) { lastSupabaseWriteError = error; console.log('Erro add cartão:', error.message); return null; }
         const novo = { id: data.id, name: data.name, limit: Number(data.card_limit), day: data.closing_day, dueDay: data.due_day || undefined, jurosRotativo: data.juros_rotativo != null ? Number(data.juros_rotativo) : undefined, expenses: [] };
         cardsCache.push(novo);
         return novo;
-    } catch (e) { console.log(e); return null; }
+    } catch (e) { lastSupabaseWriteError = e; console.log(e); return null; }
 }
 
 async function updateCardNuvem(id, campos) {
+    if (!await ensureCloudMutationReady('updateCardNuvem')) return false;
     if (!sb || !currentUserId) return false;
     try {
         const dbCampos = {};
@@ -2638,27 +3663,29 @@ async function updateCardNuvem(id, campos) {
         if ('jurosRotativo' in campos) dbCampos.juros_rotativo = campos.jurosRotativo != null ? campos.jurosRotativo : null;
         const { error } = await sb.from('cards').update(dbCampos)
             .eq('id', id).eq('user_id', currentUserId);
-        if (error) { console.log('Erro update cartão:', error.message); return false; }
+        if (error) { lastSupabaseWriteError = error; console.log('Erro update cartão:', error.message); return false; }
         const c = cardsCache.find(x => String(x.id) === String(id));
         if (c) Object.assign(c, campos);
         return true;
-    } catch (e) { console.log(e); return false; }
+    } catch (e) { lastSupabaseWriteError = e; console.log(e); return false; }
 }
 
 async function deleteCardNuvem(id) {
+    if (!await ensureCloudMutationReady('deleteCardNuvem')) return false;
     if (!sb || !currentUserId) return false;
     try {
         // Os gastos são apagados em cascata pelo banco (on delete cascade)
         const { error } = await sb.from('cards').delete()
             .eq('id', id).eq('user_id', currentUserId);
-        if (error) { console.log('Erro delete cartão:', error.message); return false; }
+        if (error) { lastSupabaseWriteError = error; console.log('Erro delete cartão:', error.message); return false; }
         cardsCache = cardsCache.filter(x => String(x.id) !== String(id));
         return true;
-    } catch (e) { console.log(e); return false; }
+    } catch (e) { lastSupabaseWriteError = e; console.log(e); return false; }
 }
 
 // Adiciona um ou vários gastos a um cartão. Atualiza o cache do cartão.
 async function addCardExpensesNuvem(cardId, expenses) {
+    if (!await ensureCloudMutationReady('addCardExpensesNuvem')) return false;
     if (!sb || !currentUserId) return false;
     try {
         const rows = expenses.map(e => ({
@@ -2674,7 +3701,7 @@ async function addCardExpensesNuvem(cardId, expenses) {
             result = await sb.from('card_expenses').insert(legacyRows).select();
         }
         const { data, error } = result;
-        if (error) { console.log('Erro add gasto:', error.message); return false; }
+        if (error) { lastSupabaseWriteError = error; console.log('Erro add gasto:', error.message); return false; }
         const c = cardsCache.find(x => String(x.id) === String(cardId));
         if (c) {
             (data || []).forEach(e => {
@@ -2688,11 +3715,12 @@ async function addCardExpensesNuvem(cardId, expenses) {
             });
         }
         return true;
-    } catch (e) { console.log(e); return false; }
+    } catch (e) { lastSupabaseWriteError = e; console.log(e); return false; }
 }
 
 
 async function updateCardExpenseNuvem(cardId, expId, campos) {
+    if (!await ensureCloudMutationReady('updateCardExpenseNuvem')) return false;
     if (!sb || !currentUserId) return false;
     try {
         const dbCampos = {};
@@ -2702,23 +3730,24 @@ async function updateCardExpenseNuvem(cardId, expId, campos) {
         if ('cat' in campos) dbCampos.cat = campos.cat;
         const { error } = await sb.from('card_expenses').update(dbCampos)
             .eq('id', expId).eq('user_id', currentUserId);
-        if (error) { console.log('Erro update gasto:', error.message); return false; }
+        if (error) { lastSupabaseWriteError = error; console.log('Erro update gasto:', error.message); return false; }
         const c = cardsCache.find(x => String(x.id) === String(cardId));
         if (c) { const ex = c.expenses.find(e => String(e.id) === String(expId)); if (ex) Object.assign(ex, campos); }
         return true;
-    } catch (e) { console.log(e); return false; }
+    } catch (e) { lastSupabaseWriteError = e; console.log(e); return false; }
 }
 
 async function deleteCardExpenseNuvem(cardId, expId) {
+    if (!await ensureCloudMutationReady('deleteCardExpenseNuvem')) return false;
     if (!sb || !currentUserId) return false;
     try {
         const { error } = await sb.from('card_expenses').delete()
             .eq('id', expId).eq('user_id', currentUserId);
-        if (error) { console.log('Erro delete gasto:', error.message); return false; }
+        if (error) { lastSupabaseWriteError = error; console.log('Erro delete gasto:', error.message); return false; }
         const c = cardsCache.find(x => String(x.id) === String(cardId));
         if (c) c.expenses = c.expenses.filter(e => String(e.id) !== String(expId));
         return true;
-    } catch (e) { console.log(e); return false; }
+    } catch (e) { lastSupabaseWriteError = e; console.log(e); return false; }
 }
 
 async function loadDebit() {
@@ -2740,6 +3769,7 @@ async function loadDebit() {
 
 // Adiciona UMA transação. Retorna o objeto criado (com id da nuvem) ou null.
 async function addDebitNuvem(t) {
+    if (!await ensureCloudMutationReady('addDebitNuvem')) return null;
     lastSupabaseWriteError = null;
     if (!sb || !currentUserId) { lastSupabaseWriteError = new Error('SESSION_REQUIRED'); return null; }
     try {
@@ -2782,6 +3812,7 @@ async function addDebitNuvem(t) {
 
 // Adiciona VÁRIAS transações de uma vez (recorrência). Retorna true/false.
 async function addDebitBatchNuvem(arr) {
+    if (!await ensureCloudMutationReady('addDebitBatchNuvem')) return false;
     lastSupabaseWriteError = null;
     if (!sb || !currentUserId) { lastSupabaseWriteError = new Error('SESSION_REQUIRED'); return false; }
     try {
@@ -2812,6 +3843,7 @@ async function addDebitBatchNuvem(arr) {
 
 
 async function updateDebitNuvem(id, campos) {
+    if (!await ensureCloudMutationReady('updateDebitNuvem')) return false;
     if (!sb || !currentUserId) return false;
     try {
         // Traduz campos do app pro banco
@@ -2824,39 +3856,41 @@ async function updateDebitNuvem(id, campos) {
         if ('recurringGroupId' in campos) dbCampos.recurring_group_id = campos.recurringGroupId || null;
         const { error } = await sb.from('transactions').update(dbCampos)
             .eq('id', id).eq('user_id', currentUserId);
-        if (error) { console.log('Erro update transação:', error.message); return false; }
+        if (error) { lastSupabaseWriteError = error; console.log('Erro update transação:', error.message); return false; }
         const t = debitCache.find(x => String(x.id) === String(id));
         if (t) Object.assign(t, campos);
         return true;
-    } catch (e) { console.log(e); return false; }
+    } catch (e) { lastSupabaseWriteError = e; console.log(e); return false; }
 }
 
 async function deleteDebitNuvem(id) {
+    if (!await ensureCloudMutationReady('deleteDebitNuvem')) return false;
     if (!sb || !currentUserId) return false;
     try {
         const { error } = await sb.from('transactions').delete()
             .eq('id', id).eq('user_id', currentUserId);
-        if (error) { console.log('Erro delete transação:', error.message); return false; }
+        if (error) { lastSupabaseWriteError = error; console.log('Erro delete transação:', error.message); return false; }
         debitCache = debitCache.filter(x => String(x.id) !== String(id));
         return true;
-    } catch (e) { console.log(e); return false; }
+    } catch (e) { lastSupabaseWriteError = e; console.log(e); return false; }
 }
 
 // Deleta todas as transações de um grupo recorrente (opcionalmente só a partir de uma data)
 async function deleteDebitGroupNuvem(groupId, fromDate) {
+    if (!await ensureCloudMutationReady('deleteDebitGroupNuvem')) return false;
     if (!sb || !currentUserId) return false;
     try {
         let q = sb.from('transactions').delete().eq('user_id', currentUserId).eq('recurring_group_id', groupId);
         if (fromDate) q = q.gte('date', fromDate);
         const { error } = await q;
-        if (error) { console.log('Erro delete grupo:', error.message); return false; }
+        if (error) { lastSupabaseWriteError = error; console.log('Erro delete grupo:', error.message); return false; }
         debitCache = debitCache.filter(x => {
             if (x.recurringGroupId !== groupId) return true;
             if (fromDate && x.date < fromDate) return true;
             return false;
         });
         return true;
-    } catch (e) { console.log(e); return false; }
+    } catch (e) { lastSupabaseWriteError = e; console.log(e); return false; }
 }
 
 
@@ -2876,41 +3910,44 @@ async function loadMetas() {
 }
 
 async function addMetaNuvem(meta) {
+    if (!await ensureCloudMutationReady('addMetaNuvem')) return null;
     if (!sb || !currentUserId) return null;
     try {
         const { data, error } = await sb.from('goals').insert({
             user_id: currentUserId, nome: meta.nome,
             total: meta.total, entrada: meta.entrada
         }).select().single();
-        if (error) { console.log('Erro add meta:', error.message); return null; }
+        if (error) { lastSupabaseWriteError = error; console.log('Erro add meta:', error.message); return null; }
         const nova = { id: data.id, nome: data.nome, total: Number(data.total), entrada: Number(data.entrada), concluida: data.concluida };
         metasCache.push(nova);
         return nova;
-    } catch (e) { console.log(e); return null; }
+    } catch (e) { lastSupabaseWriteError = e; console.log(e); return null; }
 }
 
 async function updateMetaNuvem(id, campos) {
+    if (!await ensureCloudMutationReady('updateMetaNuvem')) return false;
     if (!sb || !currentUserId) return false;
     try {
         const { error } = await sb.from('goals').update(campos)
             .eq('id', id).eq('user_id', currentUserId);
-        if (error) { console.log('Erro update meta:', error.message); return false; }
+        if (error) { lastSupabaseWriteError = error; console.log('Erro update meta:', error.message); return false; }
         // Atualiza o cache
         const m = metasCache.find(x => String(x.id) === String(id));
         if (m) Object.assign(m, campos);
         return true;
-    } catch (e) { console.log(e); return false; }
+    } catch (e) { lastSupabaseWriteError = e; console.log(e); return false; }
 }
 
 async function deleteMetaNuvem(id) {
+    if (!await ensureCloudMutationReady('deleteMetaNuvem')) return false;
     if (!sb || !currentUserId) return false;
     try {
         const { error } = await sb.from('goals').delete()
             .eq('id', id).eq('user_id', currentUserId);
-        if (error) { console.log('Erro delete meta:', error.message); return false; }
+        if (error) { lastSupabaseWriteError = error; console.log('Erro delete meta:', error.message); return false; }
         metasCache = metasCache.filter(x => String(x.id) !== String(id));
         return true;
-    } catch (e) { console.log(e); return false; }
+    } catch (e) { lastSupabaseWriteError = e; console.log(e); return false; }
 }
 
 // Carrega as categorias do usuário da nuvem pro cache
@@ -2928,25 +3965,27 @@ async function loadCustomCats() {
 function getCustomCats() { return viewingUser ? monitorCustomCats : customCatsCache; }
 
 async function addCustomCat(name) {
+    if (!await ensureCloudMutationReady('addCustomCat')) return false;
     if (!sb || !currentUserId) return false;
     try {
         const { error } = await sb.from('custom_categories')
             .insert({ user_id: currentUserId, name: name });
-        if (error) { console.log('Erro ao add categoria:', error.message); return false; }
+        if (error) { lastSupabaseWriteError = error; console.log('Erro ao add categoria:', error.message); return false; }
         if (!customCatsCache.includes(name)) customCatsCache.push(name);
         return true;
-    } catch (e) { console.log(e); return false; }
+    } catch (e) { lastSupabaseWriteError = e; console.log(e); return false; }
 }
 
 async function removeCustomCat(name) {
+    if (!await ensureCloudMutationReady('removeCustomCat')) return false;
     if (!sb || !currentUserId) return false;
     try {
         const { error } = await sb.from('custom_categories')
             .delete().eq('user_id', currentUserId).eq('name', name);
-        if (error) { console.log('Erro ao remover categoria:', error.message); return false; }
+        if (error) { lastSupabaseWriteError = error; console.log('Erro ao remover categoria:', error.message); return false; }
         customCatsCache = customCatsCache.filter(c => c !== name);
         return true;
-    } catch (e) { console.log(e); return false; }
+    } catch (e) { lastSupabaseWriteError = e; console.log(e); return false; }
 }
 
 function getCats() {
@@ -2999,8 +4038,8 @@ const tutorialSteps = [
     },
     {
         icon: 'layout-dashboard',
-        title: 'Suas 6 abas',
-        text: 'Início (visão geral), Lançamentos (gastos e receitas do dia a dia), Cartões (faturas e parcelas), Metas (objetivos) e Orçamentos (limites).'
+        title: 'Navegação organizada',
+        text: 'Use Início para a visão geral; Lançamentos, Cartões, Metas e Orçamento para o dia a dia; Família para compartilhamento e Configurações para preferências e segurança.'
     },
     {
         icon: 'piggy-bank',
@@ -3599,6 +4638,7 @@ function initIOSMobileStability() {
 }
 
 function clearStoredSession() {
+    invalidateSecureWriteSessionCache();
     localStorage.removeItem('ff_session');
     localStorage.removeItem('ff_session_id');
     localStorage.removeItem('ff_session_token');
@@ -3609,6 +4649,7 @@ function clearStoredSession() {
     rebuildSupabaseClient(null);
 }
 function persistSecureSession(username, id, displayName, token) {
+    invalidateSecureWriteSessionCache();
     currentUser = String(username || '').trim().toLowerCase();
     currentUserId = id;
     displayNameCache = displayName || currentUser;
@@ -3643,9 +4684,24 @@ async function validateStoredSession() {
 
 // Escritas não continuam apenas porque existe um token no localStorage.
 // Antes de salvar, confirma que o servidor reconhece a mesma sessão/usuário.
-async function ensureSecureWriteSession() {
+const WRITE_SESSION_TTL_MS = 20000;
+let secureWriteSessionCache = { token: null, userId: null, validatedAt: 0 };
+
+function invalidateSecureWriteSessionCache() {
+    secureWriteSessionCache = { token: null, userId: null, validatedAt: 0 };
+}
+
+async function ensureSecureWriteSession(options = {}) {
+    const force = !!options.force;
     if (!currentUser || !currentUserId || !currentSessionToken) {
         return { ok: false, kind: 'session', error: new Error('SESSION_REQUIRED') };
+    }
+    const now = Date.now();
+    if (!force &&
+        secureWriteSessionCache.token === currentSessionToken &&
+        String(secureWriteSessionCache.userId) === String(currentUserId) &&
+        (now - secureWriteSessionCache.validatedAt) < WRITE_SESSION_TTL_MS) {
+        return { ok: true, cached: true };
     }
     rebuildSupabaseClient(currentSessionToken);
     if (!sb) return { ok: false, kind: 'connection', error: new Error('SUPABASE_UNAVAILABLE') };
@@ -3653,15 +4709,30 @@ async function ensureSecureWriteSession() {
         let request = sb.rpc('validate_ff_session');
         request = applySessionHeader(request);
         const { data, error } = await withLoadTimeout(request, 'sessão de gravação', 9000);
-        if (error) return { ok: false, kind: classifyWriteError(error), error };
+        if (error) {
+            invalidateSecureWriteSessionCache();
+            return { ok: false, kind: classifyWriteError(error), error };
+        }
         const row = data && data[0];
         if (!row || String(row.id) !== String(currentUserId)) {
+            invalidateSecureWriteSessionCache();
             return { ok: false, kind: 'session', error: new Error('INVALID_SESSION') };
         }
-        return { ok: true };
+        secureWriteSessionCache = { token: currentSessionToken, userId: currentUserId, validatedAt: Date.now() };
+        return { ok: true, cached: false };
     } catch (error) {
+        invalidateSecureWriteSessionCache();
         return { ok: false, kind: isFetchFailure(error) ? 'connection' : 'session', error };
     }
+}
+
+async function ensureCloudMutationReady(action = 'salvar') {
+    lastSupabaseWriteError = null;
+    const secure = await ensureSecureWriteSession();
+    if (secure.ok) return true;
+    lastSupabaseWriteError = secure.error || new Error('WRITE_SESSION_FAILED');
+    console.log(`Gravação bloqueada antes de ${action}:`, lastSupabaseWriteError);
+    return false;
 }
 
 async function init() {
@@ -3932,8 +5003,15 @@ async function changePassword() {
 }
 function updateHeader() {
     const active = viewingUser || currentUser; if(!active) return;
-    // Header mostra a marca "family finance" (a saudação personalizada fica no greeting abaixo)
+    // Header mobile mantém a marca; desktop usa shell próprio.
     document.getElementById('header-brand').innerHTML = `<img src="${LOGO_SYMBOL}" alt="" style="width:38px; height:38px; object-fit:contain;"><h1 style="font-weight: 800; font-size: 1.1rem; letter-spacing:-0.5px;"><span style="color:var(--black);">family</span> <span style="color:var(--orange);">finance</span></h1>`;
+    const desktopLogo = document.getElementById('desktop-brand-logo');
+    if (desktopLogo) desktopLogo.src = LOGO_SYMBOL;
+    const desktopName = document.getElementById('desktop-user-name');
+    const desktopInitial = document.getElementById('desktop-user-initial');
+    const profileName = viewingUser || displayNameCache || currentUser || 'Usuário';
+    if (desktopName) desktopName.textContent = profileName;
+    if (desktopInitial) desktopInitial.textContent = String(profileName).trim().charAt(0).toUpperCase() || 'U';
     safeCreateIcons();
 }
 
@@ -4213,7 +5291,7 @@ async function addCreditCard() {
         showActionLoading('Cadastrando cartão...');
         const novo = await addCardNuvem(card);
         hideActionLoading();
-        if (!novo) { await showError("Não foi possível cadastrar o cartão. Verifique a conexão."); return; }
+        if (!novo) { await handleWriteError(lastSupabaseWriteError || new Error('CARD_WRITE_FAILED'), 'cadastrar o cartão'); return; }
         n.value = ""; l.value = ""; c.value = ""; if(d) d.value = ""; if(j) j.value = "";
         await showSuccess("Cartão cadastrado com sucesso."); renderAll();
     } finally {
@@ -4342,7 +5420,7 @@ async function deleteCard(id) {
         : `Excluir o cartão${nome}?`;
     if(!await showConfirm(msg, { danger: true, confirmText: 'Excluir cartão' })) return;
     const ok = await deleteCardNuvem(id);
-    if (!ok) { await showError("Erro ao excluir. Verifique a conexão."); return; }
+    if (!ok) { await handleWriteError(lastSupabaseWriteError || new Error('DELETE_FAILED'), 'excluir'); return; }
     await showSuccess("Cartão excluído com sucesso.");
     renderAll();
 }
@@ -4692,27 +5770,34 @@ function editCreditItem(cardId, id) {
 }
 function closeEditModal() { document.getElementById('modal-edit').classList.add('hidden'); }
 async function saveEdit() {
-    const type = document.getElementById('edit-type').value;
-    const id = document.getElementById('edit-id').value;
-    const desc = document.getElementById('edit-desc'), val = document.getElementById('edit-val'), date = document.getElementById('edit-date');
-    if(!checkCommonFields(desc, val, date)) return;
-    const valorEditado = parseMoneyInput(val.value);
-    if(!await confirmarValorAlto(valorEditado)) return;
-    if(type === 'debit') {
-        const ok = await updateDebitNuvem(id, {
-            desc: desc.value.trim(), val: valorEditado, date: date.value,
-            cat: document.getElementById('edit-cat').value, type: document.getElementById('edit-t-type').value
-        });
-        if (!ok) { await showError("Não foi possível salvar. Verifique a conexão e tente novamente."); return; }
-        closeEditModal(); await showSuccess("Alterações salvas com sucesso."); renderAll(); checkTips();
-    } else {
-        const cardId = document.getElementById('edit-card-id').value;
-        const ok = await updateCardExpenseNuvem(cardId, id, {
-            desc: desc.value.trim(), val: valorEditado,
-            date: date.value, cat: document.getElementById('edit-cat').value
-        });
-        if (!ok) { await showError("Não foi possível salvar. Verifique a conexão e tente novamente."); return; }
-        closeEditModal(); await showSuccess("Alterações salvas com sucesso."); renderAll();
+    const btn = getActionButton('saveEdit');
+    if (!startActionLock('saveEdit', btn, 'Salvando...')) return;
+    try {
+        const type = document.getElementById('edit-type').value;
+        const id = document.getElementById('edit-id').value;
+        const desc = document.getElementById('edit-desc'), val = document.getElementById('edit-val'), date = document.getElementById('edit-date');
+        if(!checkCommonFields(desc, val, date)) return;
+        const valorEditado = parseMoneyInput(val.value);
+        if(!await confirmarValorAlto(valorEditado)) return;
+        showActionLoading('Salvando alterações...');
+        if(type === 'debit') {
+            const ok = await updateDebitNuvem(id, {
+                desc: desc.value.trim(), val: valorEditado, date: date.value,
+                cat: document.getElementById('edit-cat').value, type: document.getElementById('edit-t-type').value
+            });
+            if (!ok) { await handleWriteError(lastSupabaseWriteError || new Error('UPDATE_FAILED'), 'salvar as alterações'); return; }
+            closeEditModal(); await showSuccess("Alterações salvas com sucesso."); renderAll(); checkTips();
+        } else {
+            const cardId = document.getElementById('edit-card-id').value;
+            const ok = await updateCardExpenseNuvem(cardId, id, {
+                desc: desc.value.trim(), val: valorEditado,
+                date: date.value, cat: document.getElementById('edit-cat').value
+            });
+            if (!ok) { await handleWriteError(lastSupabaseWriteError || new Error('UPDATE_FAILED'), 'salvar as alterações'); return; }
+            closeEditModal(); await showSuccess("Alterações salvas com sucesso."); renderAll();
+        }
+    } finally {
+        finishActionLock('saveEdit', btn);
     }
 }
 
@@ -4739,18 +5824,18 @@ async function deleteDebitItem(id) {
             if (!okSerie) return;
             ok = await deleteDebitGroupNuvem(item.recurringGroupId, item.date);
         }
-        if (!ok) { await showError("Erro ao excluir. Verifique a conexão."); return; }
+        if (!ok) { await handleWriteError(lastSupabaseWriteError || new Error('DELETE_FAILED'), 'excluir'); return; }
         renderAll(); checkTips();
     } else if (await showConfirm("Excluir este lançamento?", { danger: true, confirmText: 'Excluir' })) {
         const ok = await deleteDebitNuvem(id);
-        if (!ok) { await showError("Erro ao excluir. Verifique a conexão."); return; }
+        if (!ok) { await handleWriteError(lastSupabaseWriteError || new Error('DELETE_FAILED'), 'excluir'); return; }
         renderAll(); checkTips();
     }
 }
 async function deleteCreditItem(cardId, id) {
     if(viewingUser) return; if(!await showConfirm("Excluir esta compra?", { danger: true, confirmText: 'Excluir' })) return;
     const ok = await deleteCardExpenseNuvem(cardId, id);
-    if (!ok) { await showError("Erro ao excluir. Verifique a conexão."); return; }
+    if (!ok) { await handleWriteError(lastSupabaseWriteError || new Error('DELETE_FAILED'), 'excluir'); return; }
     renderAll();
 }
 async function duplicateDebitItem(id) {
@@ -5254,12 +6339,14 @@ async function revokeWatcher(permId) {
 
 
 function setNotificationBadge(count) {
-    const dot = document.getElementById('noti-dot');
-    if (!dot) return;
     const n = Number(count || 0);
-    dot.textContent = n > 9 ? '9+' : String(n);
-    dot.classList.toggle('hidden', n <= 0);
-    dot.setAttribute('aria-label', `${n} notificações não lidas`);
+    ['noti-dot', 'desktop-noti-dot'].forEach(id => {
+        const dot = document.getElementById(id);
+        if (!dot) return;
+        dot.textContent = n > 9 ? '9+' : String(n);
+        dot.classList.toggle('hidden', n <= 0);
+        dot.setAttribute('aria-label', `${n} notificações não lidas`);
+    });
 }
 
 // Atualiza o contador sem consultar o banco em toda renderização da interface.
@@ -5515,8 +6602,24 @@ function renderAll() {
 
     const incT = debits.filter(t => t.type === 'receita' && t.date <= todayStr).reduce((a,b) => a+b.val, 0);
     const expT = debits.filter(t => t.type === 'despesa' && t.date <= todayStr).reduce((a,b) => a+b.val, 0);
-    document.getElementById('stat-balance').textContent = maskVal(formatBRL(incT - expT));
+    const currentBalance = incT - expT;
+    document.getElementById('stat-balance').textContent = maskVal(formatBRL(currentBalance));
     document.getElementById('balance-adjust-btn')?.classList.toggle('hidden', !!viewingUser);
+
+    const monthEnd = formatLocalDateISO(new Date(currentYear, currentMonth + 1, 0));
+    const projectedBalance = debits.filter(t => t.date && t.date <= monthEnd).reduce((sum, t) => {
+        const value = Number(t.val || 0);
+        return sum + (t.type === 'receita' ? value : (t.type === 'despesa' ? -value : 0));
+    }, 0);
+    const projectedEl = document.getElementById('stat-saldo-previsto');
+    if (projectedEl) projectedEl.textContent = maskVal(formatBRL(projectedBalance));
+    const statusEl = document.getElementById('ff-balance-status');
+    if (statusEl) {
+        statusEl.textContent = currentBalance < 0 ? 'Saldo exige atenção' : (currentBalance === 0 ? 'Hora de planejar' : 'Tudo sob controle');
+        statusEl.style.color = currentBalance < 0 ? '#FFE2DE' : '#FFFFFF';
+    }
+    const updatedEl = document.getElementById('ff-last-update');
+    if (updatedEl) updatedEl.textContent = `Atualizado às ${new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })}`;
 
     const mD = debits.filter(filterM);
     const incM = mD.filter(t => !t.isBalanceAdjustment && t.type === 'receita').reduce((a,b) => a+b.val, 0);
@@ -5554,6 +6657,7 @@ function renderAll() {
     const rem = renderInvoiceReminders();
     document.getElementById('invoice-reminders-container').innerHTML = rem;
     if(rem) safeCreateIcons();
+    renderDesktopDashboardStates();
 
     if(!viewingUser) {
         refreshNotifications(false);
@@ -5657,13 +6761,74 @@ function renderTabContent(id) {
     }
     renderDependencyWarning();
 }
+function setDesktopNavActive(id) {
+    document.querySelectorAll('.ff-desktop-nav-btn[data-tab]').forEach(button => {
+        button.classList.toggle('active', button.dataset.tab === id);
+    });
+}
+async function handleDesktopGlobalSearch(event) {
+    if (event.key !== 'Enter') return;
+    const term = String(event.target.value || '').trim();
+    if (!term) return;
+    event.preventDefault();
+    await openHistory('all');
+    const search = document.getElementById('hist-filter-search');
+    if (search) {
+        search.value = term;
+        renderHistoryModal();
+        search.focus();
+    }
+}
+function renderDesktopDashboardStates() {
+    const reminderSlot = document.getElementById('invoice-reminders-container');
+    if (reminderSlot && !reminderSlot.innerHTML.trim()) {
+        reminderSlot.innerHTML = `<div class="ff-empty-dashboard"><span class="ff-empty-icon"><i data-lucide="calendar-check"></i></span><strong>Nenhum vencimento próximo</strong><span>Suas faturas que exigirem atenção aparecerão aqui.</span></div>`;
+    }
+    const goalsSlot = document.getElementById('dash-metas-list');
+    if (goalsSlot && !goalsSlot.innerHTML.trim()) {
+        goalsSlot.innerHTML = `<div class="ff-empty-dashboard"><span class="ff-empty-icon"><i data-lucide="trophy"></i></span><strong>Nenhuma meta cadastrada</strong><span>Crie uma meta para acompanhar seu progresso.</span></div>`;
+    }
+    safeCreateIcons();
+}
+const FF_MODULE_ACTIONS = {
+    trans: { panel: 'panel-add-trans', focus: 't-desc' },
+    card: { panel: 'panel-add-cc', focus: 'cc-name' },
+    metas: { panel: 'panel-add-meta', focus: 'm-nome' },
+    budget: { panel: 'panel-add-budget', focus: null },
+    cloud: { panel: null, focus: 'invite-target' }
+};
+function focusModulePanel(panelId, focusId) {
+    const panel = panelId ? document.getElementById(panelId) : null;
+    if (panel) {
+        panel.classList.remove('hidden');
+        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    const focusEl = focusId ? document.getElementById(focusId) : null;
+    if (focusEl) setTimeout(() => { try { focusEl.focus({ preventScroll: true }); } catch (_) { focusEl.focus(); } }, 280);
+}
+function openModulePrimaryAction(id) {
+    const cfg = FF_MODULE_ACTIONS[id];
+    switchTab(id, document.getElementById(`nav-${id}`));
+    if (cfg) setTimeout(() => focusModulePanel(cfg.panel, cfg.focus), 80);
+}
 function switchTab(id, btn) {
     debitVisible = 15; creditVisible = 15;
+    const target = document.getElementById(`view-${id}`);
+    if (!target) return;
     document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
-    document.getElementById(`view-${id}`).classList.remove('hidden');
+    target.classList.remove('hidden');
     document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-    if (btn) btn.classList.add('active');
+    if (btn && btn.classList.contains('nav-item')) btn.classList.add('active');
+    const mobileBtn = document.getElementById(`nav-${id}`);
+    if (mobileBtn) mobileBtn.classList.add('active');
+    setDesktopNavActive(id);
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    if (sidebar?.classList.contains('active')) { sidebar.classList.remove('active'); overlay?.classList.remove('active'); }
     renderTabContent(id);
+    document.body.dataset.activeModule = id;
+    if (window.scrollY > 140) window.scrollTo({ top: 0, behavior: 'smooth' });
+    safeCreateIcons();
 }
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); renderVisibilityConfig(); }
 
@@ -6567,7 +7732,7 @@ async function addCategory() {
     const all = getCats();
     if (all.some(c => c.toLowerCase() === name.toLowerCase())) { setError(input, "Essa categoria já existe."); return; }
     const ok = await addCustomCat(name);
-    if (!ok) { await showAlert("Erro ao salvar categoria. Verifique a conexão."); return; }
+    if (!ok) { await handleWriteError(lastSupabaseWriteError || new Error('CATEGORY_WRITE_FAILED'), 'salvar a categoria'); return; }
     input.value = "";
     renderCatList();
     populateCategories();
@@ -6578,7 +7743,7 @@ function deleteCategory(name) {
     showConfirm(`Excluir a categoria "${name}"? Lançamentos antigos com ela não serão afetados.`, { danger: true, confirmText: 'Excluir categoria' }).then(async ok => {
         if (!ok) return;
         const sucesso = await removeCustomCat(name);
-        if (!sucesso) { await showError("Erro ao remover. Verifique a conexão."); return; }
+        if (!sucesso) { await handleWriteError(lastSupabaseWriteError || new Error('CATEGORY_DELETE_FAILED'), 'remover a categoria'); return; }
         renderCatList();
         populateCategories();
         showSuccess("Categoria removida com sucesso.");
@@ -6680,7 +7845,7 @@ async function addMeta() {
     if(!ok) return;
     if(!await confirmarValorAlto(totalMeta)) return;
     const nova = await addMetaNuvem({ nome: n.value.trim(), total: totalMeta, entrada: entradaMeta });
-    if (!nova) { await showAlert("Erro ao criar meta. Verifique a conexão."); return; }
+    if (!nova) { await handleWriteError(lastSupabaseWriteError || new Error('GOAL_CREATE_FAILED'), 'criar a meta'); return; }
     n.value = ""; t.value = ""; e.value = ""; await showSuccess("Meta criada com sucesso."); renderAll();
 }
 
@@ -6705,7 +7870,7 @@ async function submitAddToMeta() {
     const m = list.find(x => String(x.id) === String(id)); if (!m) return;
     const novaEntrada = m.entrada + val;
     const ok = await updateMetaNuvem(id, { entrada: novaEntrada });
-    if (!ok) { await showAlert("Erro ao guardar valor. Verifique a conexão."); return; }
+    if (!ok) { await handleWriteError(lastSupabaseWriteError || new Error('GOAL_UPDATE_FAILED'), 'atualizar a meta'); return; }
     closeAddToMeta();
     renderAll();
     if (novaEntrada >= m.total) { await showAlert("🎉 Você atingiu o valor da meta! Toque em 'Concluir' para celebrar."); }
@@ -6733,7 +7898,7 @@ async function submitEditMeta() {
     if (isNaN(entrada) || entrada < 0) { setError(document.getElementById('meta-edit-entrada'), "Valor inválido."); return; }
     if(!await confirmarValorAlto(total)) return;
     const ok = await updateMetaNuvem(id, { nome: nome, total: total, entrada: entrada });
-    if (!ok) { await showError("Não foi possível salvar. Verifique a conexão e tente novamente."); return; }
+    if (!ok) { await handleWriteError(lastSupabaseWriteError || new Error('UPDATE_FAILED'), 'salvar as alterações'); return; }
     closeEditMeta();
     renderAll();
 }
@@ -6744,7 +7909,7 @@ async function concludeMeta(id) {
     const m = metasCache.find(x => String(x.id) === String(id)); if (!m) return;
     const dataConcl = getLocalDateISO();
     const ok = await updateMetaNuvem(id, { concluida: dataConcl });
-    if (!ok) { await showAlert("Erro ao concluir. Verifique a conexão."); return; }
+    if (!ok) { await handleWriteError(lastSupabaseWriteError || new Error('GOAL_UPDATE_FAILED'), 'concluir a meta'); return; }
     renderAll();
     await showAlert(`🏆 Parabéns! Você conquistou a meta "${m.nome}"! Não acredito que você conseguiu — orgulho total!`);
 }
@@ -6757,7 +7922,7 @@ function deleteMeta(id) {
     showConfirm(`Excluir a meta${nome}? O progresso registrado nela será removido.`, { danger: true, confirmText: 'Excluir meta' }).then(async ok => {
         if (!ok) return;
         const sucesso = await deleteMetaNuvem(id);
-        if (!sucesso) { await showError("Erro ao excluir. Verifique a conexão."); return; }
+        if (!sucesso) { await handleWriteError(lastSupabaseWriteError || new Error('DELETE_FAILED'), 'excluir'); return; }
         await showSuccess("Meta excluída com sucesso.");
         renderAll();
     });

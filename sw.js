@@ -1,5 +1,5 @@
 const CACHE_PREFIX = 'family-finance-';
-const CACHE_NAME = 'family-finance-cache-2026-09-11-secure-write-cors-fix';
+const CACHE_NAME = 'family-finance-cache-2026-09-13-rebuild-stage-7-8-9';
 const CORE_ASSETS = [
   './',
   './index.html',
