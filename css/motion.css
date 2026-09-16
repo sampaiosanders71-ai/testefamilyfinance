@@ -1,0 +1,132 @@
+/* Family Finance — camada de movimento.
+   Regra: este arquivo NÃO redefine layout, tamanhos permanentes, cores do app,
+   grids, cards, campos ou posicionamento estrutural. Só anima estados temporários. */
+
+.ff-entry-splash{
+  position:fixed;
+  inset:0;
+  z-index:10000;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  pointer-events:none;
+  background:#0b0c0d;
+  opacity:1;
+  will-change:opacity;
+}
+.ff-entry-splash.is-leaving{animation:ffSplashOut .34s ease forwards}
+.ff-entry-splash-brand{
+  position:fixed;
+  left:50%;
+  top:45%;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  white-space:nowrap;
+  font:800 clamp(1.55rem,3vw,2.15rem) Montserrat,Inter,sans-serif;
+  color:#f7f8f9;
+  letter-spacing:-.04em;
+  opacity:0;
+  transform:translate(-50%,-50%) scale(.9);
+  will-change:left,top,transform,opacity;
+}
+.ff-entry-splash-brand strong,.ff-entry-splash-brand .brand-mark{color:#ff7a00}
+.ff-entry-splash-brand.is-entering{animation:ffSplashBrandIn .55s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes ffSplashBrandIn{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.88)}
+  65%{opacity:1;transform:translate(-50%,-50%) scale(1.04)}
+  100%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+}
+@keyframes ffSplashOut{to{opacity:0}}
+
+/* Stagger: somente opacity/transform. O layout original continua intacto. */
+#auth-view.ff-auth-intro .auth-heading,
+#auth-view.ff-auth-intro #auth-form .field,
+#auth-view.ff-auth-intro #auth-form .form-error,
+#auth-view.ff-auth-intro #auth-submit,
+#auth-view.ff-auth-intro #auth-toggle{
+  opacity:0;
+  transform:translateY(14px);
+}
+#auth-view.ff-auth-intro.ff-auth-fields-in .auth-heading{animation:ffFieldIn .38s ease .02s forwards}
+#auth-view.ff-auth-intro.ff-auth-fields-in #auth-form .field:nth-of-type(1){animation:ffFieldIn .38s ease .10s forwards}
+#auth-view.ff-auth-intro.ff-auth-fields-in #auth-form .field:nth-of-type(2){animation:ffFieldIn .38s ease .18s forwards}
+#auth-view.ff-auth-intro.ff-auth-fields-in #auth-form .form-error{animation:ffFieldIn .30s ease .22s forwards}
+#auth-view.ff-auth-intro.ff-auth-fields-in #auth-submit{animation:ffFieldIn .38s ease .26s forwards}
+#auth-view.ff-auth-intro.ff-auth-fields-in #auth-toggle{animation:ffFieldIn .38s ease .34s forwards}
+@keyframes ffFieldIn{to{opacity:1;transform:translateY(0)}}
+
+/* O próprio botão vira cápsula durante a autenticação. Finalizado o login/erro,
+   ele volta exatamente às dimensões definidas em app.css. */
+#auth-submit.ff-login-capsule{
+  width:52px!important;
+  min-width:52px;
+  padding-left:0!important;
+  padding-right:0!important;
+  margin-left:auto;
+  margin-right:auto;
+  border-radius:999px!important;
+  opacity:1!important;
+  transition:width .34s cubic-bezier(.2,.8,.2,1),border-radius .34s ease,transform .18s ease!important;
+}
+.ff-login-spinner{
+  width:20px;
+  height:20px;
+  display:block;
+  border:2.5px solid rgba(17,18,20,.24);
+  border-top-color:#111214;
+  border-radius:50%;
+  animation:ffSpin .72s linear infinite;
+}
+@keyframes ffSpin{to{transform:rotate(360deg)}}
+html.ff-login-busy #auth-loading-overlay{display:none!important}
+
+/* Wipe final: camada independente, sem tocar no Dashboard. */
+.ff-entry-wipe{
+  position:fixed;
+  left:-10vw;
+  top:-16dvh;
+  width:120vw;
+  height:132dvh;
+  z-index:10001;
+  pointer-events:none;
+  opacity:0;
+  background:#0b0c0d;
+  border-radius:0 0 48% 48%/0 0 10% 10%;
+  transform:translateY(-120%);
+  will-change:transform,opacity;
+}
+.ff-entry-wipe.is-running{animation:ffWipe .90s cubic-bezier(.72,0,.2,1) both}
+@keyframes ffWipe{
+  0%{opacity:1;transform:translateY(-120%)}
+  47%{opacity:1;transform:translateY(-3%)}
+  55%{opacity:1;transform:translateY(0)}
+  100%{opacity:1;transform:translateY(120%)}
+}
+html.ff-entry-transition,html.ff-entry-transition body{overflow:hidden}
+
+/* Leve entrada do conteúdo após o wipe. Não altera dimensões. */
+#app-view.ff-dashboard-enter .workspace{animation:ffDashboardIn .38s ease both}
+@keyframes ffDashboardIn{
+  from{opacity:.72;transform:translateY(5px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .ff-entry-splash-brand,
+  #auth-view.ff-auth-intro .auth-heading,
+  #auth-view.ff-auth-intro #auth-form .field,
+  #auth-view.ff-auth-intro #auth-form .form-error,
+  #auth-view.ff-auth-intro #auth-submit,
+  #auth-view.ff-auth-intro #auth-toggle,
+  .ff-entry-wipe,
+  #app-view.ff-dashboard-enter .workspace{
+    animation:none!important;
+    transition:none!important;
+  }
+  #auth-view.ff-auth-intro .auth-heading,
+  #auth-view.ff-auth-intro #auth-form .field,
+  #auth-view.ff-auth-intro #auth-form .form-error,
+  #auth-view.ff-auth-intro #auth-submit,
+  #auth-view.ff-auth-intro #auth-toggle{opacity:1;transform:none}
+}
