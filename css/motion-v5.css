@@ -1,0 +1,59 @@
+/* Family Finance — reconstrução das animações v4.
+   Somente timing e estados temporários de movimento. O layout permanente continua em app.css. */
+
+.ff-motion-splash{position:fixed;inset:0;z-index:12000;display:grid;place-items:center;overflow:hidden;pointer-events:none;background:#0b0c0d;opacity:1}
+.ff-motion-splash-brand{position:fixed;left:50%;top:46%;display:flex;align-items:center;gap:10px;white-space:nowrap;font:800 clamp(1.55rem,3vw,2.15rem) Montserrat,Inter,sans-serif;color:#f7f8f9;letter-spacing:-.04em;opacity:0;transform:translate(-50%,-50%) scale(.88);will-change:left,top,transform,opacity}
+.ff-motion-splash-brand strong,.ff-motion-splash-brand .brand-mark{color:#ff7a00}
+.ff-motion-splash-brand.is-in{animation:ffMotionBrandIn .72s cubic-bezier(.2,.8,.2,1) forwards}
+.ff-motion-splash.is-out{animation:ffMotionSplashOut .42s ease forwards}
+@keyframes ffMotionBrandIn{0%{opacity:0;transform:translate(-50%,-50%) scale(.88)}68%{opacity:1;transform:translate(-50%,-50%) scale(1.03)}100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@keyframes ffMotionSplashOut{to{opacity:0}}
+
+/* Painel existente: movimento deliberadamente mais lento, sem alterar sua geometria final. */
+#auth-view.ff-motion-intro .auth-panel{transform:translateY(108%);clip-path:ellipse(95% 86% at 50% 100%);will-change:transform,clip-path}
+#auth-view.ff-motion-intro.ff-motion-panel-in .auth-panel{animation:ffMotionPanelIn 1.08s cubic-bezier(.22,.78,.2,1) forwards}
+@keyframes ffMotionPanelIn{0%{transform:translateY(108%);clip-path:ellipse(95% 86% at 50% 100%)}72%{transform:translateY(-1.2%);clip-path:ellipse(120% 120% at 50% 100%)}100%{transform:translateY(0);clip-path:inset(0 round 0)}}
+
+/* Stagger mais espaçado para cada elemento ser percebido. */
+#auth-view.ff-motion-intro .auth-heading,
+#auth-view.ff-motion-intro #auth-form .field,
+#auth-view.ff-motion-intro #auth-form .form-error,
+#auth-view.ff-motion-intro #auth-submit,
+#auth-view.ff-motion-intro #auth-toggle{opacity:0;transform:translateY(14px)}
+#auth-view.ff-motion-intro.ff-motion-fields-in .auth-heading{animation:ffMotionFieldIn .54s ease .04s forwards}
+#auth-view.ff-motion-intro.ff-motion-fields-in #auth-form .field:nth-of-type(1){animation:ffMotionFieldIn .54s ease .18s forwards}
+#auth-view.ff-motion-intro.ff-motion-fields-in #auth-form .field:nth-of-type(2){animation:ffMotionFieldIn .54s ease .32s forwards}
+#auth-view.ff-motion-intro.ff-motion-fields-in #auth-form .form-error{animation:ffMotionFieldIn .44s ease .40s forwards}
+#auth-view.ff-motion-intro.ff-motion-fields-in #auth-submit{animation:ffMotionFieldIn .54s ease .48s forwards}
+#auth-view.ff-motion-intro.ff-motion-fields-in #auth-toggle{animation:ffMotionFieldIn .54s ease .62s forwards}
+@keyframes ffMotionFieldIn{to{opacity:1;transform:translateY(0)}}
+
+/* Entrar -> cápsula/spinner com transformação mais visível. */
+#auth-submit.ff-motion-login-capsule{width:52px!important;min-width:52px;padding-left:0!important;padding-right:0!important;margin-left:auto;margin-right:auto;border-radius:999px!important;opacity:1!important;transition:width .52s cubic-bezier(.2,.8,.2,1),border-radius .52s ease!important}
+.ff-motion-login-spinner{width:20px;height:20px;display:block;margin:auto;border:2.5px solid rgba(17,18,20,.24);border-top-color:#111214;border-radius:50%;animation:ffMotionSpin .82s linear infinite}
+@keyframes ffMotionSpin{to{transform:rotate(360deg)}}
+html.ff-motion-login-busy #auth-loading-overlay{display:none!important}
+
+/* Wipe mais lento entre autenticação e Dashboard. */
+.ff-motion-wipe{position:fixed;left:-10vw;top:-16dvh;width:120vw;height:132dvh;z-index:12001;pointer-events:none;opacity:0;background:#0b0c0d;border-radius:0 0 48% 48%/0 0 10% 10%;transform:translateY(-120%);will-change:transform,opacity}
+.ff-motion-wipe.is-running{animation:ffMotionWipe 1.36s cubic-bezier(.70,0,.22,1) both}
+@keyframes ffMotionWipe{0%{opacity:1;transform:translateY(-120%)}46%{opacity:1;transform:translateY(-2%)}58%{opacity:1;transform:translateY(0)}100%{opacity:1;transform:translateY(120%)}}
+html.ff-motion-transition,html.ff-motion-transition body{overflow:hidden}
+#app-view.ff-motion-dashboard-in .workspace{animation:ffMotionDashboardIn .68s ease both}
+@keyframes ffMotionDashboardIn{from{opacity:.68;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+
+.ff-motion-counting{font-variant-numeric:tabular-nums}
+
+@media(prefers-reduced-motion:reduce){
+  .ff-motion-splash-brand{animation-duration:.16s!important}
+  #auth-view.ff-motion-intro .auth-panel{transform:none;clip-path:none}
+  #auth-view.ff-motion-intro.ff-motion-panel-in .auth-panel{animation:none!important}
+  #auth-view.ff-motion-intro .auth-heading,
+  #auth-view.ff-motion-intro #auth-form .field,
+  #auth-view.ff-motion-intro #auth-form .form-error,
+  #auth-view.ff-motion-intro #auth-submit,
+  #auth-view.ff-motion-intro #auth-toggle{opacity:1;transform:none;animation:none!important}
+  .ff-motion-wipe{display:none!important}
+  #app-view.ff-motion-dashboard-in .workspace{animation:ffMotionReducedFade .18s ease both}
+  @keyframes ffMotionReducedFade{from{opacity:.8}to{opacity:1}}
+}
