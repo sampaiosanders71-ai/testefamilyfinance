@@ -1,0 +1,234 @@
+/* Family Finance — fluxo de entrada inspirado na referência SLATE.
+   Somente interface: nenhuma regra de autenticação, banco ou RLS é alterada. */
+
+#auth-view.ff-auth-motion{
+  --ff-brand-left:clamp(24px,4vw,58px);
+  --ff-brand-top:30px;
+  position:fixed;
+  inset:0;
+  z-index:9000;
+  display:block;
+  min-height:100dvh;
+  overflow:hidden;
+  background:#08090a;
+  isolation:isolate;
+}
+
+#auth-view.ff-auth-motion .auth-brand{
+  position:absolute;
+  inset:0;
+  display:block!important;
+  padding:0;
+  border:0;
+  background:
+    radial-gradient(circle at 22% 20%,rgba(255,122,0,.19),transparent 28%),
+    radial-gradient(circle at 78% 10%,rgba(255,154,61,.07),transparent 26%),
+    #08090a;
+}
+#auth-view.ff-auth-motion .auth-brand>.brand-lockup,
+#auth-view.ff-auth-motion .auth-copy{opacity:0;visibility:hidden;pointer-events:none}
+
+.ff-auth-ambient{
+  position:absolute;
+  inset:-18%;
+  z-index:0;
+  pointer-events:none;
+  background:radial-gradient(circle at 50% 34%,rgba(255,122,0,.11),transparent 30%);
+  opacity:0;
+  transition:opacity .5s ease;
+}
+.ff-auth-ready .ff-auth-ambient{opacity:1}
+
+.ff-auth-splash{
+  position:absolute;
+  left:50%;
+  top:44%;
+  z-index:5;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  white-space:nowrap;
+  color:#f7f8f9;
+  font:800 clamp(1.55rem,3vw,2.25rem) Montserrat,Inter,sans-serif;
+  letter-spacing:-.04em;
+  opacity:0;
+  transform:translate(-50%,-50%) scale(.9);
+  transform-origin:left top;
+  will-change:left,top,transform,opacity;
+}
+.ff-auth-splash strong{color:#ff7a00}
+.ff-auth-mark{color:#ff7a00;font-size:1.35em;line-height:1;filter:drop-shadow(0 0 14px rgba(255,122,0,.28))}
+.ff-auth-ready .ff-auth-splash{animation:ffBrandJourney 1.48s cubic-bezier(.22,.86,.26,1) forwards}
+
+@keyframes ffBrandJourney{
+  0%{left:50%;top:44%;opacity:0;transform:translate(-50%,-50%) scale(.88)}
+  15%{left:50%;top:44%;opacity:1;transform:translate(-50%,-50%) scale(1.04)}
+  42%{left:50%;top:44%;opacity:1;transform:translate(-50%,-50%) scale(1)}
+  100%{left:var(--ff-brand-left);top:var(--ff-brand-top);opacity:1;transform:translate(0,0) scale(.76)}
+}
+
+#auth-view.ff-auth-motion .auth-panel{
+  position:absolute;
+  left:-4vw;
+  right:-4vw;
+  bottom:-2px;
+  z-index:3;
+  min-height:min(72dvh,760px);
+  padding:118px max(7vw,28px) 42px;
+  display:grid;
+  place-items:start center;
+  overflow:auto;
+  background:#f5f1eb;
+  color:#211f1d;
+  border:0;
+  border-radius:50% 50% 0 0/92px 92px 0 0;
+  box-shadow:0 -26px 80px rgba(0,0,0,.16);
+  transform:translateY(106%);
+  transition:transform .82s cubic-bezier(.2,.78,.2,1);
+  will-change:transform;
+}
+#auth-view.ff-auth-motion.ff-auth-ready .auth-panel{transform:translateY(0);transition-delay:.56s}
+
+#auth-view.ff-auth-motion .auth-card{
+  width:min(430px,calc(100vw - 42px));
+  padding:0;
+  margin:0 auto;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  color:#211f1d;
+}
+#auth-view.ff-auth-motion .auth-heading .eyebrow{color:#ff7a00}
+#auth-view.ff-auth-motion .auth-heading h2{margin:7px 0 7px;color:#171615;font-size:clamp(1.85rem,4vw,2.35rem);letter-spacing:-.035em}
+#auth-view.ff-auth-motion .auth-heading p{margin:0 0 25px;color:#736d67}
+#auth-view.ff-auth-motion .field{margin-bottom:15px}
+#auth-view.ff-auth-motion .field label{color:#514c47}
+#auth-view.ff-auth-motion .field input{
+  min-height:50px;
+  border:1px solid #dad2ca;
+  border-radius:14px;
+  background:#fff;
+  color:#1d1b19;
+  box-shadow:0 7px 20px rgba(72,53,36,.04);
+}
+#auth-view.ff-auth-motion .field input::placeholder{color:#a39b94}
+#auth-view.ff-auth-motion .field input:focus{border-color:#ff7a00;box-shadow:0 0 0 3px rgba(255,122,0,.12)}
+#auth-view.ff-auth-motion .text-btn{color:#c85f00;font-weight:700}
+#auth-view.ff-auth-motion .form-error{background:rgba(240,68,56,.10);color:#b42318}
+
+#auth-view.ff-auth-motion #auth-submit{
+  display:grid;
+  place-items:center;
+  min-height:52px;
+  width:100%;
+  margin:5px auto 0;
+  border-radius:14px;
+  background:linear-gradient(135deg,#ff7a00,#ff9838);
+  color:#17120e;
+  box-shadow:0 13px 28px rgba(255,122,0,.24);
+  transition:width .34s cubic-bezier(.2,.8,.2,1),border-radius .34s ease,transform .18s ease,box-shadow .25s ease;
+}
+#auth-view.ff-auth-motion #auth-submit:not(:disabled):active{transform:scale(.985)}
+#auth-view.ff-auth-motion.ff-auth-busy #auth-submit{
+  width:54px;
+  min-width:54px;
+  padding-left:0;
+  padding-right:0;
+  border-radius:999px;
+  cursor:wait;
+  opacity:1;
+  box-shadow:0 10px 28px rgba(255,122,0,.31);
+}
+.ff-auth-button-spinner{
+  width:21px;
+  height:21px;
+  border:2.5px solid rgba(17,18,20,.24);
+  border-top-color:#111214;
+  border-radius:50%;
+  animation:ffAuthSpin .72s linear infinite;
+}
+@keyframes ffAuthSpin{to{transform:rotate(360deg)}}
+
+/* Formulário em cascata depois de o painel chegar. */
+#auth-view.ff-auth-motion .auth-heading,
+#auth-view.ff-auth-motion #auth-form .field,
+#auth-view.ff-auth-motion #auth-form .form-error,
+#auth-view.ff-auth-motion #auth-submit,
+#auth-view.ff-auth-motion #auth-toggle{
+  opacity:0;
+  transform:translateY(16px);
+}
+#auth-view.ff-auth-motion.ff-auth-ready .auth-heading{animation:ffAuthFieldIn .42s ease 1.10s forwards}
+#auth-view.ff-auth-motion.ff-auth-ready #auth-form .field:nth-of-type(1){animation:ffAuthFieldIn .42s ease 1.18s forwards}
+#auth-view.ff-auth-motion.ff-auth-ready #auth-form .field:nth-of-type(2){animation:ffAuthFieldIn .42s ease 1.26s forwards}
+#auth-view.ff-auth-motion.ff-auth-ready #auth-form .form-error{animation:ffAuthFieldIn .35s ease 1.31s forwards}
+#auth-view.ff-auth-motion.ff-auth-ready #auth-submit{animation:ffAuthFieldIn .42s ease 1.34s forwards}
+#auth-view.ff-auth-motion.ff-auth-ready #auth-toggle{animation:ffAuthFieldIn .42s ease 1.42s forwards}
+@keyframes ffAuthFieldIn{to{opacity:1;transform:translateY(0)}}
+
+/* O overlay antigo não participa mais do login; o carregamento fica no próprio botão. */
+#auth-loading-overlay{display:none!important}
+
+/* Wipe arredondado que cobre o login e revela o Dashboard por baixo. */
+.ff-auth-wipe{
+  position:fixed;
+  left:-15vw;
+  top:-15dvh;
+  width:130vw;
+  height:130dvh;
+  z-index:9999;
+  pointer-events:none;
+  opacity:0;
+  background:
+    radial-gradient(circle at 50% 22%,rgba(255,122,0,.08),transparent 22%),
+    #08090a;
+  border-radius:0 0 48% 48%/0 0 10% 10%;
+  transform:translateY(-120%);
+  will-change:transform,opacity;
+}
+.ff-auth-wipe.is-running{animation:ffAuthWipe .92s cubic-bezier(.72,0,.2,1) both}
+@keyframes ffAuthWipe{
+  0%{opacity:1;transform:translateY(-120%)}
+  46%{opacity:1;transform:translateY(-4%)}
+  54%{opacity:1;transform:translateY(0)}
+  100%{opacity:1;transform:translateY(120%)}
+}
+#auth-view.ff-auth-motion.ff-auth-exit .auth-card{transition:opacity .2s ease,transform .25s ease;opacity:.55;transform:translateY(8px)}
+html.ff-app-revealing,html.ff-app-revealing body{overflow:hidden}
+
+@media(max-width:760px){
+  #auth-view.ff-auth-motion{--ff-brand-left:20px;--ff-brand-top:18px}
+  #auth-view.ff-auth-motion .auth-panel{
+    left:-12vw;
+    right:-12vw;
+    min-height:73dvh;
+    padding:94px max(15vw,28px) calc(28px + env(safe-area-inset-bottom));
+    border-radius:50% 50% 0 0/66px 66px 0 0;
+  }
+  #auth-view.ff-auth-motion .auth-card{width:min(420px,calc(100vw - 34px))}
+  .ff-auth-splash{font-size:1.55rem}
+}
+
+@media(max-width:430px){
+  #auth-view.ff-auth-motion .auth-panel{min-height:75dvh;padding-top:82px}
+  #auth-view.ff-auth-motion .auth-heading h2{font-size:1.8rem}
+  #auth-view.ff-auth-motion .auth-heading p{font-size:.86rem;margin-bottom:20px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .ff-auth-splash,
+  #auth-view.ff-auth-motion .auth-panel,
+  #auth-view.ff-auth-motion .auth-heading,
+  #auth-view.ff-auth-motion #auth-form .field,
+  #auth-view.ff-auth-motion #auth-form .form-error,
+  #auth-view.ff-auth-motion #auth-submit,
+  #auth-view.ff-auth-motion #auth-toggle{animation:none!important;transition:none!important}
+  #auth-view.ff-auth-motion.ff-auth-ready .ff-auth-splash{left:var(--ff-brand-left);top:var(--ff-brand-top);opacity:1;transform:scale(.76)}
+  #auth-view.ff-auth-motion.ff-auth-ready .auth-panel{transform:none}
+  #auth-view.ff-auth-motion.ff-auth-ready .auth-heading,
+  #auth-view.ff-auth-motion.ff-auth-ready #auth-form .field,
+  #auth-view.ff-auth-motion.ff-auth-ready #auth-form .form-error,
+  #auth-view.ff-auth-motion.ff-auth-ready #auth-submit,
+  #auth-view.ff-auth-motion.ff-auth-ready #auth-toggle{opacity:1;transform:none}
+}
