@@ -1,0 +1,63 @@
+/* Family Finance — reconstrução das animações v3.
+   Este arquivo altera somente estados temporários de movimento; não redefine o layout permanente. */
+
+/* Splash temporário */
+.ff-motion-splash{position:fixed;inset:0;z-index:12000;display:grid;place-items:center;overflow:hidden;pointer-events:none;background:#0b0c0d;opacity:1}
+.ff-motion-splash-brand{position:fixed;left:50%;top:46%;display:flex;align-items:center;gap:10px;white-space:nowrap;font:800 clamp(1.55rem,3vw,2.15rem) Montserrat,Inter,sans-serif;color:#f7f8f9;letter-spacing:-.04em;opacity:0;transform:translate(-50%,-50%) scale(.88);will-change:left,top,transform,opacity}
+.ff-motion-splash-brand strong,.ff-motion-splash-brand .brand-mark{color:#ff7a00}
+.ff-motion-splash-brand.is-in{animation:ffMotionBrandIn .50s cubic-bezier(.2,.8,.2,1) forwards}
+.ff-motion-splash.is-out{animation:ffMotionSplashOut .32s ease forwards}
+@keyframes ffMotionBrandIn{0%{opacity:0;transform:translate(-50%,-50%) scale(.88)}70%{opacity:1;transform:translate(-50%,-50%) scale(1.035)}100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@keyframes ffMotionSplashOut{to{opacity:0}}
+
+/* O painel existente sobe. A curva existe somente enquanto ele entra. */
+#auth-view.ff-motion-intro .auth-panel{transform:translateY(108%);clip-path:ellipse(95% 86% at 50% 100%);will-change:transform,clip-path}
+#auth-view.ff-motion-intro.ff-motion-panel-in .auth-panel{animation:ffMotionPanelIn .72s cubic-bezier(.22,.82,.2,1) forwards}
+@keyframes ffMotionPanelIn{0%{transform:translateY(108%);clip-path:ellipse(95% 86% at 50% 100%)}72%{transform:translateY(-1.5%);clip-path:ellipse(120% 120% at 50% 100%)}100%{transform:translateY(0);clip-path:inset(0 round 0)}}
+
+/* Formulário em cascata, sem mudar a geometria final. */
+#auth-view.ff-motion-intro .auth-heading,
+#auth-view.ff-motion-intro #auth-form .field,
+#auth-view.ff-motion-intro #auth-form .form-error,
+#auth-view.ff-motion-intro #auth-submit,
+#auth-view.ff-motion-intro #auth-toggle{opacity:0;transform:translateY(14px)}
+#auth-view.ff-motion-intro.ff-motion-fields-in .auth-heading{animation:ffMotionFieldIn .38s ease .02s forwards}
+#auth-view.ff-motion-intro.ff-motion-fields-in #auth-form .field:nth-of-type(1){animation:ffMotionFieldIn .38s ease .10s forwards}
+#auth-view.ff-motion-intro.ff-motion-fields-in #auth-form .field:nth-of-type(2){animation:ffMotionFieldIn .38s ease .18s forwards}
+#auth-view.ff-motion-intro.ff-motion-fields-in #auth-form .form-error{animation:ffMotionFieldIn .30s ease .22s forwards}
+#auth-view.ff-motion-intro.ff-motion-fields-in #auth-submit{animation:ffMotionFieldIn .38s ease .26s forwards}
+#auth-view.ff-motion-intro.ff-motion-fields-in #auth-toggle{animation:ffMotionFieldIn .38s ease .34s forwards}
+@keyframes ffMotionFieldIn{to{opacity:1;transform:translateY(0)}}
+
+/* Entrar -> cápsula/spinner. */
+#auth-submit.ff-motion-login-capsule{width:52px!important;min-width:52px;padding-left:0!important;padding-right:0!important;margin-left:auto;margin-right:auto;border-radius:999px!important;opacity:1!important;transition:width .34s cubic-bezier(.2,.8,.2,1),border-radius .34s ease!important}
+.ff-motion-login-spinner{width:20px;height:20px;display:block;margin:auto;border:2.5px solid rgba(17,18,20,.24);border-top-color:#111214;border-radius:50%;animation:ffMotionSpin .72s linear infinite}
+@keyframes ffMotionSpin{to{transform:rotate(360deg)}}
+html.ff-motion-login-busy #auth-loading-overlay{display:none!important}
+
+/* Wipe sobre as telas; o Dashboard já está renderizado por baixo. */
+.ff-motion-wipe{position:fixed;left:-10vw;top:-16dvh;width:120vw;height:132dvh;z-index:12001;pointer-events:none;opacity:0;background:#0b0c0d;border-radius:0 0 48% 48%/0 0 10% 10%;transform:translateY(-120%);will-change:transform,opacity}
+.ff-motion-wipe.is-running{animation:ffMotionWipe .92s cubic-bezier(.72,0,.2,1) both}
+@keyframes ffMotionWipe{0%{opacity:1;transform:translateY(-120%)}48%{opacity:1;transform:translateY(-2%)}56%{opacity:1;transform:translateY(0)}100%{opacity:1;transform:translateY(120%)}}
+html.ff-motion-transition,html.ff-motion-transition body{overflow:hidden}
+#app-view.ff-motion-dashboard-in .workspace{animation:ffMotionDashboardIn .38s ease both}
+@keyframes ffMotionDashboardIn{from{opacity:.72;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+/* O count-up não muda layout; apenas o texto dos elementos já existentes. */
+.ff-motion-counting{font-variant-numeric:tabular-nums}
+
+/* Acessibilidade: evita grandes deslocamentos quando o sistema pede movimento reduzido,
+   mas mantém uma transição curta de opacidade para não parecer uma troca quebrada. */
+@media(prefers-reduced-motion:reduce){
+  .ff-motion-splash-brand{animation-duration:.12s!important}
+  #auth-view.ff-motion-intro .auth-panel{transform:none;clip-path:none}
+  #auth-view.ff-motion-intro.ff-motion-panel-in .auth-panel{animation:none!important}
+  #auth-view.ff-motion-intro .auth-heading,
+  #auth-view.ff-motion-intro #auth-form .field,
+  #auth-view.ff-motion-intro #auth-form .form-error,
+  #auth-view.ff-motion-intro #auth-submit,
+  #auth-view.ff-motion-intro #auth-toggle{opacity:1;transform:none;animation:none!important}
+  .ff-motion-wipe{display:none!important}
+  #app-view.ff-motion-dashboard-in .workspace{animation:ffMotionReducedFade .16s ease both}
+  @keyframes ffMotionReducedFade{from{opacity:.8}to{opacity:1}}
+}
