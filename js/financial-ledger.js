@@ -35,6 +35,7 @@ const ALLOCATION_CATEGORY_RE=/(^|\b)(investimento|investimentos|autoinvestimento
 const ALLOCATION_DESCRIPTION_RE=/(reserva de emergencia|reserva financeira|guardar para|deposito.*poupanca|poupanca|autoinvestimento|aplicacao financeira|investimento)/i;
 
 export function isAllocationTransaction(row){
+  if(row?.financial_nature)return row.financial_nature==='allocation';
   const category=normalizeText(row?.category);
   const description=normalizeText(row?.description);
   return ALLOCATION_CATEGORY_RE.test(category) || ALLOCATION_DESCRIPTION_RE.test(description);
@@ -43,6 +44,10 @@ export function isAllocationTransaction(row){
 export function classifyTransaction(row){
   const direction=Number(row?.direction||0);
   if(isBalanceAdjustment(row)) return 'adjustment';
+  if(row?.financial_nature==='resgate')return 'transfer_in';
+  if(row?.financial_nature==='transfer')return direction>0?'transfer_in':'transfer_out';
+  if(row?.financial_nature==='allocation')return 'allocation';
+  if(row?.financial_nature==='consumption')return 'consumption';
   if(isCardInvoicePayment(row)) return 'card_payment';
   if(direction>0) return row?.affects_month_result===false?'transfer_in':'income';
   if(direction<0){

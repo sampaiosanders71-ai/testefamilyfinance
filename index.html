@@ -16,14 +16,14 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@700;800&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
-<link href="css/app.css?v=2.9.0" rel="stylesheet">
+<link href="css/app.css?v=2.9.1" rel="stylesheet"><link href="css/nature.css?v=2.9.1" rel="stylesheet">
 <link href="css/motion-v15.css?v=15" rel="stylesheet">
 <link href="css/download-motion-v16.css?v=16" rel="stylesheet">
 <link href="css/family-monitor-v17.css?v=17" rel="stylesheet"/>
 <link href="css/planning-v18.css?rev=mobile-overview-rebuild" rel="stylesheet"/>
 <link href="css/categories-budget.css?rev=mobile-overview-rebuild" rel="stylesheet"/>
 <link href="css/context-help.css?rev=global-help" rel="stylesheet"/>
-<link href="css/dashboard-v29.css?v=2.9.0" rel="stylesheet"/>
+<link href="css/dashboard-v29.css?v=2.9.1" rel="stylesheet"/>
 </head>
 <body>
 <svg aria-hidden="true" class="icon-sprite" focusable="false">
@@ -158,7 +158,7 @@
 </section>
 <section class="module-view hidden" id="module-transactions">
 <div class="module-header"><div><span class="eyebrow">FLUXO DE CAIXA</span><h2>Lançamentos</h2></div><button class="primary-compact" id="new-transaction-btn">＋ Novo lançamento</button></div>
-<div class="filter-bar"><input id="transaction-search" placeholder="Buscar descrição ou categoria" type="search"/><select id="transaction-filter-type"><option value="all">Todos</option><option value="income">Receitas</option><option value="expense">Despesas</option><option value="adjustment">Ajustes</option></select><select aria-label="Período do histórico" id="transaction-filter-month"><option value="">Todos os períodos</option></select></div>
+<div class="filter-bar"><input id="transaction-search" placeholder="Buscar descrição ou categoria" type="search"/><select id="transaction-filter-type"><option value="all">Todos</option><option value="income">Receitas</option><option value="expense">Despesas</option><option value="adjustment">Ajustes</option><option value="allocation">Reservas / investimentos</option><option value="transfer">Transferências</option><option value="resgate">Resgates</option></select><select aria-label="Período do histórico" id="transaction-filter-month"><option value="">Todos os períodos</option></select></div>
 <div class="history-sync-row"><span class="muted" id="transaction-sync-status">Sincronizando histórico…</span></div>
 <div class="panel-card"><div class="list-stack" id="transactions-list"></div></div>
 </section>
@@ -397,7 +397,7 @@
 <p class="muted settings-help" id="pwa-install-status">Verificando compatibilidade de instalação…</p>
 <div class="settings-inline-note"><strong>Dica:</strong><span>Depois de instalado, o Family Finance pode ser aberto direto pela tela inicial ou pelo menu de aplicativos.</span></div>
 <div class="settings-update-grid">
-<div class="settings-update-version"><span>Versão instalada</span><strong id="install-current-version">2.9.0</strong></div>
+<div class="settings-update-version"><span>Versão instalada</span><strong id="install-current-version">2.9.1</strong></div>
 <div class="settings-update-version"><span>Versão disponível</span><strong id="install-available-version">Verificando…</strong></div>
 </div>
 <div class="settings-update-state"><span class="status-pill" id="install-update-status">Verificando atualizações…</span></div>
@@ -470,6 +470,7 @@
 <div class="form-grid two"><div class="field"><label for="transaction-direction">Tipo</label><select id="transaction-direction"><option value="1">Receita</option><option value="-1">Despesa</option></select></div><div class="field"><label for="transaction-date">Data</label><input id="transaction-date" required="" type="date"/></div></div>
 <div class="field"><label for="transaction-description">Descrição</label><input id="transaction-description" maxlength="120" placeholder="Ex: Salário" required="" type="text"/></div>
 <div class="form-grid two"><div class="field"><label for="transaction-amount">Valor</label><input id="transaction-amount" min="0.01" required="" step="0.01" type="number"/></div><div class="field"><label for="transaction-category">Categoria</label><select id="transaction-category"></select></div></div>
+<div class="field" id="transaction-nature-wrap"><label for="transaction-nature">Natureza do lançamento</label><select id="transaction-nature"><option value="consumption">Despesa de consumo</option><option value="allocation">Reserva / Investimento</option><option value="transfer">Transferência entre contas próprias</option><option value="resgate">Resgate de reserva ou investimento</option><option value="income">Receita</option></select><p id="transaction-nature-suggestion" class="nature-hint" aria-live="polite">A classificação define como o valor aparece nos relatórios.</p></div>
 <div class="field"><label for="transaction-notes">Observação</label><input id="transaction-notes" maxlength="500" placeholder="Opcional" type="text"/></div>
 <div id="recurring-fields"><label class="check-row"><input id="transaction-recurring" type="checkbox"/><span>Repetir mensalmente</span></label><div class="field hidden" id="recurring-count-wrap"><label for="transaction-recurring-count">Quantidade de meses</label><input id="transaction-recurring-count" max="60" min="2" type="number" value="12"/></div></div>
 <p class="form-error hidden" id="transaction-form-error"></p>
@@ -665,7 +666,7 @@
 <div class="modal-card app-update-card">
 <div class="app-update-topbar"><div><span class="eyebrow">FAMILY FINANCE</span><strong>Atualizações</strong></div><button class="modal-close" id="app-update-close" type="button">×</button></div>
 <div class="app-update-hero">
-<div class="app-update-badge">Versão <span id="app-update-badge-version">2.9.0</span></div>
+<div class="app-update-badge">Versão <span id="app-update-badge-version">2.9.1</span></div>
 <h3 id="app-update-title">Nova atualização disponível</h3>
 <p id="app-update-subtitle">Veja o que mudou antes de atualizar.</p>
 </div>
@@ -680,6 +681,6 @@
 </div>
 </dialog>
 <dialog class="modal" id="dre-dialog"><div class="modal-card"><div class="modal-head"><div><span class="eyebrow">DRE</span><h3 id="dre-title">Demonstrativo do mês</h3></div><button class="modal-close" data-close-dialog="dre-dialog" type="button">×</button></div><div id="dre-content"></div></div></dialog>
-<script defer src="js/context-help.js"></script><script src="js/app.js?rev=2.9.0" type="module"></script>
+<script defer src="js/context-help.js"></script><script src="js/app.js?rev=2.9.1" type="module"></script>
 </body>
 </html>

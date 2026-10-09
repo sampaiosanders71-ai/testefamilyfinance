@@ -1,0 +1,6 @@
+Family Finance 2.9.1 - implementação inicial da natureza financeira.
+1. Faça backup do banco e dos arquivos da versão 2.9.0.
+2. Execute MIGRACAO_2.9.1.sql no Supabase antes de publicar.
+3. Publique os arquivos completos.
+4. Teste cadastro/edição, reservas, resgates, histórico, dashboards e relatórios com uma conta de teste.
+ATENÇÃO: contas de destino e vínculo de metas ainda não foram implementados; não trate transferências entre contas monitoradas como conciliação automática. A classificação legada continua existindo para registros antigos. Não há homologação de produção.
