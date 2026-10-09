@@ -1,9 +1,9 @@
-const CACHE_NAME='family-finance-2.8.0';
+const CACHE_NAME='family-finance-2.9.0';
 const CORE_ASSETS=[
   './','./index.html','./manifest.json',
-  './css/app.css?v=2.8.0','./css/motion-v15.css?v=15','./css/download-motion-v16.css?v=16','./css/family-monitor-v17.css?v=17','./css/planning-v18.css?rev=mobile-overview-rebuild','./css/categories-budget.css?rev=mobile-overview-rebuild','./css/context-help.css?rev=global-help',
+  './css/dashboard-v29.css?v=2.9.0','./css/app.css?v=2.9.0','./css/motion-v15.css?v=15','./css/download-motion-v16.css?v=16','./css/family-monitor-v17.css?v=17','./css/planning-v18.css?rev=mobile-overview-rebuild','./css/categories-budget.css?rev=mobile-overview-rebuild','./css/context-help.css?rev=global-help',
   './icons/favicon-32.png','./icons/apple-touch-icon.png','./icons/icon-192.png','./icons/icon-512.png','./assets/report-letterhead.jpg',
-  './js/version.js','./js/config.js','./js/supabase.js','./js/auth.js','./js/database.js','./js/financial-ledger.js','./js/finance.js','./js/cards.js','./js/goals.js','./js/budget.js','./js/categories.js','./js/planning-v18.js?rev=planejamento-checklist','./js/family.js?v=family-monitor-v17','./js/family-monitor-v17.js?v=17','./js/notifications.js','./js/migration.js','./js/settings.js','./js/pwa.js','./js/ui.js?v=motion-v15','./js/download-motion-v16.js?v=16','./js/motion-v15.js?v=15','./js/pdf.js','./js/reports.js','./js/analytics.js','./js/context-help.js','./js/dashboard-cash.js?v=2.8.0','./js/update-center.js?v=2.8.0','./js/app.js?rev=2.8.0'
+  './js/version.js','./js/config.js','./js/supabase.js','./js/auth.js','./js/database.js','./js/financial-ledger.js','./js/finance.js','./js/cards.js','./js/goals.js','./js/budget.js','./js/categories.js','./js/planning-v18.js?rev=planejamento-checklist','./js/family.js?v=family-monitor-v17','./js/family-monitor-v17.js?v=17','./js/notifications.js','./js/migration.js','./js/settings.js','./js/pwa.js','./js/ui.js?v=motion-v15','./js/download-motion-v16.js?v=16','./js/motion-v15.js?v=15','./js/pdf.js','./js/reports.js','./js/analytics.js','./js/context-help.js','./js/dashboard-overview.js?v=2.9.0','./js/dashboard-cash.js?v=2.9.0','./js/update-center.js?v=2.9.0','./js/app.js?rev=2.9.0'
 ];
 
 self.addEventListener('install',event=>{

@@ -12,17 +12,18 @@
 <link href="manifest.json" rel="manifest"/>
 <link href="icons/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
 <link href="icons/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
-<title>Family Finance — Reconstrução</title>
+<title>Family Finance</title>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@700;800&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
-<link href="css/app.css?v=2.8.0" rel="stylesheet">
+<link href="css/app.css?v=2.9.0" rel="stylesheet">
 <link href="css/motion-v15.css?v=15" rel="stylesheet">
 <link href="css/download-motion-v16.css?v=16" rel="stylesheet">
 <link href="css/family-monitor-v17.css?v=17" rel="stylesheet"/>
 <link href="css/planning-v18.css?rev=mobile-overview-rebuild" rel="stylesheet"/>
 <link href="css/categories-budget.css?rev=mobile-overview-rebuild" rel="stylesheet"/>
 <link href="css/context-help.css?rev=global-help" rel="stylesheet"/>
+<link href="css/dashboard-v29.css?v=2.9.0" rel="stylesheet"/>
 </head>
 <body>
 <svg aria-hidden="true" class="icon-sprite" focusable="false">
@@ -47,6 +48,8 @@
 <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></symbol>
 <symbol id="i-warning" viewBox="0 0 24 24"><path d="M12 3 2.5 20h19L12 3Z"></path><path d="M12 9v4M12 17h.01"></path></symbol>
 <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></symbol>
+<symbol id="i-piggy" viewBox="0 0 24 24"><path d="M7 8 5 5v5a6 6 0 0 0-2 4v3h3l1 4h3l1-3h4l1 3h3l1-5 2-1v-4h-3a7 7 0 0 0-12-3Z"></path><path d="M9 6h5M11 3h2M16 11h.01"></path></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7M14 10v7"></path></symbol>
 </svg>
 <div aria-live="polite" class="toast hidden" id="toast" role="status"></div>
 <main class="auth-layout" id="auth-view">
@@ -125,14 +128,15 @@
 <div class="loading-bar hidden" id="global-loading"><span></span></div>
 <div class="content">
 <section class="module-view" id="module-home">
-<div class="dashboard-head"><div><span class="eyebrow">VISÃO GERAL</span><h2 id="home-greeting">Seu mês financeiro</h2><p class="muted" id="home-period"></p></div><div class="month-switch"><button data-month-action="prev">‹</button><strong id="home-month-label"></strong><button data-month-action="next">›</button></div></div>
+<div class="dashboard-head"><div><span class="eyebrow">VISÃO GERAL</span><h2 id="home-greeting">Seu mês financeiro</h2><p class="muted" id="home-period"></p></div><div class="month-switch"><button aria-label="Mês anterior" data-month-action="prev">‹</button><strong id="home-month-label"></strong><button aria-label="Próximo mês" data-month-action="next">›</button></div></div>
+<div class="home-kpis" aria-label="Resumo do mês"><article class="home-kpi income" title="Receitas realizadas no mês selecionado. Ajustes de saldo e transferências ficam separados."><span class="home-kpi-icon"><svg aria-hidden="true" class="ui-icon"><use href="#i-trending-up"></use></svg></span><div><span class="home-kpi-label">Receitas do mês</span><strong id="stat-income">R$ 0,00</strong></div></article><article class="home-kpi expense" title="Despesas à vista e pagamentos de faturas realizados no mês. Reservas e investimentos ficam separados."><span class="home-kpi-icon"><svg aria-hidden="true" class="ui-icon"><use href="#i-trending-down"></use></svg></span><div><span class="home-kpi-label">Despesas pagas</span><strong id="stat-expense">R$ 0,00</strong></div></article><article class="home-kpi allocation" title="Destinações para reservas e investimentos registradas no mês. Não é a soma dos saldos das metas."><span class="home-kpi-icon"><svg aria-hidden="true" class="ui-icon"><use href="#i-piggy"></use></svg></span><div><span class="home-kpi-label">Investido / reservado</span><strong id="stat-allocation">R$ 0,00</strong><small id="stat-allocation-count">0 registros no mês</small></div></article><article class="home-kpi invoice" title="Total das faturas da competência selecionada, pagas e abertas. O vencimento pode ocorrer no mês seguinte."><span class="home-kpi-icon"><svg aria-hidden="true" class="ui-icon"><use href="#i-card"></use></svg></span><div><span class="home-kpi-label">Fatura do mês</span><strong id="stat-card-expense">R$ 0,00</strong></div></article></div>
 <div class="dashboard-grid">
 <div class="dashboard-main">
 <article class="balance-card">
 <div class="balance-top"><span>Saldo atual</span><button aria-label="Ajustar saldo" class="icon-soft" id="open-balance-adjust" title="Ajustar saldo"><svg aria-hidden="true" class="ui-icon"><use href="#i-pencil"></use></svg></button></div>
-<strong class="money-xl" id="stat-balance">R$ 0,00</strong>
+<strong title="Saldo disponível hoje, considerando os lançamentos realizados de todos os períodos." class="money-xl" id="stat-balance">R$ 0,00</strong>
 <div class="balance-divider"></div>
-<div class="balance-bottom"><div><span>Resultado de caixa</span><strong id="stat-month-result">R$ 0,00</strong></div><div><span>Saldo previsto</span><strong id="stat-projected">R$ 0,00</strong></div></div>
+<div class="balance-bottom"><div><span>Resultado de caixa</span><strong id="stat-month-result">R$ 0,00</strong></div><div><span title="Saldo atual + lançamentos futuros do mês − faturas abertas do mês. Os planos pendentes podem ser consultados em Planejamento.">Saldo previsto</span><strong id="stat-projected">R$ 0,00</strong></div></div>
 </article>
 <div class="quick-actions">
 <button class="action-card" id="quick-transaction"><span class="action-icon"><svg aria-hidden="true" class="ui-icon"><use href="#i-plus"></use></svg></span><div><strong>Novo lançamento</strong><small>Receita ou despesa</small></div></button>
@@ -140,18 +144,15 @@
 <button class="action-card" id="quick-pdf"><span class="action-icon"><svg aria-hidden="true" class="ui-icon"><use href="#i-file-down"></use></svg></span><div><strong>Baixar relatório</strong><small>Escolher meses e dados</small></div></button>
 <button class="action-card" id="quick-analytics"><span class="action-icon"><svg aria-hidden="true" class="ui-icon"><use href="#i-analytics"></use></svg></span><div><strong>Ver análises</strong><small>Comparar meses e anos</small></div></button>
 </div>
-<div class="metric-grid">
-<article class="metric-card income"><span class="metric-label"><svg aria-hidden="true" class="ui-icon"><use href="#i-trending-up"></use></svg>Receitas</span><strong id="stat-income">R$ 0,00</strong></article>
-<article class="metric-card expense"><span class="metric-label"><svg aria-hidden="true" class="ui-icon"><use href="#i-trending-down"></use></svg>Despesas pagas</span><strong id="stat-expense">R$ 0,00</strong></article>
-<article class="metric-card"><span class="metric-label"><svg aria-hidden="true" class="ui-icon"><use href="#i-card"></use></svg>Fatura do mês</span><strong id="stat-card-expense">R$ 0,00</strong></article>
-</div>
-<article class="panel-card"><div class="section-title"><div><h3>Últimos lançamentos</h3></div><button class="link-btn" data-go-module="transactions">Ver todos</button></div><div class="list-stack" id="home-transactions"></div></article>
+
+<article class="panel-card"><div class="section-title"><div><h3 class="heading-with-icon"><svg aria-hidden="true" class="heading-icon"><use href="#i-receipt"></use></svg><span>Últimos lançamentos</span></h3><p>No mês selecionado</p></div><button class="link-btn" data-go-module="transactions">Ver todos</button></div><div class="list-stack" id="home-transactions"></div></article>
+<article class="panel-card planning-home-summary"><div class="section-title"><div><h3 class="heading-with-icon"><svg aria-hidden="true" class="heading-icon"><use href="#i-calendar"></use></svg><span>Planejamento</span></h3><p id="home-planning-caption">Nenhum compromisso pendente.</p></div><button class="link-btn" data-go-module="planning">Ver</button></div><div class="progress-meta"><strong id="home-planning-pending">R$ 0,00</strong><span id="home-planning-count">0 pendentes</span></div></article>
 </div>
 <aside class="dashboard-side">
 <article class="panel-card"><div class="section-title"><div><h3 class="heading-with-icon"><svg aria-hidden="true" class="heading-icon"><use href="#i-calendar"></use></svg><span>Próximas faturas</span></h3></div><button class="link-btn" data-go-module="cards">Cartões</button></div><div class="list-stack" id="home-invoices"></div></article>
 <article class="panel-card"><div class="section-title"><div><h3 class="heading-with-icon"><svg aria-hidden="true" class="heading-icon"><use href="#i-target"></use></svg><span>Metas</span></h3></div><button class="link-btn" data-go-module="goals">Ver metas</button></div><div class="list-stack" id="home-goals"></div></article>
-<article class="panel-card budget-summary"><div class="section-title"><div><h3 class="heading-with-icon"><svg aria-hidden="true" class="heading-icon"><use href="#i-wallet"></use></svg><span>Limites</span></h3><p id="home-budget-caption">Nenhum limite definido.</p></div><button class="link-btn" data-go-module="planning" data-planning-target="limits">Ajustar</button></div><div class="progress"><span id="home-budget-progress" style="width:0%"></span></div><div class="progress-meta"><strong id="home-budget-spent">R$ 0,00</strong><span id="home-budget-limit">de R$ 0,00</span></div></article>
-<article class="panel-card planning-home-summary"><div class="section-title"><div><h3 class="heading-with-icon"><svg aria-hidden="true" class="heading-icon"><use href="#i-calendar"></use></svg><span>Planejamento</span></h3><p id="home-planning-caption">Nenhum compromisso pendente.</p></div><button class="link-btn" data-go-module="planning">Ver</button></div><div class="progress-meta"><strong id="home-planning-pending">R$ 0,00</strong><span id="home-planning-count">0 pendentes</span></div></article>
+<article class="panel-card budget-summary"><div class="section-title"><div><h3 class="heading-with-icon"><svg aria-hidden="true" class="heading-icon"><use href="#i-wallet"></use></svg><span>Limites</span></h3><p id="home-budget-caption">Nenhum limite definido.</p></div><button class="link-btn" data-go-module="planning" data-planning-target="limits">Ajustar</button></div><div class="progress"><span id="home-budget-progress" style="width:0%"></span></div><div class="progress-meta"><strong id="home-budget-spent">R$ 0,00</strong><span id="home-budget-limit">Sem limite definido</span></div><p class="home-budget-note" id="home-budget-note"></p></article>
+
 </aside>
 </div>
 </section>
@@ -396,7 +397,7 @@
 <p class="muted settings-help" id="pwa-install-status">Verificando compatibilidade de instalação…</p>
 <div class="settings-inline-note"><strong>Dica:</strong><span>Depois de instalado, o Family Finance pode ser aberto direto pela tela inicial ou pelo menu de aplicativos.</span></div>
 <div class="settings-update-grid">
-<div class="settings-update-version"><span>Versão instalada</span><strong id="install-current-version">2.8.0</strong></div>
+<div class="settings-update-version"><span>Versão instalada</span><strong id="install-current-version">2.9.0</strong></div>
 <div class="settings-update-version"><span>Versão disponível</span><strong id="install-available-version">Verificando…</strong></div>
 </div>
 <div class="settings-update-state"><span class="status-pill" id="install-update-status">Verificando atualizações…</span></div>
@@ -664,7 +665,7 @@
 <div class="modal-card app-update-card">
 <div class="app-update-topbar"><div><span class="eyebrow">FAMILY FINANCE</span><strong>Atualizações</strong></div><button class="modal-close" id="app-update-close" type="button">×</button></div>
 <div class="app-update-hero">
-<div class="app-update-badge">Versão <span id="app-update-badge-version">2.8.0</span></div>
+<div class="app-update-badge">Versão <span id="app-update-badge-version">2.9.0</span></div>
 <h3 id="app-update-title">Nova atualização disponível</h3>
 <p id="app-update-subtitle">Veja o que mudou antes de atualizar.</p>
 </div>
@@ -679,6 +680,6 @@
 </div>
 </dialog>
 <dialog class="modal" id="dre-dialog"><div class="modal-card"><div class="modal-head"><div><span class="eyebrow">DRE</span><h3 id="dre-title">Demonstrativo do mês</h3></div><button class="modal-close" data-close-dialog="dre-dialog" type="button">×</button></div><div id="dre-content"></div></div></dialog>
-<script defer src="js/context-help.js"></script><script src="js/app.js?rev=2.8.0" type="module"></script>
+<script defer src="js/context-help.js"></script><script src="js/app.js?rev=2.9.0" type="module"></script>
 </body>
 </html>
