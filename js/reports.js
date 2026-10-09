@@ -1,4 +1,5 @@
-import { buildFinancialMonthLedger } from './financial-ledger.js';
+import { buildFinancialMonthLedger, classifyTransaction } from './financial-ledger.js';
+import { ownTransferReview, legacyReview, reviewedPeriodRows } from './financial-integrity.js';
 import { buildVisualPdf, PDF_PAGE } from './pdf.js';
 
 const C = {
@@ -41,6 +42,10 @@ function buildMonthModel({transactions,installments,invoiceStatuses,budget,key,t
     scheduledExpense:ledger.futureExpense,
     details:(ledger.details||[]).filter(row=>row.kind==='consumption'||row.kind==='card_consumption'),
     allocationDetails:(ledger.details||[]).filter(row=>row.kind==='allocation'),
+    movementDetails:(transactions||[]).filter(row=>String(row.occurred_on||'').startsWith(key.slice(0,7)) && row.occurred_on<=ledger.cutoff)
+      .filter(row=>['allocation','transfer_in','transfer_out'].includes(classifyTransaction(row)))
+      .map(row=>({date:row.occurred_on,description:row.description||'Movimentação',category:row.category||'Outros',amount:Math.abs(Number(row.amount)||0),
+        kind:classifyTransaction(row),nature:row.financial_nature||'legacy',goalId:row.goal_id||null})).sort((a,b)=>a.date.localeCompare(b.date)),
     budget:{plannedIncome:Number(budget?.plan?.planned_income||0),totalLimit:Object.values(limits).reduce((s,v)=>s+Number(v||0),0),categories:budgetCategories,exists:!!budget?.plan}
   };
 }
@@ -57,7 +62,11 @@ export function getMonthlyDRE(transactions,installments,refDate,today=new Date()
     cardExpense:ledger.cardExpense,
     totalExpense:ledger.totalExpense,
     allocation:ledger.allocation,
+    transferIn:ledger.transferIn,
+    transferOut:ledger.transferOut,
+    cardPayments:ledger.cardPayments,
     cashOutflow:ledger.cashOutflow,
+    cashResult:ledger.cashResult,
     result:ledger.result,
     futureExpense:ledger.futureExpense,
     realizedThrough:ledger.cutoff,
@@ -68,8 +77,14 @@ export function getReportMonthOptions(transactions,installments,referenceDate=ne
 export function buildFinancialReportModel({transactions,installments,invoiceStatuses,budgetsByMonth={},monthKeys,monthLabel,today=new Date(),cutoffDaysByMonth={}}){
   const keys=sortedMonthKeys(monthKeys||[]);if(!keys.length)throw new Error('Selecione pelo menos um mês para o relatório.');
   const months=keys.map(key=>buildMonthModel({transactions,installments,invoiceStatuses,budget:budgetsByMonth[key]||{plan:null,items:[]},key,today,throughDay:cutoffDaysByMonth?.[key]??null,monthLabel}));
-  const totals=months.reduce((a,m)=>{for(const field of ['income','cashExpense','cardExpense','totalExpense','result','allocation','cashOutflow','futureExpense','futureAllocation','committedCard'])a[field]+=Number(m[field]||0);return a;},{income:0,cashExpense:0,cardExpense:0,totalExpense:0,result:0,allocation:0,cashOutflow:0,futureExpense:0,futureAllocation:0,committedCard:0});
-  return{keys,months,totals,categories:aggregateCategories(months),cards:aggregateCards(months),budget:aggregateBudget(months)};
+  const fields=['income','cashExpense','cardExpense','totalExpense','result','allocation','cashOutflow','cashResult','transferOut','transferIn','cardPayments','adjustments','futureIncome','futureExpense','futureAllocation','committedCard'];
+  const totals=months.reduce((a,m)=>{for(const field of fields)a[field]+=Number(m[field]||0);return a;},Object.fromEntries(fields.map(field=>[field,0])));
+  const periodRows=reviewedPeriodRows(transactions,keys,today);
+  const legacy=legacyReview(periodRows);
+  const reconciliation=ownTransferReview(transactions||[]);
+  const periodIds=new Set(periodRows.map(r=>r.id));
+  const transferReview={...reconciliation,pairs:reconciliation.pairs.filter(pair=>periodIds.has(pair.outId)||periodIds.has(pair.inId)),unmatched:reconciliation.unmatched.filter(row=>periodIds.has(row.id)),ambiguous:reconciliation.ambiguous.filter(row=>periodIds.has(row.id))};
+  return{keys,months,totals,categories:aggregateCategories(months),cards:aggregateCards(months),budget:aggregateBudget(months),audit:{legacy,transferReview}};
 }
 
 function wrapText(text,maxChars=70){const words=String(text||'').split(/\s+/).filter(Boolean),lines=[];let current='';for(const word of words){const next=current?`${current} ${word}`:word;if(next.length>maxChars&&current){lines.push(current);current=word}else current=next}if(current)lines.push(current);return lines.length?lines:['']}
@@ -182,7 +197,7 @@ function buildAnalyticalPages({model,comparisonModel,contextModel,formatDate,for
     for(const wrapped of wrapText(insight,80)){text(p1,62,iy,`- ${wrapped}`,8.1,{color:C.ink});iy+=14}
     iy+=2;
   }
-  text(p1,48,710,'Compras no cartão representam consumo por competência. Pagamento de fatura é saída de caixa e não é somado novamente. Reservas e investimentos ficam separados do consumo.',6.8,{color:C.subtle});
+  text(p1,48,710,'Compras no cartão: consumo por competência. Quitações não duplicam consumo. Reservas e transferências são separadas.',6.6,{color:C.subtle});
 
   const p2=page();pages.push(p2);
   reportTitle(p2,'Categorias e limites',`Comparativo financeiro - ${periodText}`);
@@ -241,6 +256,61 @@ function buildAnalyticalPages({model,comparisonModel,contextModel,formatDate,for
       const bodyY=drawDetailHeader(extra,nextHeaderY);drawDetailRows(extra,bodyY,batch,formatDate,formatBRL);
     }
   }
+  // Anexo de conciliação: valores realizados e classificações explícitas por mês.
+  for(const month of model.months){
+    const p=page();pages.push(p);
+    reportTitle(p,`Movimentações - ${month.label}`,'Complemento do resultado de consumo: fluxo de caixa e destinações de dinheiro.');
+    let y=187;
+    for(const [label,value] of [
+      ['Reservado / investido',month.allocation],['Resgates e transferências de entrada',month.transferIn],
+      ['Transferências de saída',month.transferOut],['Quitações de cartão (saída do caixa)',month.cardPayments],
+      ['Variação de caixa registrada (sem ajustes)',month.cashResult],
+      ['Resultado por consumo (receitas - despesas)',month.result],
+      ['Reservas futuras, fora do realizado',month.futureAllocation]
+    ]){
+      text(p,48,y,label,8.1,{color:C.muted});text(p,562,y,reportMoney(formatBRL,value),9,{align:'right',bold:true});
+      line(p,48,y+15,564,y+15,C.line,.45);y+=34;
+    }
+    y+=13;
+    y=sectionTitle(p,y,'Aportes, transferências e resgates','Valores efetivos; lançamentos futuros ficam somente nos indicadores de previsão.');
+    const movements=month.movementDetails||[];
+    if(!movements.length){text(p,48,y,'Nenhuma movimentação desta natureza no mês.',8,{color:C.muted});}
+    else{
+      const batchSize=8;
+      for(let i=0;i<movements.length;i+=batchSize){
+        const group=movements.slice(i,i+batchSize);
+        const target=i===0?p:page();
+        if(i>0){pages.push(target);reportTitle(target,`${month.label} - movimentações`,'Continuação do detalhamento financeiro.');}
+        const start=i===0?y:196;
+        const rows=group.map(row=>({date:row.date,description:`${row.nature==='legacy'?'Anterior (inferido)':row.nature==='resgate'?'Resgate':row.kind==='allocation'?'Reserva':row.kind==='transfer_in'?'Transferência entrada':'Transferência saída'}: ${row.description}`,category:row.category,source:row.goalId?'Vinculado à meta':'',amount:row.amount}));
+        drawDetailHeader(target,start);drawDetailRows(target,start+18,rows,formatDate,formatBRL);
+      }
+    }
+  }
+  // Revisão não destrutiva do histórico; pareamentos por valor/data são apenas candidatos.
+  const auditPage=page();pages.push(auditPage);
+  reportTitle(auditPage,'Integridade e revisão','Transações anteriores não foram alteradas automaticamente.');
+  let ay=193;
+  const checklist=[
+    `Lançamentos sem natureza explícita: ${model.audit.legacy.length}`,
+    `Possíveis pares entre contas próprias: ${model.audit.transferReview.pairs.length}`,
+    `Movimentações de transferência sem par visível: ${model.audit.transferReview.unmatched.length}`,
+    `Transferências com múltiplas combinações: ${model.audit.transferReview.ambiguous.length}`
+  ];
+  for(const item of checklist){text(auditPage,48,ay,item,9,{color:C.ink});ay+=28;}
+  ay+=14;
+  for(const warning of [
+    'Pares são sugeridos por valor e data; não demonstram conciliação bancária.',
+    'Uma única ponta de transferência pode existir porque a outra conta não é cadastrada.',
+    'Aportes e resgates não representam despesas ou receitas de consumo.',
+    'A natureza de registros anteriores pode ser inferida para compatibilidade, mas não está confirmada. Edite no histórico.'
+  ]){for(const ln of wrapText(warning,83)){text(auditPage,48,ay,`- ${ln}`,8,{color:C.muted});ay+=15;}}
+  ay+=20;
+  ay=sectionTitle(auditPage,ay,'Registros antigos a revisar','Edite a natureza do lançamento no histórico para confirmar a classificação.');
+  const suggestionLabel={allocation:'Reserva',resgate:'Resgate',transfer:'Transferência'};
+  const exampleRows=model.audit.legacy.slice(0,5).map(row=>({date:row.date,description:row.description,category:row.suggestion?`Sugestão: ${suggestionLabel[row.suggestion]||'Revisar'}`:'Revisar manual',amount:row.amount}));
+  if(exampleRows.length){drawDetailHeader(auditPage,ay);drawDetailRows(auditPage,ay+18,exampleRows,formatDate,formatBRL);if(model.audit.legacy.length>5)text(auditPage,48,690,`Mais ${model.audit.legacy.length-5} registros antigos disponíveis no CSV e no Histórico.`,7.5,{color:C.muted});}
+  else text(auditPage,48,ay,'Não foram identificados registros antigos sem natureza no período.',8,{color:C.muted});
   return decorateReportPages(pages,{today,periodText});
 }
 

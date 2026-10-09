@@ -130,7 +130,8 @@ export async function createTransaction(input) {
     recurring_group_id: groupId,
     client_request_id: newRequestId(),
     notes: input.notes?.trim() || null,
-    financial_nature: input.financialNature || (input.direction>0?'income':'consumption')
+    financial_nature: input.financialNature || (input.direction>0?'income':'consumption'),
+    goal_id: input.financialNature==='allocation' && input.direction<0 ? (input.goalId || null) : null
   }));
   const { data, error } = await supabase.from('ff2_transactions').insert(rows).select('*');
   if (error) throw error;
@@ -150,6 +151,7 @@ export async function updateTransaction(id, input) {
       category: input.category || 'Outros',
       notes: input.notes?.trim() || null,
       financial_nature: input.financialNature || (input.direction>0?'income':'consumption'),
+      goal_id: input.financialNature==='allocation' && input.direction<0 ? (input.goalId || null) : null,
       updated_at: new Date().toISOString()
     })
     .eq('id', id).eq('user_id', user.id)

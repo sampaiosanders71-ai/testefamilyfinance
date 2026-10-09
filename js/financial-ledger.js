@@ -44,11 +44,13 @@ export function isAllocationTransaction(row){
 export function classifyTransaction(row){
   const direction=Number(row?.direction||0);
   if(isBalanceAdjustment(row)) return 'adjustment';
-  if(row?.financial_nature==='resgate')return 'transfer_in';
-  if(row?.financial_nature==='transfer')return direction>0?'transfer_in':'transfer_out';
-  if(row?.financial_nature==='allocation')return 'allocation';
-  if(row?.financial_nature==='consumption')return 'consumption';
+  // A quitação da fatura não é nova despesa: as compras já foram reconhecidas nas parcelas.
   if(isCardInvoicePayment(row)) return 'card_payment';
+  if(row?.financial_nature==='resgate')return direction>0?'transfer_in':'neutral';
+  if(row?.financial_nature==='transfer')return direction>0?'transfer_in':'transfer_out';
+  if(row?.financial_nature==='allocation')return direction<0?'allocation':'neutral';
+  if(row?.financial_nature==='consumption')return direction<0?'consumption':'neutral';
+  if(row?.financial_nature==='income') return direction>0?'income':'neutral';
   if(direction>0) return row?.affects_month_result===false?'transfer_in':'income';
   if(direction<0){
     if(isAllocationTransaction(row)) return 'allocation';
@@ -90,7 +92,7 @@ export function buildFinancialMonthLedger({transactions=[],installments=[],invoi
     const kind=classifyTransaction(row);
     const realized=occurred<=cutoff;
     if(!realized){
-      if(direction>0 && row?.affects_month_result!==false) futureIncome+=amount;
+      if(kind==='income') futureIncome+=amount;
       else if(direction<0){
         if(kind==='allocation') futureAllocation+=amount;
         else if(kind==='consumption') futureCashExpense+=amount;
@@ -106,7 +108,7 @@ export function buildFinancialMonthLedger({transactions=[],installments=[],invoi
     }else if(kind==='allocation'){
       allocation+=amount;
       addAmount(allocationMap,row?.category,amount);
-      addAmount(budgetUsageMap,row?.category,amount);
+      // Aportes não consomem orçamento de despesas; aparecem em allocationMap.
       details.push({date:occurred,description:row?.description||'Destinação financeira',category:row?.category||'Outros',source:'Reserva / investimento',amount,kind:'allocation'});
     }else if(kind==='card_payment') cardPayments+=amount;
     else if(kind==='transfer_out') transferOut+=amount;

@@ -1,36 +1,35 @@
 {
-  "version": "2.9.1",
+  "version": "2.9.4",
   "publishedAt": "09/10/2026",
   "improvementCount": 5,
-  "title": "Natureza dos lançamentos",
-  "summary": "Visual renovado do Início, com os principais números do mês em destaque e acesso rápido aos seus registros.",
+  "title": "Relatórios e consistência financeira",
+  "summary": "Relatórios distinguem despesas, reservas, transferências e fluxo de caixa. Classificações antigas podem ser revisadas sem alteração automática.",
   "highlights": [
     {
-      "title": "Novo dashboard",
-      "text": "Quatro indicadores no topo, saldo em destaque e blocos compactos de faturas, metas e limites."
+      "title": "Relatórios claros",
+      "text": "PDF apresenta resultado de consumo e variação de caixa em visões separadas."
     },
     {
-      "title": "Investido / reservado",
-      "text": "Veja as destinações realizadas e a quantidade de registros no mês selecionado."
+      "title": "Exportação CSV",
+      "text": "Lançamentos exportados com natureza, situação, direção e vínculo com meta."
     },
     {
-      "title": "Lançamentos mais práticos",
-      "text": "Histórico do mês com ícones das categorias e atalhos de edição e exclusão."
+      "title": "Conferência de transferências",
+      "text": "Detecta possíveis pares por valor e data, sem supor confirmação bancária."
     },
     {
-      "title": "Faturas e metas interativas",
-      "text": "Abra os detalhes diretamente no painel e identifique faturas pagas, abertas ou vencidas."
+      "title": "Histórico preservado",
+      "text": "Novo filtro permite revisar e confirmar a natureza dos registros anteriores."
     },
     {
-      "title": "Limites mais claros",
-      "text": "Percentuais acima de 100% indicam excesso. Gastos em categorias sem teto aparecem separadamente."
+      "title": "Proteções financeiras",
+      "text": "Revisão dos sinais da natureza e testes de regressão para cartões e reservas."
     }
   ],
   "details": [
-    "Layout adaptado para computador e celular, compatível com tema claro e escuro.",
-    "O saldo atual continua refletindo os lançamentos realizados de todos os períodos.",
-    "Reservas não são somadas às metas para calcular o indicador mensal.",
-    "Atalhos de Planejamento abrem o mês escolhido no dashboard.",
-    "Atualização visual sem mudança de estrutura no banco de dados."
+    "Para vincular reservas a metas, a migração 2.9.3 é obrigatória.",
+    "Sem reconciliação bancária automática: não existem contas de origem e destino identificáveis nesta estrutura.",
+    "Lançamentos históricos nunca são reclassificados automaticamente.",
+    "Esta versão requer homologação em navegador autenticado antes de publicação definitiva."
   ]
 }

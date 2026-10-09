@@ -16,14 +16,15 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@700;800&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
-<link href="css/app.css?v=2.9.1" rel="stylesheet"><link href="css/nature.css?v=2.9.1" rel="stylesheet">
+<link href="css/app.css?v=2.9.4" rel="stylesheet"><link href="css/nature.css?v=2.9.4" rel="stylesheet">
 <link href="css/motion-v15.css?v=15" rel="stylesheet">
 <link href="css/download-motion-v16.css?v=16" rel="stylesheet">
 <link href="css/family-monitor-v17.css?v=17" rel="stylesheet"/>
 <link href="css/planning-v18.css?rev=mobile-overview-rebuild" rel="stylesheet"/>
 <link href="css/categories-budget.css?rev=mobile-overview-rebuild" rel="stylesheet"/>
 <link href="css/context-help.css?rev=global-help" rel="stylesheet"/>
-<link href="css/dashboard-v29.css?v=2.9.1" rel="stylesheet"/>
+<link href="css/dashboard-v29.css?v=2.9.4" rel="stylesheet"/>
+<link rel="stylesheet" href="./css/financial-view-293.css?v=2.9.4"/>
 </head>
 <body>
 <svg aria-hidden="true" class="icon-sprite" focusable="false">
@@ -158,7 +159,7 @@
 </section>
 <section class="module-view hidden" id="module-transactions">
 <div class="module-header"><div><span class="eyebrow">FLUXO DE CAIXA</span><h2>Lançamentos</h2></div><button class="primary-compact" id="new-transaction-btn">＋ Novo lançamento</button></div>
-<div class="filter-bar"><input id="transaction-search" placeholder="Buscar descrição ou categoria" type="search"/><select id="transaction-filter-type"><option value="all">Todos</option><option value="income">Receitas</option><option value="expense">Despesas</option><option value="adjustment">Ajustes</option><option value="allocation">Reservas / investimentos</option><option value="transfer">Transferências</option><option value="resgate">Resgates</option></select><select aria-label="Período do histórico" id="transaction-filter-month"><option value="">Todos os períodos</option></select></div>
+<div class="filter-bar"><input id="transaction-search" placeholder="Buscar descrição ou categoria" type="search"/><select id="transaction-filter-type"><option value="all">Todos</option><option value="income">Receitas</option><option value="expense">Despesas</option><option value="adjustment">Ajustes</option><option value="allocation">Reservas / investimentos</option><option value="transfer">Transferências</option><option value="resgate">Resgates</option><option value="legacy">Revisar classificação</option></select><select aria-label="Período do histórico" id="transaction-filter-month"><option value="">Todos os períodos</option></select></div>
 <div class="history-sync-row"><span class="muted" id="transaction-sync-status">Sincronizando histórico…</span></div>
 <div class="panel-card"><div class="list-stack" id="transactions-list"></div></div>
 </section>
@@ -191,6 +192,11 @@
 <article class="expense"><span>Despesas planejadas</span><strong id="planning-expense">R$ 0,00</strong><small id="planning-expense-detail">Somente o que está em Meus planos</small></article>
 <article><span>Saldo planejado</span><strong id="planning-result">R$ 0,00</strong><small>Receitas planejadas − despesas planejadas</small></article>
 <article><span>Conclusão</span><strong id="planning-completion">0%</strong><small id="planning-completion-detail">0 de 0 itens concluídos</small></article>
+</div>
+<div class="planning-reserve-overview" aria-live="polite">
+<div><small>Reservado neste mês</small><strong id="planning-allocation-realized">R$ 0,00</strong></div>
+<div><small>Reservas futuras cadastradas</small><strong id="planning-allocation-future">R$ 0,00</strong></div>
+<div><small>Projeção do saldo livre (lançamentos)</small><strong id="planning-cash-projected">—</strong></div>
 </div>
 <div class="planning-overview-grid">
 <article class="panel-card planning-overview-panel">
@@ -286,6 +292,9 @@
 <label><span>Comparar com</span><select id="analytics-year-b"></select></label>
 </div>
 </section>
+<div class="financial-view-switch" role="group" aria-label="Visão financeira">
+<span>Visão financeira</span><div class="financial-view-buttons"><button type="button" class="financial-view-btn active" data-financial-view="general" aria-pressed="true">Geral</button><button type="button" class="financial-view-btn" data-financial-view="consumption" aria-pressed="false">Consumo</button><button type="button" class="financial-view-btn" data-financial-view="allocation" aria-pressed="false">Reservas / Investimentos</button></div>
+</div>
 <div aria-label="Seções da análise" class="analytics-tabs" role="tablist">
 <button class="analytics-tab active" data-analysis-tab="overview" type="button">Visão geral</button>
 <button class="analytics-tab" data-analysis-tab="categories" type="button">Categorias</button>
@@ -397,7 +406,7 @@
 <p class="muted settings-help" id="pwa-install-status">Verificando compatibilidade de instalação…</p>
 <div class="settings-inline-note"><strong>Dica:</strong><span>Depois de instalado, o Family Finance pode ser aberto direto pela tela inicial ou pelo menu de aplicativos.</span></div>
 <div class="settings-update-grid">
-<div class="settings-update-version"><span>Versão instalada</span><strong id="install-current-version">2.9.1</strong></div>
+<div class="settings-update-version"><span>Versão instalada</span><strong id="install-current-version">2.9.4</strong></div>
 <div class="settings-update-version"><span>Versão disponível</span><strong id="install-available-version">Verificando…</strong></div>
 </div>
 <div class="settings-update-state"><span class="status-pill" id="install-update-status">Verificando atualizações…</span></div>
@@ -471,6 +480,10 @@
 <div class="field"><label for="transaction-description">Descrição</label><input id="transaction-description" maxlength="120" placeholder="Ex: Salário" required="" type="text"/></div>
 <div class="form-grid two"><div class="field"><label for="transaction-amount">Valor</label><input id="transaction-amount" min="0.01" required="" step="0.01" type="number"/></div><div class="field"><label for="transaction-category">Categoria</label><select id="transaction-category"></select></div></div>
 <div class="field" id="transaction-nature-wrap"><label for="transaction-nature">Natureza do lançamento</label><select id="transaction-nature"><option value="consumption">Despesa de consumo</option><option value="allocation">Reserva / Investimento</option><option value="transfer">Transferência entre contas próprias</option><option value="resgate">Resgate de reserva ou investimento</option><option value="income">Receita</option></select><p id="transaction-nature-suggestion" class="nature-hint" aria-live="polite">A classificação define como o valor aparece nos relatórios.</p></div>
+<div class="transaction-goal-option hidden" id="transaction-goal-wrap">
+<label class="check-row"><input type="checkbox" id="transaction-goal-link"/><span>Vincular a uma meta <small class="goal-option-note">(opcional)</small></span></label>
+<div class="field hidden" id="transaction-goal-picker"><label for="transaction-goal-id">Selecione a meta</label><select id="transaction-goal-id"></select><p class="nature-hint">O aporte será contabilizado uma única vez e refletido na meta após a data do lançamento.</p></div>
+</div>
 <div class="field"><label for="transaction-notes">Observação</label><input id="transaction-notes" maxlength="500" placeholder="Opcional" type="text"/></div>
 <div id="recurring-fields"><label class="check-row"><input id="transaction-recurring" type="checkbox"/><span>Repetir mensalmente</span></label><div class="field hidden" id="recurring-count-wrap"><label for="transaction-recurring-count">Quantidade de meses</label><input id="transaction-recurring-count" max="60" min="2" type="number" value="12"/></div></div>
 <p class="form-error hidden" id="transaction-form-error"></p>
@@ -523,7 +536,7 @@
 <dialog class="modal" id="goal-dialog">
 <form class="modal-card small" id="goal-form" method="dialog">
 <div class="modal-head"><div><span class="eyebrow">META</span><h3 id="goal-dialog-title">Nova meta</h3></div><button class="modal-close" data-close-dialog="goal-dialog" type="button">×</button></div>
-<input id="goal-id" type="hidden"/><div class="field"><label for="goal-name">Nome</label><input id="goal-name" maxlength="100" required="" type="text"/></div><div class="form-grid two"><div class="field"><label for="goal-target">Objetivo</label><input id="goal-target" min="0.01" required="" step="0.01" type="number"/></div><div class="field"><label for="goal-saved">Já guardado</label><input id="goal-saved" min="0" step="0.01" type="number" value="0"/></div></div><div class="field"><label for="goal-due">Prazo</label><input id="goal-due" type="date"/></div><p class="form-error hidden" id="goal-form-error"></p><div class="modal-actions"><button class="secondary-btn" data-close-dialog="goal-dialog" type="button">Cancelar</button><button class="primary-compact" id="goal-save-btn" type="submit">Salvar meta</button></div>
+<input id="goal-id" type="hidden"/><div class="field"><label for="goal-name">Nome</label><input id="goal-name" maxlength="100" required="" type="text"/></div><div class="form-grid two"><div class="field"><label for="goal-target">Objetivo</label><input id="goal-target" min="0.01" required="" step="0.01" type="number"/></div><div class="field"><label for="goal-saved">Já guardado (sem aportes vinculados)</label><input id="goal-saved" min="0" step="0.01" type="number" value="0"/></div></div><div class="field"><label for="goal-due">Prazo</label><input id="goal-due" type="date"/></div><p class="form-error hidden" id="goal-form-error"></p><div class="modal-actions"><button class="secondary-btn" data-close-dialog="goal-dialog" type="button">Cancelar</button><button class="primary-compact" id="goal-save-btn" type="submit">Salvar meta</button></div>
 </form>
 </dialog>
 <dialog class="modal" id="budget-category-dialog">
@@ -635,7 +648,7 @@
 <div><span class="eyebrow">RELATÓRIO FINANCEIRO</span><h3>Escolha os meses do relatório</h3></div>
 <button class="modal-close" data-close-dialog="report-dialog" type="button">×</button>
 </div>
-<p class="report-intro">O PDF será montado como uma <strong>análise visual do período</strong>, com comparação, gráficos, categorias, limites e cartões. O histórico detalhado aparece apenas no final como apoio.</p>
+<p class="report-intro">O PDF reúne <strong>resultados, consumo, reservas, transferências e conferência financeira</strong>. O CSV exporta lançamentos do período com natureza e status para análise em planilhas.</p>
 <div aria-label="Seleções rápidas de período" class="report-presets">
 <button class="secondary-btn" data-report-preset="current" type="button">Mês atual</button>
 <button class="secondary-btn" data-report-preset="3" type="button">Últimos 3 meses</button>
@@ -655,18 +668,18 @@
 <div class="report-includes">
 <strong>O relatório inclui</strong>
 <div class="report-includes-grid">
-<span>✓ Resumo visual</span><span>✓ Comparação com mês anterior</span><span>✓ Gráfico de evolução</span><span>✓ Gastos por categoria</span><span>✓ Limites x realizado</span><span>✓ Análise automática</span>
+<span>✓ Resumo visual</span><span>✓ Comparação com mês anterior</span><span>✓ Gráfico de evolução</span><span>✓ Gastos por categoria</span><span>✓ Limites x realizado</span><span>✓ Análise automática</span><span>✓ Reservas e transferências</span><span>✓ Histórico para revisão</span>
 </div>
 </div>
 <p class="form-error hidden" id="report-form-error"></p>
-<div class="modal-actions"><button class="secondary-btn" data-close-dialog="report-dialog" type="button">Cancelar</button><button class="primary-compact" id="report-generate-btn" type="button">Baixar relatório PDF</button></div>
+<div class="modal-actions"><button class="secondary-btn" data-close-dialog="report-dialog" type="button">Cancelar</button><button class="secondary-btn" id="report-export-csv" type="button">Exportar lançamentos CSV</button><button class="primary-compact" id="report-generate-btn" type="button">Baixar relatório PDF</button></div>
 </div>
 </dialog>
 <dialog class="modal app-update-dialog" id="app-update-dialog">
 <div class="modal-card app-update-card">
 <div class="app-update-topbar"><div><span class="eyebrow">FAMILY FINANCE</span><strong>Atualizações</strong></div><button class="modal-close" id="app-update-close" type="button">×</button></div>
 <div class="app-update-hero">
-<div class="app-update-badge">Versão <span id="app-update-badge-version">2.9.1</span></div>
+<div class="app-update-badge">Versão <span id="app-update-badge-version">2.9.4</span></div>
 <h3 id="app-update-title">Nova atualização disponível</h3>
 <p id="app-update-subtitle">Veja o que mudou antes de atualizar.</p>
 </div>
@@ -681,6 +694,6 @@
 </div>
 </dialog>
 <dialog class="modal" id="dre-dialog"><div class="modal-card"><div class="modal-head"><div><span class="eyebrow">DRE</span><h3 id="dre-title">Demonstrativo do mês</h3></div><button class="modal-close" data-close-dialog="dre-dialog" type="button">×</button></div><div id="dre-content"></div></div></dialog>
-<script defer src="js/context-help.js"></script><script src="js/app.js?rev=2.9.1" type="module"></script>
+<script defer src="js/context-help.js"></script><script src="js/app.js?rev=2.9.4" type="module"></script>
 </body>
 </html>
