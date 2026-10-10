@@ -1,26 +1,26 @@
 {
-  "version": "2.9.10",
+  "version": "2.9.11",
   "publishedAt": "10/10/2026",
   "improvementCount": 3,
-  "title": "Composição de saldo simplificada",
-  "summary": "Nova composição do saldo guardado organizada em Metas, Investidos e Total.",
+  "title": "Card de reservas clicável no celular",
+  "summary": "No celular, o card Investido / reservado virou clicável e ficou visualmente mais limpo.",
   "highlights": [
     {
-      "title": "Metas organizadas",
-      "text": "Cada meta aparece com seu saldo e total do grupo."
+      "title": "Card clicável no mobile",
+      "text": "Agora o toque no card inteiro abre a composição do saldo."
     },
     {
-      "title": "Investidos separados",
-      "text": "Valores confirmados fora das metas aparecem em um grupo próprio."
+      "title": "Visual mais limpo",
+      "text": "Removidos os textos “Saldo acumulado · até hoje” e “Ver composição” no celular."
     },
     {
-      "title": "Resumo direto",
-      "text": "Total consolidado sem a lista extensa de conferências."
+      "title": "Indicação sutil",
+      "text": "Ícone discreto ↗ no canto mostra que o card pode ser aberto."
     }
   ],
   "details": [
-    "A composição mantém os cálculos e conciliações existentes.",
-    "Movimentações pendentes continuam fora do saldo confirmado.",
-    "Atualização visual do modal de reservas e investimentos."
+    "Mudança aplicada apenas para telas menores.",
+    "No desktop, o comportamento existente foi mantido.",
+    "Atualização de cache e versão para garantir publicação correta."
   ]
 }
