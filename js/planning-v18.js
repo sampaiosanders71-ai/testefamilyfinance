@@ -1,5 +1,7 @@
-import { supabase } from './supabase.js';
-import { getCurrentUser, newRequestId } from './database.js';
+import { operationIds, insertOnce } from './request-operation.js?v=2.9.12';
+import { listAllRows } from './pagination.js?v=2.9.12';
+import { supabase } from './supabase.js?v=2.9.12';
+import { getCurrentUser } from './database.js?v=2.9.12';
 
 export function planningMonthKey(value=new Date()){
   const date=value instanceof Date?value:new Date(`${String(value).slice(0,7)}-01T12:00:00`);
@@ -13,24 +15,27 @@ export function planningLocalISO(date=new Date()){return `${date.getFullYear()}-
 function nextMonthKey(value){return planningMonthKey(shiftPlanningMonth(value,1))}
 
 export async function listPlanningMonth(value=new Date()){
-  const user=await getCurrentUser();const start=planningMonthKey(value),end=nextMonthKey(value);
-  const {data,error}=await supabase.from('ff2_planning_items').select('*').eq('user_id',user.id).gte('planned_on',start).lt('planned_on',end).order('planned_on',{ascending:true}).order('created_at',{ascending:true});
-  if(error)throw error;return data||[];
+  const user=await getCurrentUser(), start=planningMonthKey(value), end=nextMonthKey(value);
+  const rows=await listAllRows(options=>supabase.from('ff2_planning_items').select('*',options).eq('user_id',user.id).gte('planned_on',start).lt('planned_on',end).order('created_at').order('id'),'Planejamento');
+  return rows.sort((a,b)=>String(a.planned_on).localeCompare(String(b.planned_on))||String(a.created_at).localeCompare(String(b.created_at)));
 }
+
 export async function listPlanningByMonths(monthKeys=[]){
-  const user=await getCurrentUser();const keys=[...new Set((monthKeys||[]).map(planningMonthKey))].sort();if(!keys.length)return{};
-  const start=keys[0],end=nextMonthKey(keys[keys.length-1]);
-  const {data,error}=await supabase.from('ff2_planning_items').select('*').eq('user_id',user.id).gte('planned_on',start).lt('planned_on',end).order('planned_on',{ascending:true});
-  if(error)throw error;const wanted=new Set(keys);const out=Object.fromEntries(keys.map(k=>[k,[]]));
-  (data||[]).forEach(row=>{const key=`${String(row.planned_on).slice(0,7)}-01`;if(wanted.has(key))out[key].push(row)});return out;
+  const user=await getCurrentUser(), keys=[...new Set(monthKeys.map(planningMonthKey))].sort();
+  if(!keys.length)return{};
+  const rows=await listAllRows(options=>supabase.from('ff2_planning_items').select('*',options).eq('user_id',user.id).gte('planned_on',keys[0]).lt('planned_on',nextMonthKey(keys.at(-1))).order('created_at').order('id'),'Planejamento');
+  const out=Object.fromEntries(keys.map(key=>[key,[]]));
+  rows.sort((a,b)=>String(a.planned_on).localeCompare(String(b.planned_on))).forEach(row=>out[planningMonthKey(row.planned_on)]?.push(row));
+  return out;
 }
+
 export function planningNature(item){
   if(Number(item?.direction)>0)return 'income';
   return ['consumption','allocation','transfer'].includes(item?.financial_nature)?item.financial_nature:'consumption';
 }
 export async function createPlanningItem(input){
-  const user=await getCurrentUser();const row={user_id:user.id,direction:Number(input.direction)>0?1:-1,description:String(input.description||'').trim(),amount:Number(input.amount),planned_on:input.date,category:input.category||'Outros',status:'pending',financial_nature:Number(input.direction)>0?'income':(input.financialNature||'consumption'),notes:String(input.notes||'').trim()||null,client_request_id:newRequestId()};
-  const {data,error}=await supabase.from('ff2_planning_items').insert(row).select('*').single();if(error)throw error;return data;
+  const user=await getCurrentUser();const row={user_id:user.id,direction:Number(input.direction)>0?1:-1,description:String(input.description||'').trim(),amount:Number(input.amount),planned_on:input.date,category:input.category||'Outros',status:'pending',financial_nature:Number(input.direction)>0?'income':(input.financialNature||'consumption'),notes:String(input.notes||'').trim()||null,client_request_id:operationIds(input)[0]};
+  return (await insertOnce(supabase,'ff2_planning_items',row,user.id))[0];
 }
 export async function updatePlanningItem(id,input){
   const user=await getCurrentUser();const changes={direction:Number(input.direction)>0?1:-1,description:String(input.description||'').trim(),amount:Number(input.amount),planned_on:input.date,category:input.category||'Outros',financial_nature:Number(input.direction)>0?'income':(input.financialNature||'consumption'),notes:String(input.notes||'').trim()||null,updated_at:new Date().toISOString()};

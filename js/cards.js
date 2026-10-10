@@ -1,22 +1,23 @@
-import { supabase } from './supabase.js';
-import { getCurrentUser, newRequestId } from './database.js';
-import { monthISO } from './finance.js';
+import { operationIds, insertOnce } from './request-operation.js?v=2.9.12';
+import { listAllRows } from './pagination.js?v=2.9.12';
+import { supabase } from './supabase.js?v=2.9.12';
+import { getCurrentUser } from './database.js?v=2.9.12';
+import { monthISO } from './finance.js?v=2.9.12';
 
 export async function listCards() {
   const user = await getCurrentUser();
-  const { data, error } = await supabase.from('ff2_cards').select('*').eq('user_id', user.id).eq('active', true).order('created_at');
-  if (error) throw error;
-  return data || [];
+  const rows = await listAllRows(options => supabase.from('ff2_cards').select('*',options).eq('user_id',user.id).eq('active',true).order('created_at').order('id'), 'listCards');
+  return rows;
 }
 
 export async function createCard(input) {
   const user = await getCurrentUser();
-  const { data, error } = await supabase.from('ff2_cards').insert({
+  const row = {
+    id: operationIds(input)[0],
     user_id: user.id, name: input.name.trim(), credit_limit: Number(input.limit), closing_day: Number(input.closingDay),
     due_day: Number(input.dueDay), revolving_interest: Number(input.interest || 0), active: true
-  }).select('*').single();
-  if (error) throw error;
-  return data;
+  };
+  return (await insertOnce(supabase, 'ff2_cards', row, user.id, 'id'))[0];
 }
 
 export async function updateCard(id, input) {
@@ -43,7 +44,7 @@ export async function createPurchase(input) {
     p_purchase_date: input.date,
     p_category: input.category || 'Outros',
     p_installment_count: Number(input.installments),
-    p_client_request_id: newRequestId()
+    p_client_request_id: operationIds(input)[0]
   });
   if (error) throw error;
   return data;
@@ -70,33 +71,20 @@ export async function deletePurchase(id) {
 
 export async function listPurchases() {
   const user = await getCurrentUser();
-  const { data, error } = await supabase
-    .from('ff2_card_purchases')
-    .select('*, ff2_cards(name)')
-    .eq('user_id', user.id)
-    .order('purchase_date', { ascending: false })
-    .order('created_at', { ascending: false });
-  if (error) throw error;
-  return data || [];
+  const rows = await listAllRows(options => supabase.from('ff2_card_purchases').select('*, ff2_cards(name)',options).eq('user_id',user.id).order('created_at',{ascending:false}).order('id',{ascending:false}), 'listPurchases');
+  return rows.sort((a,b)=>String(b.purchase_date||'').localeCompare(String(a.purchase_date||''))||String(b.created_at||'').localeCompare(String(a.created_at||''))); 
 }
 
 export async function listInstallments() {
   const user = await getCurrentUser();
-  const { data, error } = await supabase
-    .from('ff2_card_installments')
-    .select('*, ff2_card_purchases(description,category,total_amount,installment_count,purchase_date), ff2_cards(name,due_day,closing_day)')
-    .eq('user_id', user.id)
-    .order('invoice_month')
-    .order('installment_no');
-  if (error) throw error;
-  return data || [];
+  const rows = await listAllRows(options => supabase.from('ff2_card_installments').select('*, ff2_card_purchases(description,category,total_amount,installment_count,purchase_date), ff2_cards(name,due_day,closing_day)',options).eq('user_id',user.id).order('invoice_month').order('installment_no').order('id'), 'listInstallments');
+  return rows;
 }
 
 export async function listInvoiceStatuses() {
   const user = await getCurrentUser();
-  const { data, error } = await supabase.from('ff2_card_invoices').select('*').eq('user_id', user.id);
-  if (error) throw error;
-  return data || [];
+  const rows = await listAllRows(options => supabase.from('ff2_card_invoices').select('*',options).eq('user_id',user.id).order('id'), 'listInvoiceStatuses');
+  return rows;
 }
 
 export async function setInvoicePaid(cardId, invoiceMonth, paid) {

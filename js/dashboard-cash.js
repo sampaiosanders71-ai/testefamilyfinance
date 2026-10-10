@@ -1,4 +1,4 @@
-import { isCardInvoicePayment } from './financial-ledger.js';
+import { isCardInvoicePayment } from './financial-ledger.js?v=2.9.12';
 function monthPrefix(refDate){
   return `${refDate.getFullYear()}-${String(refDate.getMonth()+1).padStart(2,'0')}`;
 }

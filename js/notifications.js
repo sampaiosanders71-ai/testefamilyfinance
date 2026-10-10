@@ -1,33 +1,17 @@
-import { supabase } from './supabase.js';
-import { getCurrentUser } from './database.js';
-import { budgetSummary } from './budget.js';
-import { cardInvoiceSummaries } from './cards.js';
-import { goalProgress } from './goal-integration.js';
-import { canonicalCategoryName } from './category-alias.js';
+import { listAllRows } from './pagination.js?v=2.9.12';
+import { supabase } from './supabase.js?v=2.9.12';
+import { getCurrentUser } from './database.js?v=2.9.12';
+import { budgetSummary } from './budget.js?v=2.9.12';
+import { cardInvoiceSummaries } from './cards.js?v=2.9.12';
+import { goalProgress } from './goal-integration.js?v=2.9.12';
+import { canonicalCategoryName } from './category-alias.js?v=2.9.12';
 
 function monthKey(date){return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}`}
 function sameMonth(a,b){return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()}
 
-const NOTIFICATION_PAGE_SIZE=500;
-
 export async function listNotifications(){
   const user=await getCurrentUser();
-  const rows=[];
-  for(let from=0;;from+=NOTIFICATION_PAGE_SIZE){
-    const to=from+NOTIFICATION_PAGE_SIZE-1;
-    const {data,error}=await supabase
-      .from('ff2_notifications')
-      .select('*')
-      .eq('user_id',user.id)
-      .order('created_at',{ascending:false})
-      .order('id',{ascending:false})
-      .range(from,to);
-    if(error)throw error;
-    const page=data||[];
-    rows.push(...page);
-    if(page.length<NOTIFICATION_PAGE_SIZE)break;
-  }
-  return rows;
+  return listAllRows(options=>supabase.from('ff2_notifications').select('*',options).eq('user_id',user.id).order('created_at',{ascending:false}).order('id',{ascending:false}),'Notificações');
 }
 
 export async function markNotificationRead(id){

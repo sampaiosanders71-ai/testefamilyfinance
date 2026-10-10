@@ -1,26 +1,33 @@
 {
-  "version": "2.9.11",
+  "version": "2.9.12",
   "publishedAt": "10/10/2026",
-  "improvementCount": 3,
-  "title": "Card de reservas clicável no celular",
-  "summary": "No celular, o card Investido / reservado virou clicável e ficou visualmente mais limpo.",
+  "improvementCount": 5,
+  "title": "Mais confiabilidade nos dados e atualizações",
+  "summary": "Históricos completos, orçamento salvo por inteiro e navegação preservada.",
   "highlights": [
     {
-      "title": "Card clicável no mobile",
-      "text": "Agora o toque no card inteiro abre a composição do saldo."
+      "title": "Históricos completos",
+      "text": "Carregamento de todas as parcelas e registros financeiros."
     },
     {
-      "title": "Visual mais limpo",
-      "text": "Removidos os textos “Saldo acumulado · até hoje” e “Ver composição” no celular."
+      "title": "Atualizações consistentes",
+      "text": "Todos os arquivos do aplicativo usam a mesma versão."
     },
     {
-      "title": "Indicação sutil",
-      "text": "Ícone discreto ↗ no canto mostra que o card pode ser aberto."
+      "title": "Envios protegidos",
+      "text": "Retentativas reutilizam os identificadores da operação."
+    },
+    {
+      "title": "Orçamento íntegro",
+      "text": "Plano e limites são salvos juntos."
+    },
+    {
+      "title": "Sessão sem interrupções",
+      "text": "A renovação da sessão mantém a tela aberta."
     }
   ],
   "details": [
-    "Mudança aplicada apenas para telas menores.",
-    "No desktop, o comportamento existente foi mantido.",
-    "Atualização de cache e versão para garantir publicação correta."
+    "Correções de confiabilidade sem alterar os conceitos dos cálculos financeiros.",
+    "O orçamento usa uma função transacional no Supabase."
   ]
 }

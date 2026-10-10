@@ -1,6 +1,7 @@
-import { ADDITIONAL_CATEGORY_ICONS } from './category-extra-icons.js';
-import { supabase } from './supabase.js';
-import { getCurrentUser } from './database.js';
+import { listAllRows } from './pagination.js?v=2.9.12';
+import { ADDITIONAL_CATEGORY_ICONS } from './category-extra-icons.js?v=2.9.12';
+import { supabase } from './supabase.js?v=2.9.12';
+import { getCurrentUser } from './database.js?v=2.9.12';
 
 export const CATEGORY_DEFAULTS = [
   { kind:'expense', name:'Alimentação', origin:'default', default_key:'expense_food', icon_key:'food', color_key:'orange', sort_order:10 },
@@ -80,8 +81,7 @@ export function categoryGlyph(iconKey='tag'){
 }
 
 async function ensureDefaults(user){
-  const { data: existing, error } = await supabase.from('ff2_categories').select('kind,name,default_key').eq('user_id',user.id).eq('is_deleted',false);
-  if(error)throw error;
+  const existing=await listAllRows(options=>supabase.from('ff2_categories').select('id,kind,name,default_key',options).eq('user_id',user.id).eq('is_deleted',false).order('id'),'Categorias padrão');
   const identityKeys=new Set((existing||[]).map(row=>row.default_key).filter(Boolean));
   const legacyKeys=new Set((existing||[]).map(row=>`${row.kind}|${String(row.name).toLocaleLowerCase('pt-BR')}`));
   const missing=CATEGORY_DEFAULTS.filter(row=>!identityKeys.has(row.default_key)&&!legacyKeys.has(`${row.kind}|${row.name.toLocaleLowerCase('pt-BR')}`)).map(row=>({user_id:user.id,...row}));
@@ -93,8 +93,7 @@ async function ensureDefaults(user){
 export async function listCategories(){
   const user=await getCurrentUser();
   await ensureDefaults(user);
-  const { data,error }=await supabase.from('ff2_categories').select('*').eq('user_id',user.id).order('kind').order('sort_order').order('name');
-  if(error)throw error;
+  const data=await listAllRows(options=>supabase.from('ff2_categories').select('*',options).eq('user_id',user.id).order('kind').order('sort_order').order('name').order('id'),'Categorias');
   return (data||[]).map(row=>({...row,icon_key:normalizeCategoryIconKey(row.icon_key)}));
 }
 

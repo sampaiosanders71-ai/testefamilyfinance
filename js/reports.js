@@ -1,7 +1,7 @@
-import { buildFinancialMonthLedger, classifyTransaction } from './financial-ledger.js';
-import { canonicalCategoryName, canonicalCategoryAmounts, canonicalCategoryLimits } from './category-alias.js';
-import { ownTransferReview, legacyReview, reviewedPeriodRows } from './financial-integrity.js';
-import { buildVisualPdf, PDF_PAGE } from './pdf.js';
+import { buildFinancialMonthLedger, classifyTransaction } from './financial-ledger.js?v=2.9.12';
+import { canonicalCategoryName, canonicalCategoryAmounts, canonicalCategoryLimits } from './category-alias.js?v=2.9.12';
+import { ownTransferReview, legacyReview, reviewedPeriodRows } from './financial-integrity.js?v=2.9.12';
+import { buildVisualPdf, PDF_PAGE } from './pdf.js?v=2.9.12';
 
 const C = {
   ink:'#171717', muted:'#6f7379', subtle:'#9b9da1', panel:'#f5f2ed', line:'#dedbd5',
