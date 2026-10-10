@@ -195,14 +195,36 @@ function renderReserveDetails(){
   const position=reservePosition||buildReservePosition({goals:state.goals,transactions:state.transactions,today:localISO()});
   const root=document.getElementById('reserve-detail-body');if(!root)return;
   const shortDate=position.asOf.split('-').reverse().join('/');
-  const goalRows=position.accountedGoals.map(({goal,progress})=>`<div class="reserve-detail-row"><span>${escapeHTML(goal.name)}</span><strong>${formatBRL(progress.saved)}</strong><small>Base manual: ${formatBRL(progress.base)} · Aportes vinculados líquidos: ${formatBRL(progress.linked)}</small></div>`).join('');
-  const archived=position.archivedWithFunds.length?`<div class="reserve-alert">${position.archivedWithFunds.length} meta(s) arquivada(s) ainda têm saldo registrado. Revise em Metas; não foram somadas.</div>`:'';
-  const pending=position.pending.map(row=>{
-    const isRescue=row.financial_nature==='resgate';
-    return `<article class="reserve-unlinked"><div class="reserve-unlinked-head"><div><strong>${escapeHTML(row.description||'Movimentação sem descrição')}</strong><small>${escapeHTML(formatDate(row.occurred_on))} · ${isRescue?'Resgate':'Aporte sem meta'}</small></div><strong class="${isRescue?'negative':'positive'}">${isRescue?'−':'+'} ${formatBRL(row.amount)}</strong></div><div class="reserve-choices">${isRescue?'':`<button type="button" data-reserve-treatment="included" data-reserve-id="${escapeHTML(row.id)}">Já incluído na meta</button>`}<button type="button" data-reserve-treatment="separate" data-reserve-id="${escapeHTML(row.id)}">Reserva independente</button><button type="button" data-reserve-edit="${escapeHTML(row.id)}">Vincular à meta</button></div></article>`;
-  }).join('');
-  const classified=[...position.independent,...position.included].map(row=>`<div class="reserve-reviewed"><span>${escapeHTML(row.description||'Movimentação')} · ${formatBRL(row.amount)} <small>(${row.reserve_reconciliation==='separate'?'avulsa confirmada':'já incluída na base'})</small></span><button type="button" data-reserve-treatment="pending" data-reserve-id="${escapeHTML(row.id)}">Revisar</button></div>`).join('');
-  root.innerHTML=`<div class="reserve-detail-total"><small>Saldo confirmado em ${shortDate}</small><strong>${formatBRL(position.confirmedBalance)}</strong><span>${position.incomplete?'Parcial: existem valores aguardando conciliação.':'Todos os lançamentos classificados foram conciliados.'}</span></div><div class="reserve-detail-section"><h4>Composição do saldo</h4><div class="reserve-detail-row"><span>Metas existentes</span><strong>${formatBRL(position.goalBalance)}</strong></div><div class="reserve-detail-row"><span>Reservas independentes líquidas</span><strong>${formatBRL(position.independentBalance)}</strong></div>${goalRows}${archived}</div>${position.pending.length?`<div class="reserve-detail-section"><h4>Para conciliar (${position.pending.length})</h4><p>Esses valores não estão incluídos no saldo acima. Confirme se já fazem parte do valor manual de uma meta, se são outra reserva ou vincule ao objetivo correto.</p>${pending}</div>`:''}${classified?`<div class="reserve-detail-section"><h4>Avulsas já conferidas</h4>${classified}</div>`:''}<p class="reserve-disclaimer">Este saldo não representa rendimento de mercado ou patrimônio bancário verificado. É a posição calculada a partir dos registros confirmados no Family Finance, sem adicionar novamente dinheiro já contado em Metas.</p>`;
+  const goalsList=position.accountedGoals.length
+    ? position.accountedGoals.map(({goal,progress})=>`<div class="reserve-composition-row"><span>${escapeHTML(goal.name)}</span><strong>${formatBRL(progress.saved)}</strong></div>`).join('')
+    : `<div class="reserve-empty-line">Nenhuma meta com saldo no momento.</div>`;
+  const investLabel=position.independentBalance===0?'Nenhum valor investido fora das metas':'Valor investido fora das metas';
+  const archivedNotice=position.archivedWithFunds.length?`<div class="reserve-inline-note">${position.archivedWithFunds.length} meta(s) arquivada(s) com saldo não entram na composição atual.</div>`:'';
+  const pendingNotice=position.pending.length?`<div class="reserve-inline-note">${position.pending.length} movimentação(ões) ainda não conciliadas não entram neste total.</div>`:'';
+  root.innerHTML=`
+    <div class="reserve-detail-total reserve-highlight-card">
+      <small>Saldo confirmado em ${shortDate}</small>
+      <strong>${formatBRL(position.confirmedBalance)}</strong>
+    </div>
+    <section class="reserve-detail-section reserve-composition-block">
+      <h4>Composição do saldo</h4>
+      <div class="reserve-summary-card">
+        <h5>Metas</h5>
+        ${goalsList}
+        <div class="reserve-composition-row reserve-composition-total"><span>Total em Metas</span><strong>${formatBRL(position.goalBalance)}</strong></div>
+      </div>
+      <div class="reserve-summary-card">
+        <h5>Investidos</h5>
+        <div class="reserve-composition-row"><span>${investLabel}</span><strong>${formatBRL(position.independentBalance)}</strong></div>
+        <div class="reserve-composition-row reserve-composition-total"><span>Total Investidos</span><strong>${formatBRL(position.independentBalance)}</strong></div>
+      </div>
+      <div class="reserve-summary-card reserve-highlight-card reserve-grand-total">
+        <h5>Total da composição</h5>
+        <strong>${formatBRL(position.confirmedBalance)}</strong>
+      </div>
+      ${archivedNotice}${pendingNotice}
+    </section>
+  `;
 }
 function openReserveDetails(){renderReserveDetails();openDialog('reserve-dialog')}
 async function setReserveTreatment(id,value){
