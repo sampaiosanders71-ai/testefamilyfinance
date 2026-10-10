@@ -1,30 +1,26 @@
 {
-  "version": "2.9.8",
+  "version": "2.9.9",
   "publishedAt": "10/10/2026",
-  "improvementCount": 4,
-  "title": "Conciliação e integridade dos relatórios",
-  "summary": "Faturas de cartões com mesmo nome identificadas por ID, categorias renomeadas conciliadas, planejamento preserva a natureza financeira e falhas de atualização são informadas com clareza.",
+  "improvementCount": 3,
+  "title": "Saldo de reservas conciliado",
+  "summary": "O card de reservas mostra o saldo acumulado confirmado, integra Metas e permite conciliar aportes avulsos sem duplicações.",
   "highlights": [
     {
-      "title": "Cartões independentes",
-      "text": "Cartões homônimos permanecem separados no livro e relatórios."
+      "title": "Saldo acumulado",
+      "text": "Metas e reservas avulsas confirmadas, com resgates descontados."
     },
     {
-      "title": "Categorias conciliadas",
-      "text": "Orçamento, Análises e PDF compartilham a mesma identidade histórica."
+      "title": "Conciliação transparente",
+      "text": "Aportes avulsos pendentes não são somados automaticamente."
     },
     {
-      "title": "Planejamento íntegro",
-      "text": "Conclusões e adiamentos individuais mantêm a classificação original."
-    },
-    {
-      "title": "Atualização confiável",
-      "text": "Falhas de rede não são apresentadas como aplicativo atualizado."
+      "title": "Composição acessível",
+      "text": "Detalhamento do saldo diretamente no card do Dashboard."
     }
   ],
   "details": [
-    "Correção das quatro falhas F01-F04 da auditoria independente 2.9.7.",
-    "O banco exige migração 2.9.8 para preservar a natureza em operações individuais do Planejamento.",
-    "Proteção contra senhas vazadas do Supabase e homologação autenticada ainda dependem de validação."
+    "Saldo parcial é exibido quando há movimentações sem vínculo confirmado.",
+    "Valores registrados em Metas permanecem preservados.",
+    "Nova coluna e RPC de conciliação precisam da migração 2.9.9."
   ]
 }

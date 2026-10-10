@@ -1,0 +1,28 @@
+/* Indicador acumulado e conciliação de reservas 2.9.9 */
+#module-home .home-kpi.allocation .reserve-kpi-details{display:block;margin-top:3px;padding:2px 0;border:0;background:none;color:var(--orange);font-size:.69rem;font-weight:700;text-align:left;cursor:pointer}
+#module-home .home-kpi.allocation .reserve-kpi-details:hover{text-decoration:underline}
+#module-home .home-kpi.allocation .reserve-kpi-details:focus-visible{outline:2px solid var(--orange);outline-offset:3px;border-radius:3px}
+#module-home #stat-allocation-count.reserve-pending{color:#f7c178}
+.reserve-dialog-card{width:min(630px,calc(100vw - 20px))}
+.reserve-detail-total{background:linear-gradient(135deg,#232527,#191e23);border:1px solid var(--line);border-radius:15px;padding:17px;margin-bottom:18px;display:grid;gap:5px}
+.reserve-detail-total small{font-size:.78rem;color:var(--muted)}
+.reserve-detail-total strong{font-size:clamp(1.6rem,5vw,2.3rem);font-weight:800}
+.reserve-detail-total span{font-size:.75rem;color:#f7c178}
+.reserve-detail-section{border-top:1px solid var(--line);padding-top:14px;margin-top:15px}
+.reserve-detail-section h4{font-size:1rem;margin:0 0 9px}
+.reserve-detail-section p,.reserve-disclaimer{font-size:.78rem;line-height:1.5;color:var(--muted)}
+.reserve-detail-row{padding:9px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 10px;font-size:.84rem}
+.reserve-detail-row strong{text-align:right;font-weight:800}
+.reserve-detail-row small{grid-column:1/-1;color:var(--muted);font-size:.72rem}
+.reserve-unlinked{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:11px;margin:8px 0}
+.reserve-unlinked-head{display:flex;justify-content:space-between;align-items:start;gap:7px;font-size:.83rem}
+.reserve-unlinked-head strong{font-size:.82rem}
+.reserve-unlinked-head small{display:block;color:var(--muted);margin-top:4px;font-size:.7rem}
+.reserve-unlinked-head>strong{white-space:nowrap}
+.reserve-choices{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.reserve-choices button,.reserve-reviewed button{font-size:.72rem;font-weight:650;padding:8px 9px;background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:8px;cursor:pointer}
+.reserve-choices button:hover,.reserve-reviewed button:hover{border-color:var(--orange)}
+.reserve-reviewed{display:flex;align-items:center;justify-content:space-between;gap:6px;font-size:.78rem;border-bottom:1px solid var(--line);padding:7px 0}
+.reserve-reviewed small{color:var(--muted)}
+.reserve-alert{padding:12px;background:#45311b;color:#ffe2b2;border-radius:9px;font-size:.8rem;margin-top:11px}
+@media(max-width:480px){.reserve-dialog-card{padding:15px}.reserve-unlinked-head{flex-wrap:wrap}.reserve-choices button{flex:1 1 43%}.reserve-detail-total strong{font-size:1.75rem}}

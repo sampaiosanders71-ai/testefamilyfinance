@@ -152,6 +152,7 @@ export async function updateTransaction(id, input) {
       notes: input.notes?.trim() || null,
       financial_nature: input.financialNature || (input.direction>0?'income':'consumption'),
       goal_id: ((input.financialNature==='allocation' && input.direction<0)||(input.financialNature==='resgate' && input.direction>0)) ? (input.goalId || null) : null,
+      ...(input.resetReserveReconciliation ? { reserve_reconciliation: null } : {}),
       updated_at: new Date().toISOString()
     })
     .eq('id', id).eq('user_id', user.id)
