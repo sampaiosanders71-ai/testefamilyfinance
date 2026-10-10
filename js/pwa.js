@@ -31,6 +31,7 @@ export async function initPWA(){
     try{
       registrationRef=await navigator.serviceWorker.getRegistration('./');
       if(!registrationRef)registrationRef=await navigator.serviceWorker.register(`./sw.js?rev=${APP_VERSION}`,{scope:'./',updateViaCache:'none'});
+      else await registrationRef.update();
     }catch(error){console.error('Falha ao registrar Service Worker:',error);updateInstallUI('O navegador não conseguiu ativar o modo aplicativo. Atualize a página e tente novamente.');return}
   }
   updateInstallUI();

@@ -1,26 +1,26 @@
 {
-  "version": "2.9.9",
+  "version": "2.9.10",
   "publishedAt": "10/10/2026",
   "improvementCount": 3,
-  "title": "Saldo de reservas conciliado",
-  "summary": "O card de reservas mostra o saldo acumulado confirmado, integra Metas e permite conciliar aportes avulsos sem duplicações.",
+  "title": "Composição de saldo simplificada",
+  "summary": "Nova composição do saldo guardado organizada em Metas, Investidos e Total.",
   "highlights": [
     {
-      "title": "Saldo acumulado",
-      "text": "Metas e reservas avulsas confirmadas, com resgates descontados."
+      "title": "Metas organizadas",
+      "text": "Cada meta aparece com seu saldo e total do grupo."
     },
     {
-      "title": "Conciliação transparente",
-      "text": "Aportes avulsos pendentes não são somados automaticamente."
+      "title": "Investidos separados",
+      "text": "Valores confirmados fora das metas aparecem em um grupo próprio."
     },
     {
-      "title": "Composição acessível",
-      "text": "Detalhamento do saldo diretamente no card do Dashboard."
+      "title": "Resumo direto",
+      "text": "Total consolidado sem a lista extensa de conferências."
     }
   ],
   "details": [
-    "Saldo parcial é exibido quando há movimentações sem vínculo confirmado.",
-    "Valores registrados em Metas permanecem preservados.",
-    "Nova coluna e RPC de conciliação precisam da migração 2.9.9."
+    "A composição mantém os cálculos e conciliações existentes.",
+    "Movimentações pendentes continuam fora do saldo confirmado.",
+    "Atualização visual do modal de reservas e investimentos."
   ]
 }
