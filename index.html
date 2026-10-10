@@ -16,15 +16,15 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@700;800&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
-<link href="css/app.css?v=2.9.4" rel="stylesheet"><link href="css/nature.css?v=2.9.4" rel="stylesheet">
+<link href="css/app.css?v=2.9.8" rel="stylesheet"><link href="css/nature.css?v=2.9.8" rel="stylesheet">
 <link href="css/motion-v15.css?v=15" rel="stylesheet">
 <link href="css/download-motion-v16.css?v=16" rel="stylesheet">
 <link href="css/family-monitor-v17.css?v=17" rel="stylesheet"/>
 <link href="css/planning-v18.css?rev=mobile-overview-rebuild" rel="stylesheet"/>
-<link href="css/categories-budget.css?rev=mobile-overview-rebuild" rel="stylesheet"/>
+<link href="css/categories-budget.css?v=2.9.8" rel="stylesheet"/>
 <link href="css/context-help.css?rev=global-help" rel="stylesheet"/>
-<link href="css/dashboard-v29.css?v=2.9.4" rel="stylesheet"/>
-<link rel="stylesheet" href="./css/financial-view-293.css?v=2.9.4"/>
+<link href="css/dashboard-v29.css?v=2.9.8" rel="stylesheet"/>
+<link rel="stylesheet" href="./css/financial-view-293.css?v=2.9.8"/><link rel="stylesheet" href="./css/ui-295.css?v=2.9.8"/>
 </head>
 <body>
 <svg aria-hidden="true" class="icon-sprite" focusable="false">
@@ -195,7 +195,7 @@
 </div>
 <div class="planning-reserve-overview" aria-live="polite">
 <div><small>Reservado neste mês</small><strong id="planning-allocation-realized">R$ 0,00</strong></div>
-<div><small>Reservas futuras cadastradas</small><strong id="planning-allocation-future">R$ 0,00</strong></div>
+<div><small>Reservas futuras cadastradas</small><strong id="planning-allocation-future">R$ 0,00</strong><small id="planning-allocation-planned">Reservas programadas: R$ 0,00</small></div>
 <div><small>Projeção do saldo livre (lançamentos)</small><strong id="planning-cash-projected">—</strong></div>
 </div>
 <div class="planning-overview-grid">
@@ -406,7 +406,7 @@
 <p class="muted settings-help" id="pwa-install-status">Verificando compatibilidade de instalação…</p>
 <div class="settings-inline-note"><strong>Dica:</strong><span>Depois de instalado, o Family Finance pode ser aberto direto pela tela inicial ou pelo menu de aplicativos.</span></div>
 <div class="settings-update-grid">
-<div class="settings-update-version"><span>Versão instalada</span><strong id="install-current-version">2.9.4</strong></div>
+<div class="settings-update-version"><span>Versão instalada</span><strong id="install-current-version">2.9.8</strong></div>
 <div class="settings-update-version"><span>Versão disponível</span><strong id="install-available-version">Verificando…</strong></div>
 </div>
 <div class="settings-update-state"><span class="status-pill" id="install-update-status">Verificando atualizações…</span></div>
@@ -482,7 +482,7 @@
 <div class="field" id="transaction-nature-wrap"><label for="transaction-nature">Natureza do lançamento</label><select id="transaction-nature"><option value="consumption">Despesa de consumo</option><option value="allocation">Reserva / Investimento</option><option value="transfer">Transferência entre contas próprias</option><option value="resgate">Resgate de reserva ou investimento</option><option value="income">Receita</option></select><p id="transaction-nature-suggestion" class="nature-hint" aria-live="polite">A classificação define como o valor aparece nos relatórios.</p></div>
 <div class="transaction-goal-option hidden" id="transaction-goal-wrap">
 <label class="check-row"><input type="checkbox" id="transaction-goal-link"/><span>Vincular a uma meta <small class="goal-option-note">(opcional)</small></span></label>
-<div class="field hidden" id="transaction-goal-picker"><label for="transaction-goal-id">Selecione a meta</label><select id="transaction-goal-id"></select><p class="nature-hint">O aporte será contabilizado uma única vez e refletido na meta após a data do lançamento.</p></div>
+<div class="field hidden" id="transaction-goal-picker"><label for="transaction-goal-id">Selecione a meta</label><select id="transaction-goal-id"></select><p class="nature-hint">O aporte aumenta a meta e um resgate vinculado a reduz, respeitando a data do lançamento.</p></div>
 </div>
 <div class="field"><label for="transaction-notes">Observação</label><input id="transaction-notes" maxlength="500" placeholder="Opcional" type="text"/></div>
 <div id="recurring-fields"><label class="check-row"><input id="transaction-recurring" type="checkbox"/><span>Repetir mensalmente</span></label><div class="field hidden" id="recurring-count-wrap"><label for="transaction-recurring-count">Quantidade de meses</label><input id="transaction-recurring-count" max="60" min="2" type="number" value="12"/></div></div>
@@ -557,12 +557,20 @@
 <input id="category-editor-id" type="hidden"/>
 <div class="field"><label for="category-editor-kind">Tipo</label><select id="category-editor-kind"><option value="expense">Despesa</option><option value="income">Receita</option></select></div>
 <div class="field"><label for="category-editor-name">Nome</label><input id="category-editor-name" maxlength="60" minlength="2" placeholder="Ex.: Faculdade" required="" type="text"/></div>
-<div class="field category-icon-field">
-<label>Ícone</label>
-<input id="category-editor-icon" type="hidden" value="tag"/>
-<div aria-label="Escolher ícone da categoria" class="category-icon-grid" id="category-icon-grid" role="radiogroup"></div>
+<div class="category-appearance-fields">
+  <div class="field category-icon-field">
+    <label id="category-icon-label">Ícone</label>
+    <input id="category-editor-icon" type="hidden" value="tag"/>
+    <button type="button" class="category-picker-toggle" id="category-icon-toggle" aria-labelledby="category-icon-label" aria-expanded="false" aria-controls="category-icon-panel"><span class="category-picker-preview" id="category-icon-preview" aria-hidden="true"></span><span>Escolher ícone</span><span class="category-picker-chevron" aria-hidden="true">⌄</span></button>
+  </div>
+  <div class="field category-color-field">
+    <label id="category-color-label">Cor</label>
+    <input id="category-editor-color" type="hidden" value="orange"/>
+    <button type="button" class="category-picker-toggle" id="category-color-toggle" aria-labelledby="category-color-label" aria-expanded="false" aria-controls="category-color-panel"><span class="category-color-preview" id="category-color-preview" aria-hidden="true"></span><span>Escolher cor</span><span class="category-picker-chevron" aria-hidden="true">⌄</span></button>
+  </div>
 </div>
-<div class="field"><label for="category-editor-color">Cor</label><select id="category-editor-color"></select></div>
+<div id="category-icon-panel" class="category-picker-panel hidden" aria-label="Ícones disponíveis"><div class="category-icon-grid" id="category-icon-grid" role="radiogroup"></div></div>
+<div id="category-color-panel" class="category-picker-panel category-color-panel hidden" aria-label="Cores disponíveis"><div class="category-color-grid" id="category-color-grid" role="radiogroup"></div></div>
 <p class="field-help" id="category-editor-note">Alterar o nome não modifica lançamentos antigos; o histórico continua preservado.</p>
 <p class="form-error hidden" id="category-editor-error"></p>
 <div class="modal-actions"><button class="secondary-btn" data-close-dialog="category-editor-dialog" type="button">Cancelar</button><button class="primary-compact" id="category-editor-save" type="submit">Salvar categoria</button></div>
@@ -603,6 +611,7 @@
 </div>
 <div class="field"><label for="planning-description">Descrição</label><input id="planning-description" maxlength="140" placeholder="Ex.: Formatura, bolsa, consulta" required="" type="text"/></div>
 <div class="form-grid two"><div class="field"><label for="planning-amount">Valor previsto</label><input id="planning-amount" min="0.01" required="" step="0.01" type="number"/></div><div class="field"><label for="planning-category">Categoria</label><select id="planning-category"></select></div></div>
+<div class="field hidden" id="planning-nature-wrap"><label for="planning-nature">Natureza da saída</label><select id="planning-nature"><option value="consumption">Despesa de consumo</option><option value="allocation">Reserva / Investimento</option><option value="transfer">Transferência própria</option></select><p class="nature-hint">Reservas e transferências não entram nas despesas de consumo.</p></div>
 <div class="field"><label for="planning-notes">Observação <span class="muted">(opcional)</span></label><input id="planning-notes" maxlength="220" type="text"/></div>
 <p class="form-error hidden" id="planning-form-error"></p>
 <div class="modal-actions"><button class="secondary-btn" data-close-dialog="planning-dialog" type="button">Cancelar</button><button class="primary-compact" id="planning-save-btn" type="submit">Salvar</button></div>
@@ -679,7 +688,7 @@
 <div class="modal-card app-update-card">
 <div class="app-update-topbar"><div><span class="eyebrow">FAMILY FINANCE</span><strong>Atualizações</strong></div><button class="modal-close" id="app-update-close" type="button">×</button></div>
 <div class="app-update-hero">
-<div class="app-update-badge">Versão <span id="app-update-badge-version">2.9.4</span></div>
+<div class="app-update-badge">Versão <span id="app-update-badge-version">2.9.8</span></div>
 <h3 id="app-update-title">Nova atualização disponível</h3>
 <p id="app-update-subtitle">Veja o que mudou antes de atualizar.</p>
 </div>
@@ -689,11 +698,11 @@
 <div class="app-update-meta-card"><span>Novidades</span><strong id="app-update-count">—</strong></div>
 </div>
 <div class="app-update-status"><strong id="app-update-status-title">Verificando atualização…</strong><small id="app-update-status-text">Aguarde um instante.</small></div>
-<div class="app-update-actions"><button class="primary-compact" id="app-update-now" type="button">Atualizar agora</button><button class="secondary-btn" id="app-update-later" type="button">Mais tarde</button><button class="text-btn" id="app-update-details-btn" type="button">Ver detalhes</button></div>
+<div class="app-update-actions"><button class="primary-compact hidden" id="app-update-retry" type="button">Tentar novamente</button><button class="primary-compact" id="app-update-now" type="button">Atualizar agora</button><button class="secondary-btn" id="app-update-later" type="button">Mais tarde</button><button class="text-btn" id="app-update-details-btn" type="button">Ver detalhes</button></div>
 <div class="app-update-details hidden" id="app-update-details"></div>
 </div>
 </dialog>
 <dialog class="modal" id="dre-dialog"><div class="modal-card"><div class="modal-head"><div><span class="eyebrow">DRE</span><h3 id="dre-title">Demonstrativo do mês</h3></div><button class="modal-close" data-close-dialog="dre-dialog" type="button">×</button></div><div id="dre-content"></div></div></dialog>
-<script defer src="js/context-help.js"></script><script src="js/app.js?rev=2.9.4" type="module"></script>
+<script defer src="js/context-help.js"></script><script src="js/app.js?rev=2.9.8" type="module"></script>
 </body>
 </html>

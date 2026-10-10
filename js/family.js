@@ -99,8 +99,17 @@ export async function loadFamilyOverview(ownerId, refDate = new Date()) {
     if (itemRes.error) throw itemRes.error;
     budgetItems = itemRes.data || [];
   }
+  // O progresso das metas é calculado no servidor, respeitando a permissão específica
+  // de Metas, mesmo quando o titular não compartilha seu histórico de lançamentos.
+  let goalStatus = [];
+  if ((goalRes.data || []).length) {
+    const { data: statusData, error: statusError } = await supabase.rpc('ff2_family_goal_progress_297', {p_owner_id:ownerId});
+    if (statusError) throw statusError;
+    goalStatus = statusData || [];
+  }
   return {
     month,
+    goalStatus,
     transactions: txRes.data || [],
     cards: cardRes.data || [],
     installments: installmentRes.data || [],

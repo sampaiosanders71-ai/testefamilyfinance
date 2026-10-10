@@ -1,4 +1,5 @@
 import { buildFinancialMonthLedger, classifyTransaction } from './financial-ledger.js';
+import { canonicalCategoryName, canonicalCategoryAmounts, canonicalCategoryLimits } from './category-alias.js';
 import { ownTransferReview, legacyReview, reviewedPeriodRows } from './financial-integrity.js';
 import { buildVisualPdf, PDF_PAGE } from './pdf.js';
 
@@ -25,32 +26,39 @@ function reportMoney(formatBRL, value) { return String(formatBRL(Number(value) |
 function compactText(value, max = 72) { const t=String(value??'').replace(/\s+/g,' ').trim(); return t.length<=max?t:`${t.slice(0,Math.max(1,max-3))}...`; }
 function pctChange(current, previous) { const a=Number(current||0), b=Number(previous||0); if(Math.abs(b)<0.005)return Math.abs(a)<0.005?0:null; return ((a-b)/Math.abs(b))*100; }
 function addCategory(target,category,cash=0,card=0){const name=String(category||'Outros').trim()||'Outros';if(!target[name])target[name]={category:name,cash:0,card:0,total:0};target[name].cash+=Number(cash||0);target[name].card+=Number(card||0);target[name].total=target[name].cash+target[name].card}
-function addCard(target,cardName,amount,status='open'){const name=String(cardName||'Cartão').trim()||'Cartão';if(!target[name])target[name]={name,total:0,status};target[name].total+=Number(amount||0);if(status==='paid')target[name].status='paid'}
+function addCard(target,cardId,cardName,amount,status='open'){const name=String(cardName||'Cartão').trim()||'Cartão',id=String(cardId||''),key=id?`id:${id}`:`legacy:${name}`;if(!target[key])target[key]={cardId:id||null,name,total:0,status};target[key].total+=Number(amount||0);if(status!=='paid')target[key].status='open'}
 
-function buildMonthModel({transactions,installments,invoiceStatuses,budget,key,today,throughDay,monthLabel}){
+function buildMonthModel({transactions,installments,invoiceStatuses,budget,key,today,throughDay,monthLabel,categories=[]}){
   const ledger=buildFinancialMonthLedger({transactions,installments,invoiceStatuses,monthKey:key,today,throughDay});
   const date=dateFromMonthKey(key);
-  const limits=Object.fromEntries((budget?.items||[]).map(item=>[item.category,Number(item.limit_amount||0)]));
-  const usage=ledger.budgetUsageMap||{};
+  const limits=canonicalCategoryLimits(budget?.items||[],categories);
+  const usage=canonicalCategoryAmounts(ledger.budgetUsageMap||{},categories);
+  const normalizedCategoryMap={};
+  for(const item of ledger.categories||[]){
+    addCategory(normalizedCategoryMap,canonicalCategoryName(item.category,categories),item.cash,item.card);
+  }
+  const canonicalCategories=Object.values(normalizedCategoryMap).sort((a,b)=>b.total-a.total||a.category.localeCompare(b.category,'pt-BR'));
   const budgetCategories=[...new Set([...Object.keys(limits),...Object.keys(usage)])]
     .map(category=>{const spent=Number(usage[category]||0),limit=Number(limits[category]||0);return{category,limit,spent,available:limit-spent,limitDefined:Object.prototype.hasOwnProperty.call(limits,category)}})
     .filter(item=>item.limitDefined||item.spent>0)
     .sort((a,b)=>Math.max(b.limit,b.spent)-Math.max(a.limit,a.spent));
   return {
     ...ledger,
+    categories:canonicalCategories,
+    budgetUsageMap:usage,
     key,date,label:monthLabel(date),
     scheduledExpense:ledger.futureExpense,
-    details:(ledger.details||[]).filter(row=>row.kind==='consumption'||row.kind==='card_consumption'),
-    allocationDetails:(ledger.details||[]).filter(row=>row.kind==='allocation'),
+    details:(ledger.details||[]).filter(row=>row.kind==='consumption'||row.kind==='card_consumption').map(row=>({...row,category:canonicalCategoryName(row.category,categories)})),
+    allocationDetails:(ledger.details||[]).filter(row=>row.kind==='allocation').map(row=>({...row,category:canonicalCategoryName(row.category,categories)})),
     movementDetails:(transactions||[]).filter(row=>String(row.occurred_on||'').startsWith(key.slice(0,7)) && row.occurred_on<=ledger.cutoff)
       .filter(row=>['allocation','transfer_in','transfer_out'].includes(classifyTransaction(row)))
-      .map(row=>({date:row.occurred_on,description:row.description||'Movimentação',category:row.category||'Outros',amount:Math.abs(Number(row.amount)||0),
+      .map(row=>({date:row.occurred_on,description:row.description||'Movimentação',category:canonicalCategoryName(row.category,categories),amount:Math.abs(Number(row.amount)||0),
         kind:classifyTransaction(row),nature:row.financial_nature||'legacy',goalId:row.goal_id||null})).sort((a,b)=>a.date.localeCompare(b.date)),
     budget:{plannedIncome:Number(budget?.plan?.planned_income||0),totalLimit:Object.values(limits).reduce((s,v)=>s+Number(v||0),0),categories:budgetCategories,exists:!!budget?.plan}
   };
 }
 function aggregateCategories(months){const map={};for(const month of months)for(const item of month.categories||[])addCategory(map,item.category,item.cash,item.card);return Object.values(map).sort((a,b)=>b.total-a.total||a.category.localeCompare(b.category,'pt-BR'))}
-function aggregateCards(months){const map={};for(const month of months)for(const item of month.cards||[])addCard(map,item.name,item.total,item.status);return Object.values(map).sort((a,b)=>b.total-a.total)}
+function aggregateCards(months){const map={};for(const month of months)for(const item of month.cards||[])addCard(map,item.cardId,item.name,item.total,item.status);return Object.values(map).sort((a,b)=>b.total-a.total||a.name.localeCompare(b.name,'pt-BR'))}
 function aggregateBudget(months){const map={};let plannedIncome=0,totalLimit=0;for(const month of months){plannedIncome+=month.budget.plannedIncome;totalLimit+=month.budget.totalLimit;for(const item of month.budget.categories){if(!map[item.category])map[item.category]={category:item.category,limit:0,spent:0,limitDefined:false};map[item.category].limit+=item.limit;map[item.category].spent+=item.spent;map[item.category].limitDefined=map[item.category].limitDefined||item.limitDefined}}return{plannedIncome,totalLimit,categories:Object.values(map).map(item=>({...item,available:item.limit-item.spent})).sort((a,b)=>Math.max(b.limit,b.spent)-Math.max(a.limit,a.spent))}}
 
 export function getMonthlyDRE(transactions,installments,refDate,today=new Date()){
@@ -74,9 +82,9 @@ export function getMonthlyDRE(transactions,installments,refDate,today=new Date()
   };
 }
 export function getReportMonthOptions(transactions,installments,referenceDate=new Date()){const reference=requireDate(referenceDate),now=new Date(),todayISO=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`,keys=new Set([monthKey(reference)]);for(let offset=0;offset<12;offset++)keys.add(monthKey(new Date(reference.getFullYear(),reference.getMonth()-offset,1,12)));for(const row of transactions||[]){const raw=String(row.occurred_on||'');if(raw<=todayISO&&/^\d{4}-\d{2}/.test(raw))keys.add(`${raw.slice(0,7)}-01`)}for(const row of installments||[]){const raw=String(row.invoice_month||''),purchaseDate=String(row.ff2_card_purchases?.purchase_date||'');if(/^\d{4}-\d{2}-01$/.test(raw)&&(!purchaseDate||purchaseDate<=todayISO))keys.add(raw)}return[...keys].map(key=>({key,date:dateFromMonthKey(key)})).sort((a,b)=>b.key.localeCompare(a.key))}
-export function buildFinancialReportModel({transactions,installments,invoiceStatuses,budgetsByMonth={},monthKeys,monthLabel,today=new Date(),cutoffDaysByMonth={}}){
+export function buildFinancialReportModel({transactions,installments,invoiceStatuses,budgetsByMonth={},monthKeys,monthLabel,today=new Date(),cutoffDaysByMonth={},categories=[]}){
   const keys=sortedMonthKeys(monthKeys||[]);if(!keys.length)throw new Error('Selecione pelo menos um mês para o relatório.');
-  const months=keys.map(key=>buildMonthModel({transactions,installments,invoiceStatuses,budget:budgetsByMonth[key]||{plan:null,items:[]},key,today,throughDay:cutoffDaysByMonth?.[key]??null,monthLabel}));
+  const months=keys.map(key=>buildMonthModel({transactions,installments,invoiceStatuses,budget:budgetsByMonth[key]||{plan:null,items:[]},key,today,throughDay:cutoffDaysByMonth?.[key]??null,monthLabel,categories}));
   const fields=['income','cashExpense','cardExpense','totalExpense','result','allocation','cashOutflow','cashResult','transferOut','transferIn','cardPayments','adjustments','futureIncome','futureExpense','futureAllocation','committedCard'];
   const totals=months.reduce((a,m)=>{for(const field of fields)a[field]+=Number(m[field]||0);return a;},Object.fromEntries(fields.map(field=>[field,0])));
   const periodRows=reviewedPeriodRows(transactions,keys,today);
@@ -323,14 +331,14 @@ async function loadLetterheadJpeg(){
   return letterheadCache;
 }
 
-export async function buildFinancialReportPDFBytes({transactions,installments,invoiceStatuses,budgetsByMonth,monthKeys,comparisonMonthKey,contextMonthKeys,formatDate,formatBRL,monthLabel,today=new Date(),backgroundJpeg=null}){
-  const model=buildFinancialReportModel({transactions,installments,invoiceStatuses,budgetsByMonth,monthKeys,monthLabel,today});
+export async function buildFinancialReportPDFBytes({transactions,installments,invoiceStatuses,budgetsByMonth,monthKeys,comparisonMonthKey,contextMonthKeys,formatDate,formatBRL,monthLabel,today=new Date(),backgroundJpeg=null,categories=[]}){
+  const model=buildFinancialReportModel({transactions,installments,invoiceStatuses,budgetsByMonth,monthKeys,monthLabel,today,categories});
   const latestKey=model.keys[model.keys.length-1],comparisonKey=normalizeMonthKey(comparisonMonthKey||shiftKey(latestKey,-1));
   const currentKey=monthKey(new Date(today.getFullYear(),today.getMonth(),1,12));
   const comparisonCutoff=latestKey===currentKey?{[comparisonKey]:today.getDate()}:{};
-  const comparisonModel=buildFinancialReportModel({transactions,installments,invoiceStatuses,budgetsByMonth,monthKeys:[comparisonKey],monthLabel,today,cutoffDaysByMonth:comparisonCutoff});
+  const comparisonModel=buildFinancialReportModel({transactions,installments,invoiceStatuses,budgetsByMonth,monthKeys:[comparisonKey],monthLabel,today,cutoffDaysByMonth:comparisonCutoff,categories});
   const contextKeys=(contextMonthKeys&&contextMonthKeys.length?contextMonthKeys:Array.from({length:6},(_,i)=>shiftKey(latestKey,i-5))).map(normalizeMonthKey);
-  const contextModel=buildFinancialReportModel({transactions,installments,invoiceStatuses,budgetsByMonth,monthKeys:contextKeys,monthLabel,today});
+  const contextModel=buildFinancialReportModel({transactions,installments,invoiceStatuses,budgetsByMonth,monthKeys:contextKeys,monthLabel,today,categories});
   const pages=buildAnalyticalPages({model,comparisonModel,contextModel,formatDate,formatBRL,monthLabel,today});
   const bg=backgroundJpeg||await loadLetterheadJpeg();
   const bytes=buildVisualPdf(pages,{backgroundJpeg:bg});

@@ -1,3 +1,4 @@
+import { ADDITIONAL_CATEGORY_ICONS } from './category-extra-icons.js';
 import { supabase } from './supabase.js';
 import { getCurrentUser } from './database.js';
 
@@ -25,13 +26,12 @@ export const CATEGORY_ICON_OPTIONS = [
   ['tag','Categoria'],['food','Alimentação'],['car','Transporte'],['home','Moradia'],['health','Saúde'],
   ['education','Educação'],['leisure','Lazer'],['subscription','Assinaturas'],['debt','Dívidas'],
   ['investment','Investimento'],['salary','Salário'],['income','Receita'],['benefit','Benefícios'],
-  ['refund','Reembolso'],['fuel','Combustível'],['gift','Presentes'],['pet','Pets'],['travel','Viagens'],['more','Outros']
+  ['refund','Reembolso'],['fuel','Combustível'],['gift','Presentes'],['pet','Pets'],['travel','Viagens'],['more','Outros'],
+  ...Object.entries(ADDITIONAL_CATEGORY_ICONS).map(([key,icon])=>[key,icon.label])
 ];
 
-export const CATEGORY_COLOR_OPTIONS = [
-  ['orange','Laranja'],['blue','Azul'],['green','Verde'],['red','Vermelho'],['purple','Roxo'],
-  ['pink','Rosa'],['yellow','Amarelo'],['teal','Turquesa'],['slate','Cinza']
-];
+export const CATEGORY_COLOR_OPTIONS = [["orange","Laranja"],["blue","Azul"],["green","Verde"],["red","Vermelho"],["purple","Roxo"],["pink","Rosa"],["yellow","Amarelo"],["teal","Turquesa"],["slate","Cinza"],["coral","Coral"],["crimson","Carmesim"],["rose","Rosa queimado"],["fuchsia","Fúcsia"],["lilac","Lilás"],["indigo","Índigo"],["cobalt","Azul royal"],["sky","Azul céu"],["cyan","Ciano"],["mint","Menta"],["lime","Lima"],["amber","Âmbar"],["gold","Dourado"],["brown","Marrom"],["graphite","Grafite"],["peach","Pêssego"],["lavender","Lavanda"],["forest","Verde floresta"],["sea","Azul petróleo"]];
+
 
 const ICON_KEYS = new Set(CATEGORY_ICON_OPTIONS.map(([key])=>key));
 
@@ -66,6 +66,11 @@ export function normalizeCategoryIconKey(iconKey='tag'){
 
 export function categoryIconSVG(iconKey='tag',className='category-icon-svg'){
   const key=normalizeCategoryIconKey(iconKey);
+  const extra=ADDITIONAL_CATEGORY_ICONS[key];
+  if(extra){
+    const paths=Array.isArray(extra.path)?extra.path:[extra.path];
+    return `<svg class="${className}" viewBox="0 0 ${extra.w} ${extra.h}" aria-hidden="true" focusable="false" fill="currentColor">${paths.map(path=>`<path d="${path}"/>`).join('')}</svg>`;
+  }
   return `<svg class="${className}" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICON_PATHS[key]||ICON_PATHS.tag}</svg>`;
 }
 
@@ -88,7 +93,7 @@ async function ensureDefaults(user){
 export async function listCategories(){
   const user=await getCurrentUser();
   await ensureDefaults(user);
-  const { data,error }=await supabase.from('ff2_categories').select('*').eq('user_id',user.id).eq('is_deleted',false).order('kind').order('sort_order').order('name');
+  const { data,error }=await supabase.from('ff2_categories').select('*').eq('user_id',user.id).order('kind').order('sort_order').order('name');
   if(error)throw error;
   return (data||[]).map(row=>({...row,icon_key:normalizeCategoryIconKey(row.icon_key)}));
 }
@@ -124,7 +129,7 @@ export async function updateCategory(id,{name,iconKey,colorKey}){
   if(dupeError)throw dupeError;
   if((dupes||[]).some(row=>row.id!==id))throw new Error(`A categoria “${safeName}” já existe.`);
   const { data,error }=await supabase.from('ff2_categories').update({
-    name:safeName,icon_key:normalizeCategoryIconKey(iconKey||current.icon_key),color_key:String(colorKey||current.color_key||'slate'),updated_at:new Date().toISOString()
+    name:safeName,name_history:safeName!==current.name?[...new Set([...(current.name_history||[]),current.name])]:current.name_history||[],name_history_visual:safeName!==current.name?{...(current.name_history_visual||{}),[current.name]:{icon_key:current.icon_key,color_key:current.color_key}}:(current.name_history_visual||{}),icon_key:normalizeCategoryIconKey(iconKey||current.icon_key),color_key:String(colorKey||current.color_key||'slate'),updated_at:new Date().toISOString()
   }).eq('id',id).eq('user_id',user.id).select('*').single();
   if(error)throw error;
   return data;

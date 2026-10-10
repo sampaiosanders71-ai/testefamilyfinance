@@ -1,3 +1,4 @@
+import { canonicalCategoryAmounts, canonicalCategoryLimits } from './category-alias.js';
 import { supabase } from './supabase.js';
 import { getCurrentUser } from './database.js';
 import { monthISO } from './finance.js';
@@ -86,15 +87,15 @@ export async function saveBudget(refDate, plannedIncome, limits) {
   return getBudget(refDate);
 }
 
-export function budgetSummary(budget, transactions, installments, refDate, today = new Date()) {
+export function budgetSummary(budget, transactions, installments, refDate, today = new Date(), categories = []) {
   const ledger = buildFinancialMonthLedger({
     transactions: transactions || [],
     installments: installments || [],
     monthKey: monthISO(refDate),
     today
   });
-  const itemMap = Object.fromEntries((budget.items || []).map(item => [item.category, Number(item.limit_amount || 0)]));
-  const spentMap = { ...ledger.budgetUsageMap };
+  const itemMap = canonicalCategoryLimits(budget.items||[],categories);
+  const spentMap = canonicalCategoryAmounts(ledger.budgetUsageMap,categories);
   const totalLimit = Object.values(itemMap).reduce((sum, value) => sum + Number(value || 0), 0);
   const totalSpent = Object.values(spentMap).reduce((sum, value) => sum + Number(value || 0), 0);
   return {

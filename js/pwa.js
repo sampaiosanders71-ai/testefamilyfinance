@@ -25,7 +25,7 @@ function armReloadOnce(){
 export async function initPWA(){
   window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();deferredInstallPrompt=event;updateInstallUI()});
   window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;updateInstallUI('Instalação concluída.')});
-  window.addEventListener('online',()=>updateInstallUI());window.addEventListener('offline',()=>updateInstallUI('Sem conexão. A interface pode abrir do cache; sincronizações exigem internet.'));
+  window.addEventListener('online',()=>updateInstallUI());window.addEventListener('offline',()=>updateInstallUI('Sem conexão. Consulte apenas dados carregados; login e sincronização exigem internet.'));
   document.getElementById('install-app-btn')?.addEventListener('click',async()=>{if(!deferredInstallPrompt)return updateInstallUI();const prompt=deferredInstallPrompt;deferredInstallPrompt=null;await prompt.prompt();const choice=await prompt.userChoice.catch(()=>null);updateInstallUI(choice?.outcome==='accepted'?'Instalação iniciada.':'Instalação não concluída.')});
   if('serviceWorker'in navigator){
     try{

@@ -2,6 +2,8 @@ import { supabase } from './supabase.js';
 import { getCurrentUser } from './database.js';
 import { budgetSummary } from './budget.js';
 import { cardInvoiceSummaries } from './cards.js';
+import { goalProgress } from './goal-integration.js';
+import { canonicalCategoryName } from './category-alias.js';
 
 function monthKey(date){return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}`}
 function sameMonth(a,b){return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()}
@@ -47,7 +49,7 @@ export async function markNotificationsForTarget(target,targetId){
   if(error)throw error;
 }
 
-export async function syncFinancialNotifications({budget,transactions,installments,cards,invoiceStatuses,goals}){
+export async function syncFinancialNotifications({budget,transactions,installments,cards,invoiceStatuses,goals,categories=[]}){
   const user=await getCurrentUser();
   const now=new Date();
   const rows=[];
@@ -55,10 +57,10 @@ export async function syncFinancialNotifications({budget,transactions,installmen
   if(budget?.plan){
     const budgetMonth=new Date(`${String(budget.plan.month).slice(0,10)}T12:00:00`);
     if(!Number.isNaN(budgetMonth.getTime())&&sameMonth(budgetMonth,now)){
-      const summary=budgetSummary(budget,transactions||[],installments||[],now);
+      const summary=budgetSummary(budget,transactions||[],installments||[],now,now,categories);
       for(const item of budget.items||[]){
         const limit=Number(item.limit_amount||0);
-        const spent=Number(summary.spentMap[item.category]||0);
+        const spent=Number(summary.spentMap[canonicalCategoryName(item.category,categories)]||0);
         if(limit<=0||spent<=0)continue;
         const ratio=spent/limit;
         if(ratio>=1){
@@ -71,7 +73,7 @@ export async function syncFinancialNotifications({budget,transactions,installmen
   }
 
   for(const goal of goals||[]){
-    const target=Number(goal.target_amount||0),saved=Number(goal.saved_amount||0);
+    const progress=goalProgress(goal,transactions||[],now);const target=progress.target,saved=progress.saved;
     if(target>0&&saved>=target&&goal.status!=='archived'){
       rows.push({user_id:user.id,type:'goal_reached',title:'Meta atingida',body:`Você alcançou a meta “${goal.name}”.`,target:'goals',target_id:goal.id,event_key:`goal-reached:${goal.id}`});
     }

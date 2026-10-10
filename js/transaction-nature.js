@@ -2,7 +2,7 @@
 export function normalizeNatureText(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim()}
 export function suggestNature(description,category=''){
  const s=normalizeNatureText(description),c=normalizeNatureText(category);
- if(/\b(reserva de hotel|reserva de mesa|reserva de passagem|reserva de viagem|reserva de restaurante|reserva de quarto|reserva de hospedagem|compra de|comprar|pagamento de)\b/.test(s))return null;
+ if(/\b(reserva|reservei|reservar|reservado|poupanca)\b.*\b(hotel|passagem|viagem|restaurante|quarto|hospedagem|mesa|voo|pousada|bateria|energia|combustivel)\b/.test(s)||/\b(compra de|comprar|pagamento de|poupanca de bateria)\b/.test(s))return null;
  if(/\b(resgate|resgatar|retirada da reserva|sacar da reserva|retirei da caixinha)\b/.test(s))return 'resgate';
  if(/\b(pix entre contas|transferencia propria|transferencia entre (minhas |as )?contas|movimentacao entre contas|transferi para minha conta)\b/.test(s))return 'transfer';
  if(/\b(reserva|reservinha|poupanca|poupar|poupei|guardei|guardar dinheiro|dinheiro guardado|cofrinho|caixinha|pe de meia|fundo de emergencia|investi|investir|investimento|investindo|aplicacao financeira|apliquei|aporte|cdb|cdi|tesouro direto|lci|lca|etf|renda fixa)\b/.test(s))return 'allocation';

@@ -1,13 +1,22 @@
-const CACHE_NAME='family-finance-2.9.4';
+const CACHE_NAME='family-finance-2.9.8';
 const CORE_ASSETS=[
   './','./index.html','./manifest.json',
-  './css/dashboard-v29.css?v=2.9.4','./css/app.css?v=2.9.4','./css/motion-v15.css?v=15','./css/download-motion-v16.css?v=16','./css/family-monitor-v17.css?v=17','./css/planning-v18.css?rev=mobile-overview-rebuild','./css/categories-budget.css?rev=mobile-overview-rebuild','./css/context-help.css?rev=global-help',
+  './css/dashboard-v29.css?v=2.9.8','./css/app.css?v=2.9.8','./css/motion-v15.css?v=15','./css/download-motion-v16.css?v=16','./css/family-monitor-v17.css?v=17','./css/planning-v18.css?rev=mobile-overview-rebuild','./css/categories-budget.css?v=2.9.8','./css/context-help.css?rev=global-help',
   './icons/favicon-32.png','./icons/apple-touch-icon.png','./icons/icon-192.png','./icons/icon-512.png','./assets/report-letterhead.jpg',
-  './js/version.js','./js/config.js','./js/supabase.js','./js/auth.js','./js/database.js','./js/financial-ledger.js','./js/financial-integrity.js','./js/report-export.js','./js/finance.js','./js/transaction-nature.js','./css/nature.css?v=2.9.4','./css/financial-view-293.css?v=2.9.4','./js/cards.js','./js/goals.js','./js/goal-integration.js','./js/budget.js','./js/categories.js','./js/planning-v18.js?rev=planejamento-checklist','./js/family.js?v=family-monitor-v17','./js/family-monitor-v17.js?v=17','./js/notifications.js','./js/migration.js','./js/settings.js','./js/pwa.js','./js/ui.js?v=motion-v15','./js/download-motion-v16.js?v=16','./js/motion-v15.js?v=15','./js/pdf.js','./js/reports.js','./js/analytics.js','./js/context-help.js','./js/dashboard-overview.js?v=2.9.4','./js/dashboard-cash.js?v=2.9.4','./js/update-center.js?v=2.9.4','./js/app.js?rev=2.9.4'
+  './js/version.js','./js/config.js','./js/supabase.js','./js/auth.js','./js/database.js','./js/financial-ledger.js','./js/financial-integrity.js','./js/category-alias.js','./js/budget-suggestion.js','./js/report-export.js','./js/finance.js','./js/transaction-nature.js','./css/nature.css?v=2.9.8','./css/financial-view-293.css?v=2.9.8','./js/cards.js','./js/goals.js','./js/goal-integration.js','./js/budget.js','./js/categories.js','./js/category-extra-icons.js','./css/ui-295.css?v=2.9.8','./js/planning-v18.js?rev=2.9.8','./js/family.js?v=family-monitor-v17','./js/family-monitor-v17.js?v=2.9.8','./js/notifications.js','./js/migration.js','./js/settings.js','./js/pwa.js','./js/ui.js?v=motion-v15','./js/download-motion-v16.js?v=16','./js/motion-v15.js?v=15','./js/pdf.js','./js/reports.js','./js/analytics.js','./js/context-help.js','./js/dashboard-overview.js?v=2.9.8','./js/dashboard-cash.js?v=2.9.8','./js/update-center.js?v=2.9.8','./js/app.js?rev=2.9.8'
 ];
 
+// Cliente Supabase carregado de CDN: cópia opcional para reaberturas após uso online.
+// Não significa autenticação ou sincronização offline; rede continua obrigatória.
+const OPTIONAL_VENDOR=['https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.95.0/+esm'];
 self.addEventListener('install',event=>{
-  event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(CORE_ASSETS)));
+  event.waitUntil(caches.open(CACHE_NAME).then(async cache=>{
+    await cache.addAll(CORE_ASSETS);
+    await Promise.allSettled(OPTIONAL_VENDOR.map(async url=>{
+      const r=await fetch(url,{mode:'cors'});
+      if(r.ok)await cache.put(url,r);
+    }));
+  }));
 });
 
 self.addEventListener('activate',event=>{
@@ -30,8 +39,13 @@ async function navigationFromInstalledShell(request){
 
 self.addEventListener('fetch',event=>{
   const request=event.request;if(request.method!=='GET')return;
-  const url=new URL(request.url);if(url.origin!==self.location.origin)return;
-  if(url.pathname.endsWith('/updates.json')||url.pathname.endsWith('updates.json')){event.respondWith(networkOnly(request).catch(async()=>await caches.match(request)||new Response('{"version":"0.0.0"}',{headers:{'Content-Type':'application/json'}})));return}
+  const url=new URL(request.url);
+  // Recursos ESM do cliente de autenticação podem ter dependências transitivas.
+  if(url.origin!==self.location.origin){
+    if(url.hostname==='cdn.jsdelivr.net' && url.pathname.startsWith('/npm/@supabase/'))event.respondWith(cacheFirst(request).catch(()=>Response.error()));
+    return;
+  }
+  if(url.pathname.endsWith('/updates.json')||url.pathname.endsWith('updates.json')){event.respondWith(networkOnly(request));return}
   if(request.mode==='navigate'){event.respondWith(navigationFromInstalledShell(request));return}
   event.respondWith(cacheFirst(request));
 });
