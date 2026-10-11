@@ -43,3 +43,12 @@ export function cardLimitSummary(card,invoices=[]){
 export const cardAdjustmentLabel=kind=>({interest:'Juros',fine:'Multa',fee:'Encargo',debit_adjustment:'Ajuste de débito',credit_adjustment:'Crédito confirmado',purchase_refund:'Estorno de compra',reversal:'Correção de ajuste',limit_release:'Liberação de limite'})[kind]||'Ajuste';
 export function adjustmentsAsInstallments(adjustments=[],cards=[]){return adjustments.map(a=>({id:'adjustment:'+a.id,card_id:a.card_id,purchase_id:a.purchase_id,invoice_month:a.invoice_month,amount:Number(a.analytics_effect),installment_no:1,card_adjustment:a,
  ff2_cards:{name:cards.find(c=>c.id===a.card_id)?.name||a.ff2_cards?.name||'Cartão'},ff2_card_purchases:{record_kind:'adjustment',description:cardAdjustmentLabel(a.kind)+' · '+a.reason,category:a.category||'Outros',purchase_date:a.occurred_on,total_amount:a.amount,installment_count:1}}));}
+
+// Accept Brazilian amounts and plain decimal values without silently rounding invalid inputs.
+export function parseCardInvoiceAmount(value){
+ let text=String(value??'').trim().replace(/^R\$\s*/i,'').replace(/\s/g,'');
+ if(text.includes(',')){if(!/^(?:\d+|\d{1,3}(?:\.\d{3})+),\d{1,2}$/.test(text))return null;text=text.replace(/\./g,'').replace(',','.');}
+ else if(/^\d{1,3}(?:\.\d{3})+$/.test(text))text=text.replace(/\./g,'');
+ else if(!/^\d+(?:\.\d{1,2})?$/.test(text))return null;
+ const amount=Number(text);return Number.isFinite(amount)&&amount>=0&&amount<=999999999999.99?amount:null;
+}

@@ -1,26 +1,26 @@
 {
-  "version": "2.9.18",
+  "version": "2.9.19",
   "publishedAt": "11/10/2026",
   "improvementCount": 3,
-  "title": "Novas telas de cartões",
-  "summary": "Visual aprovado, histórico com filtros e edição de fatura visível no resumo.",
+  "title": "Edição de faturas corrigida",
+  "summary": "Salve valor, data e competência, inclusive mantendo o mesmo valor.",
   "highlights": [
     {
-      "title": "Gerenciamento do cartão",
-      "text": "Degradê laranja no limite, gráfico ampliado e ações para fatura, detalhes e próximas competências."
+      "title": "Mesmo valor permitido",
+      "text": "Confirme a fatura sem precisar inventar uma alteração no total."
     },
     {
-      "title": "Histórico com filtros",
-      "text": "Consulte todas as faturas ou filtre anteriores, atual e futuras."
+      "title": "Data e competência editáveis",
+      "text": "Corrija o registro e transfira uma fatura legada elegível para o mês correto."
     },
     {
-      "title": "Edição fácil de encontrar",
-      "text": "Editar fatura aparece no topo do resumo quando o saldo legado ainda permite correção."
+      "title": "Formulário sem travamento",
+      "text": "Campos voltam a ficar disponíveis após falhas. Confirmações repetidas não duplicam a fatura."
     }
   ],
   "details": [
-    "A janela da fatura mantém o resumo e pagamento em destaque, com detalhamento acessível.",
-    "O gráfico inclui todos os meses registrados e oferece seleção de período.",
-    "As proteções financeiras e os dados existentes permanecem preservados."
+    "Mantém as telas aprovadas e o acesso à edição no topo.",
+    "Registra confirmação e histórico mesmo quando o total permanece igual.",
+    "Preserva pagamentos e impede transferência sobre uma competência já ocupada."
   ]
 }

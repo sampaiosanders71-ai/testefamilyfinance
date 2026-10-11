@@ -1,18 +1,18 @@
-import {initCardAdjustments} from './card-adjustments-workspace.js?v=2.9.18';
-import { buildCardInvoices,cardLimitSummary,cardToday,cardMonth,cardDate,invoiceStatusLabel } from './card-domain.js?v=2.9.18';
-import { payCardInvoice,reverseCardPayment,deleteCard } from './cards.js?v=2.9.18';
-import { formOperation,clearFormOperation } from './request-operation.js?v=2.9.18';
-import { calculateCashStats } from './finance.js?v=2.9.18';
-import { formatBRL,formatDate,monthLabel,escapeHTML,openDialog,closeDialog,setFormError,toast } from './ui.js?v=2.9.18';
-import { categoryIconSVG } from './categories.js?v=2.9.18';
-import { canonicalCategoryName } from './category-alias.js?v=2.9.18';
+import {initCardAdjustments} from './card-adjustments-workspace.js?v=2.9.19';
+import { buildCardInvoices,cardLimitSummary,cardToday,cardMonth,cardDate,invoiceStatusLabel } from './card-domain.js?v=2.9.19';
+import { payCardInvoice,reverseCardPayment,deleteCard } from './cards.js?v=2.9.19';
+import { formOperation,clearFormOperation } from './request-operation.js?v=2.9.19';
+import { calculateCashStats } from './finance.js?v=2.9.19';
+import { formatBRL,formatDate,monthLabel,escapeHTML,openDialog,closeDialog,setFormError,toast } from './ui.js?v=2.9.19';
+import { categoryIconSVG } from './categories.js?v=2.9.19';
+import { canonicalCategoryName } from './category-alias.js?v=2.9.19';
 const e=escapeHTML;
 const icon=(name)=>`<svg class="ui-icon" aria-hidden="true"><use href="#i-${name}"></use></svg>`;
 const shortMonth=key=>new Intl.DateTimeFormat('pt-BR',{month:'short',year:'numeric'}).format(cardDate(key)).replace('.','').replace(' de ','/');
 const empty=text=>`<p class="card-empty">${e(text)}</p>`;
 export function initCardsWorkspace({getState,onRefresh,onOperation,onNewPurchase,onEditPurchase,onEditCard,onCancelPurchase}){
  let selectedCardId=null,activeInvoice=null,activePurchase=null,paying=false,negativeApproved=false,lastRenderedCardId=null,historyCardId=null,historyFilter='all',chartPeriod='all';
- const adjustmentsUI=initCardAdjustments({getState,onRefresh,onOperation});
+ const adjustmentsUI=initCardAdjustments({getState,onRefresh,onOperation,onInvoiceEdited:result=>{if(activeInvoice)activeInvoice.key=result.invoice_month;}});
  const state=()=>getState();
  const findCard=id=>state().cards.find(card=>card.id===id);
  const invoices=card=>buildCardInvoices(card,state().installments,state().invoiceStatuses);
