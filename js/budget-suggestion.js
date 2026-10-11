@@ -1,5 +1,5 @@
-import { buildFinancialMonthLedger } from './financial-ledger.js?v=2.9.14';
-import { canonicalCategoryAmounts } from './category-alias.js?v=2.9.14';
+import { buildFinancialMonthLedger } from './financial-ledger.js?v=2.9.16';
+import { canonicalCategoryAmounts } from './category-alias.js?v=2.9.16';
 export function spendingInPastMonths({transactions=[],installments=[],categories=[],months=[],today=new Date()}={}) {
  const out={};const monthly={};const monthlyCategoryTotals={};
  for(const month of [...new Set(months)]) {

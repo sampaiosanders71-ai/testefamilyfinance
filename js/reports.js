@@ -1,7 +1,8 @@
-import { buildFinancialMonthLedger, classifyTransaction } from './financial-ledger.js?v=2.9.14';
-import { canonicalCategoryName, canonicalCategoryAmounts, canonicalCategoryLimits } from './category-alias.js?v=2.9.14';
-import { ownTransferReview, legacyReview, reviewedPeriodRows } from './financial-integrity.js?v=2.9.14';
-import { buildVisualPdf, PDF_PAGE } from './pdf.js?v=2.9.14';
+import {cardAdjustmentLabel} from './card-domain.js?v=2.9.16';
+import { buildFinancialMonthLedger, classifyTransaction } from './financial-ledger.js?v=2.9.16';
+import { canonicalCategoryName, canonicalCategoryAmounts, canonicalCategoryLimits } from './category-alias.js?v=2.9.16';
+import { ownTransferReview, legacyReview, reviewedPeriodRows } from './financial-integrity.js?v=2.9.16';
+import { buildVisualPdf, PDF_PAGE } from './pdf.js?v=2.9.16';
 
 const C = {
   ink:'#171717', muted:'#6f7379', subtle:'#9b9da1', panel:'#f5f2ed', line:'#dedbd5',
@@ -48,7 +49,7 @@ function buildMonthModel({transactions,installments,invoiceStatuses,budget,key,t
     budgetUsageMap:usage,
     key,date,label:monthLabel(date),
     scheduledExpense:ledger.futureExpense,
-    details:(ledger.details||[]).filter(row=>row.kind==='consumption'||row.kind==='card_consumption').map(row=>({...row,category:canonicalCategoryName(row.category,categories)})),
+    details:(ledger.details||[]).filter(row=>row.kind==='consumption'||row.kind==='card_consumption'||row.kind==='card_adjustment').map(row=>({...row,category:canonicalCategoryName(row.category,categories)})),
     allocationDetails:(ledger.details||[]).filter(row=>row.kind==='allocation').map(row=>({...row,category:canonicalCategoryName(row.category,categories)})),
     movementDetails:(transactions||[]).filter(row=>String(row.occurred_on||'').startsWith(key.slice(0,7)) && row.occurred_on<=ledger.cutoff)
       .filter(row=>['allocation','transfer_in','transfer_out'].includes(classifyTransaction(row)))
@@ -85,7 +86,7 @@ export function getReportMonthOptions(transactions,installments,referenceDate=ne
 export function buildFinancialReportModel({transactions,installments,invoiceStatuses,budgetsByMonth={},monthKeys,monthLabel,today=new Date(),cutoffDaysByMonth={},categories=[]}){
   const keys=sortedMonthKeys(monthKeys||[]);if(!keys.length)throw new Error('Selecione pelo menos um mês para o relatório.');
   const months=keys.map(key=>buildMonthModel({transactions,installments,invoiceStatuses,budget:budgetsByMonth[key]||{plan:null,items:[]},key,today,throughDay:cutoffDaysByMonth?.[key]??null,monthLabel,categories}));
-  const fields=['income','cashExpense','cardExpense','totalExpense','result','allocation','cashOutflow','cashResult','transferOut','transferIn','cardPayments','adjustments','futureIncome','futureExpense','futureAllocation','committedCard'];
+  const fields=['income','cashExpense','cardExpense','totalExpense','result','allocation','cashOutflow','cashResult','transferOut','transferIn','cardPayments','cardRefundCash','adjustments','futureIncome','futureExpense','futureAllocation','committedCard'];
   const totals=months.reduce((a,m)=>{for(const field of fields)a[field]+=Number(m[field]||0);return a;},Object.fromEntries(fields.map(field=>[field,0])));
   const periodRows=reviewedPeriodRows(transactions,keys,today);
   const legacy=legacyReview(periodRows);
@@ -95,11 +96,11 @@ export function buildFinancialReportModel({transactions,installments,invoiceStat
   const selected=new Set(keys),cutoff=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
   const cardAuditRows=(installments||[]).filter(row=>selected.has(row.invoice_month)&&!row.ff2_card_purchases?.cancelled_at).map(row=>{
     const purchase=row.ff2_card_purchases||{},opening=purchase.record_kind==='invoice_opening';
-    return {date:purchase.purchase_date||row.invoice_month,description:opening?'Saldo anterior de fatura (conciliação)':purchase.description||'Compra no cartão',category:opening?'Conciliação; fora do consumo':canonicalCategoryName(purchase.category,categories),amount:Number(row.amount)||0,
+    return {date:purchase.purchase_date||row.invoice_month,description:row.card_adjustment?cardAdjustmentLabel(row.card_adjustment.kind)+' · '+row.card_adjustment.reason:opening?'Saldo anterior de fatura (conciliação)':purchase.description||'Compra no cartão',category:row.card_adjustment?'Ajuste confirmado; '+(row.card_adjustment.purchase_id?'compra '+row.card_adjustment.purchase_id:'sem compra vinculada'):opening?'Conciliação; fora do consumo':canonicalCategoryName(purchase.category,categories),amount:row.card_adjustment?.kind==='limit_release'?Number(row.card_adjustment.amount):Number(row.amount)||0,
       source:`${row.ff2_cards?.name||'Cartão'} | Fatura ${row.invoice_month.slice(0,7)} | ${opening?'Saldo anterior':`Parcela ${row.installment_no}/${purchase.installment_count||1}; total original R$ ${Number(purchase.total_amount||row.amount).toFixed(2).replace('.',',')}`}`};
   });
   for(const inv of invoiceStatuses||[]){if(selected.has(inv.invoice_month)&&inv.total_amount!=null)cardAuditRows.push({date:inv.invoice_month,description:'Conferência de fatura',category:'Total / pago / saldo devido',amount:Number(inv.balance_due)||0,source:`Fatura ${inv.invoice_month.slice(0,7)} | Total R$ ${Number(inv.total_amount).toFixed(2).replace('.',',')}; pago R$ ${Number(inv.paid_amount).toFixed(2).replace('.',',')}`});}
-  for(const row of transactions||[]){if(row.source==='card'&&['card_payment','card_payment_reversal'].includes(classifyTransaction(row))&&row.occurred_on<=cutoff&&(selected.has(row.occurred_on.slice(0,7)+'-01')||keys.some(key=>String(row.reference_key||'').includes(key))))cardAuditRows.push({date:row.occurred_on,description:row.description||'Pagamento de fatura',category:classifyTransaction(row)==='card_payment'?'Pagamento; fora do consumo':'Reversão; fora do consumo',amount:Number(row.amount)||0,source:row.notes||'Quitação vinculada à fatura'});}
+  for(const row of transactions||[]){if(row.source==='card'&&['card_payment','card_payment_reversal','card_refund_cash'].includes(classifyTransaction(row))&&row.occurred_on<=cutoff&&(selected.has(row.occurred_on.slice(0,7)+'-01')||keys.some(key=>String(row.reference_key||'').includes(key))))cardAuditRows.push({date:row.occurred_on,description:row.description||'Pagamento de fatura',category:classifyTransaction(row)==='card_refund_cash'?'Devolução em conta; fora da receita':classifyTransaction(row)==='card_payment'?'Pagamento; fora do consumo':'Reversão; fora do consumo',amount:Number(row.amount)||0,source:`Lançamento ${row.id} | ${row.reference_key||''} | ${row.notes||'Operação vinculada ao cartão'}`});}
   return{keys,months,totals,cardAuditRows,categories:aggregateCategories(months),cards:aggregateCards(months),budget:aggregateBudget(months),audit:{legacy,transferReview}};
 }
 
@@ -279,7 +280,7 @@ function buildAnalyticalPages({model,comparisonModel,contextModel,formatDate,for
     let y=187;
     for(const [label,value] of [
       ['Reservado / investido',month.allocation],['Resgates e transferências de entrada',month.transferIn],
-      ['Transferências de saída',month.transferOut],['Quitações de cartão (saída do caixa)',month.cardPayments],
+      ['Transferências de saída',month.transferOut],['Quitações de cartão (saída do caixa)',month.cardPayments],['Estornos recebidos em conta',month.cardRefundCash],
       ['Variação de caixa registrada (sem ajustes)',month.cashResult],
       ['Resultado por consumo (receitas - despesas)',month.result],
       ['Reservas futuras, fora do realizado',month.futureAllocation]

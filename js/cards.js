@@ -1,9 +1,9 @@
-import { buildCardInvoices, cardMonth,cardCalendarDates,cardDate } from './card-domain.js?v=2.9.14';
-import { operationIds, insertOnce } from './request-operation.js?v=2.9.14';
-import { listAllRows } from './pagination.js?v=2.9.14';
-import { supabase } from './supabase.js?v=2.9.14';
-import { getCurrentUser } from './database.js?v=2.9.14';
-import { monthISO } from './finance.js?v=2.9.14';
+import { buildCardInvoices, cardMonth,cardCalendarDates,cardDate } from './card-domain.js?v=2.9.16';
+import { operationIds, insertOnce } from './request-operation.js?v=2.9.16';
+import { listAllRows } from './pagination.js?v=2.9.16';
+import { supabase } from './supabase.js?v=2.9.16';
+import { getCurrentUser } from './database.js?v=2.9.16';
+import { monthISO } from './finance.js?v=2.9.16';
 
 export async function listCards() {
   const user = await getCurrentUser();
@@ -125,3 +125,8 @@ export async function payCardInvoice(input){
 export async function reverseCardPayment(id,reason){
  const {data,error}=await supabase.rpc('ff2_reverse_card_payment_2914',{p_payment_id:id,p_reason:reason});if(error)throw error;return data;
 }
+
+export async function listCardAdjustments(){const user=await getCurrentUser();return listAllRows(options=>supabase.from('ff2_card_adjustments').select('*, ff2_cards(name)',options).eq('user_id',user.id).order('created_at').order('id'),'Ajustes de cartão');}
+export async function listCardReconciliations(){const user=await getCurrentUser();return listAllRows(options=>supabase.from('ff2_card_legacy_reconciliations').select('*',options).eq('user_id',user.id).order('created_at').order('id'),'Conciliações de cartão');}
+export async function recordCardAdjustment(input){const {data,error}=await supabase.rpc('ff2_record_card_adjustment_2916',{p_card_id:input.cardId,p_month:input.month,p_kind:input.kind,p_amount:Number(input.amount),p_date:input.date,p_reason:input.reason,p_purchase_id:input.purchaseId||null,p_destination:input.destination||'invoice',p_limit_released:Number(input.limitReleased)||0,p_category:input.category||'Outros',p_client_request_id:operationIds(input)[0],p_confirmed:!!input.confirmed,p_reversal_of:input.reversalOf||null,p_allow_negative:!!input.allowNegative});if(error)throw error;return data;}
+export async function reconcileCardLegacy(input){const {data,error}=await supabase.rpc('ff2_reconcile_card_legacy_2916',{p_invoice_id:input.invoiceId,p_installment_id:input.installmentId,p_covered_amount:Number(input.amount),p_reason:input.reason,p_client_request_id:operationIds(input)[0],p_confirmed:!!input.confirmed});if(error)throw error;return data;}

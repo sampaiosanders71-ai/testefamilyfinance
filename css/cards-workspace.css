@@ -1,4 +1,4 @@
-/* Cartões 2.9.14: seleção simples, detalhe por cartão e faturas acessíveis pelo gráfico. */
+/* Cartões 2.9.16: seleção simples, detalhe por cartão e faturas acessíveis pelo gráfico. */
 .cards-workspace{max-width:1100px;margin-inline:auto}
 .cards-workspace .module-header{align-items:center;margin-bottom:22px}
 .cards-workspace .module-header h2{margin:0}
@@ -108,3 +108,23 @@
 @media(max-width:600px){.cards-workspace .module-header{gap:12px}.cards-workspace .module-header h2{font-size:1.3rem}.cards-workspace .module-header .secondary-btn{padding:11px 12px;font-size:.8rem}.card-entry{padding:20px}.card-detail-header{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:10px}.card-detail-header h2{font-size:1.25rem}.card-detail-header>.primary-compact{grid-column:1/-1;min-height:44px}#card-detail-content{gap:18px}#card-detail-content>section{padding:18px}.card-available{font-size:1.95rem}.card-limit-meta{display:grid;gap:10px}.card-current-invoice{gap:10px}.card-current-value>strong{font-size:1.1rem}.card-current-invoice .card-row-copy strong{font-size:.8rem}.card-current-invoice .card-row-copy small{font-size:.7rem}.card-chart-scale{min-width:48px;font-size:.58rem}.card-barchart{gap:8px}.card-chart-bars{grid-template-columns:repeat(var(--card-months),minmax(96px,1fr));min-width:calc(var(--card-months)*96px)}.card-purchase-row{gap:9px}.card-purchase-row .category-icon-tile{width:32px;height:32px}.card-purchase-row .card-row-copy strong{font-size:.8rem}.card-row-amount{font-size:.76rem}.card-purchase-row .card-row-arrow{display:none}.card-invoice-dialog .modal-card{padding:18px;width:calc(100vw - 24px);max-height:calc(100dvh - 24px)}.card-invoice-summary{display:grid;gap:18px}.card-invoice-summary dl{max-width:none;width:100%}.card-invoice-dialog .modal-actions{gap:9px}.card-invoice-dialog .modal-actions .primary-compact{flex:1}.card-invoice-dialog .modal-actions .text-btn{font-size:.77rem}.card-related-invoice{gap:8px;font-size:.73rem}}
 /* Impede que a largura das barras force o grid externo a crescer no celular. */
 #card-detail-content,#card-detail-content>section{min-width:0}
+
+/* Histórico sob demanda: acesso discreto, lista somente dentro da janela. */
+.card-invoice-history-access{display:flex;justify-content:flex-end;margin-top:14px}
+.card-history-link{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:8px 0;border:0;background:transparent;color:var(--muted);font:500 .76rem Inter,system-ui,sans-serif;cursor:pointer}
+.card-history-link .ui-icon{width:16px;height:16px}
+.card-history-link:hover{color:var(--text)}
+.card-history-return{margin-bottom:6px;padding-right:10px}
+.card-invoice-history-dialog .modal-card{display:flex;flex-direction:column;overflow:hidden}
+.card-invoice-history-dialog .modal-head{flex-shrink:0;margin-bottom:8px}
+.card-history-caption{margin:8px 0 0;color:var(--muted);font-size:.76rem;line-height:1.5}
+.card-invoice-history-list{min-height:0;overflow-y:auto;overscroll-behavior-y:contain;scrollbar-width:thin;padding:3px 4px 3px 3px}
+.card-invoice-history-row{display:flex;align-items:center;gap:14px;width:100%;min-height:94px;padding:16px 4px;border:0;border-bottom:1px solid var(--line);background:transparent;text-align:left;color:var(--text);cursor:pointer;border-radius:4px}
+.card-invoice-history-row:last-child{border-bottom:0}
+.card-invoice-history-row:hover{background:var(--surface2)}
+.card-invoice-history-value{display:grid;gap:6px;text-align:right;flex-shrink:0}
+.card-invoice-history-value strong{font:600 1rem 'Space Grotesk',system-ui,sans-serif;white-space:nowrap}
+.card-invoice-history-value small{font-size:.72rem;color:var(--muted)}
+@media(max-width:600px){.card-invoice-history-row{gap:8px;padding-block:14px}.card-invoice-history-row .card-row-copy strong{font-size:.8rem}.card-invoice-history-row .card-row-copy small{font-size:.69rem}.card-invoice-history-value strong{font-size:.86rem}.card-invoice-history-value small{font-size:.66rem}.card-invoice-history-dialog .modal-card{max-height:calc(100dvh - 24px)}}
+
+.card-adjustments-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}.card-adjustment-row{display:flex;gap:12px;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--line)}.card-adjustment-row>div{display:grid;gap:7px;min-width:0}.card-adjustment-row strong{font-size:.82rem}.card-adjustment-row small,.card-adjustment-row p{font-size:.74rem;line-height:1.5;color:var(--muted);margin:0;overflow-wrap:anywhere}.card-adjustment-row .card-history-link{justify-content:start}.card-payment-row{flex-wrap:wrap}.card-payment-row>span{flex:1}.check-row{color:var(--text);line-height:1.5}.card-invoice-dialog .modal-actions{flex-wrap:wrap}#card-linked-transaction-content .card-lock-note{overflow-wrap:anywhere}@media(max-width:600px){#card-adjustment-dialog .form-grid{grid-template-columns:1fr}.card-adjustments-heading{align-items:start}.card-adjustments-heading h4{min-width:0}.card-adjustments-heading .card-history-link{white-space:nowrap;font-size:.7rem}}

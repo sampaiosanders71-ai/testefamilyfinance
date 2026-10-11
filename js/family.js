@@ -1,7 +1,8 @@
-import { listAllRows } from './pagination.js?v=2.9.14';
-import { supabase } from './supabase.js?v=2.9.14';
-import { getCurrentUser } from './database.js?v=2.9.14';
-import { monthISO } from './finance.js?v=2.9.14';
+import {adjustmentsAsInstallments} from './card-domain.js?v=2.9.16';
+import { listAllRows } from './pagination.js?v=2.9.16';
+import { supabase } from './supabase.js?v=2.9.16';
+import { getCurrentUser } from './database.js?v=2.9.16';
+import { monthISO } from './finance.js?v=2.9.16';
 
 export async function listFamilyData() {
   const user = await getCurrentUser();
@@ -74,12 +75,13 @@ function nextMonthISO(refDate) {
 export async function loadFamilyOverview(ownerId, refDate = new Date()) {
   const month = monthISO(refDate);
   const nextMonth = nextMonthISO(refDate);
-  const [transactions,cards,installments,goals,planRes] = await Promise.all([
+  const [transactions,cards,installments,goals,planRes,cardAdjustments] = await Promise.all([
     listAllRows(options=>supabase.from('ff2_transactions').select('*',options).eq('user_id',ownerId).gte('occurred_on',month).lt('occurred_on',nextMonth).order('created_at',{ascending:false}).order('id',{ascending:false}),'Lançamentos familiares'),
     listAllRows(options=>supabase.from('ff2_cards').select('*',options).eq('user_id',ownerId).eq('active',true).order('id'),'Cartões familiares'),
     listAllRows(options=>supabase.from('ff2_card_installments').select('*, ff2_card_purchases(description,category,installment_count,purchase_date,record_kind,cancelled_at)',options).eq('user_id',ownerId).eq('invoice_month',month).order('id'),'Parcelas familiares'),
     listAllRows(options=>supabase.from('ff2_goals').select('*',options).eq('user_id',ownerId).order('created_at').order('id'),'Metas familiares'),
-    supabase.from('ff2_budget_plans').select('*').eq('user_id',ownerId).eq('month',month).maybeSingle()
+    supabase.from('ff2_budget_plans').select('*').eq('user_id',ownerId).eq('month',month).maybeSingle(),
+    listAllRows(options=>supabase.from('ff2_card_adjustments').select('*, ff2_cards(name)',options).eq('user_id',ownerId).eq('invoice_month',month).order('id'),'Ajustes familiares')
   ]);
   if(planRes.error)throw planRes.error;
   let budgetItems=[];
@@ -97,7 +99,7 @@ export async function loadFamilyOverview(ownerId, refDate = new Date()) {
     goalStatus,
     transactions,
     cards,
-    installments,
+    installments:[...installments,...adjustmentsAsInstallments(cardAdjustments,cards)],
     goals,
     budget: { plan: planRes.data || null, items: budgetItems }
   };

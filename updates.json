@@ -1,35 +1,26 @@
 {
-  "version": "2.9.14",
+  "version": "2.9.16",
   "publishedAt": "11/10/2026",
-  "improvementCount": 5,
-  "title": "Cartões reconstruídos",
-  "summary": "Cada cartão tem sua página, gráfico de faturas e pagamentos vinculados.",
+  "improvementCount": 3,
+  "title": "Ajustes e conciliação de cartões",
+  "summary": "Estornos, encargos e conciliação explícita, preservando o histórico financeiro.",
   "highlights": [
     {
-      "title": "Detalhes por cartão",
-      "text": "Limite disponível, fatura atual e compras organizadas por competência."
+      "title": "Ajustes e estornos rastreáveis",
+      "text": "Registre créditos, débitos, juros e devoluções conforme confirmado pelo emissor."
     },
     {
-      "title": "Todas as faturas no gráfico",
-      "text": "Barras verticais por mês. Toque para consultar e pagar uma fatura."
+      "title": "Histórico financeiro protegido",
+      "text": "Descrição e categoria podem ser corrigidas sem reescrever valores de faturas quitadas."
     },
     {
-      "title": "Pagamentos integral e parcial",
-      "text": "Data e valor registrados em Lançamentos, sem duplicar o consumo."
-    },
-    {
-      "title": "Fechamento e atraso automáticos",
-      "text": "Notificações únicas para faturas com saldo vencido."
-    },
-    {
-      "title": "Histórico preservado",
-      "text": "Conciliação de faturas antigas e correções de pagamento rastreáveis."
+      "title": "Conciliação confirmada",
+      "text": "Vincule compras identificadas ao saldo legado com confirmação e trilha de auditoria."
     }
   ],
   "details": [
-    "Sem seção separada de histórico de faturas.",
-    "Parcelas reconhecidas na competência; limite considera todas as faturas pendentes.",
-    "Saldo insuficiente exibe aviso e permite confirmar.",
-    "Inclui o redesign de exportação e as correções das versões anteriores."
+    "Mantém o gráfico vertical e o acesso discreto ao histórico de faturas.",
+    "Pagamentos e devoluções permitem consultar o lançamento vinculado.",
+    "Liberações de limite dependem de confirmação; juros não são calculados automaticamente."
   ]
 }
