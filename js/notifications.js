@@ -1,10 +1,10 @@
-import { listAllRows } from './pagination.js?v=2.9.12';
-import { supabase } from './supabase.js?v=2.9.12';
-import { getCurrentUser } from './database.js?v=2.9.12';
-import { budgetSummary } from './budget.js?v=2.9.12';
-import { cardInvoiceSummaries } from './cards.js?v=2.9.12';
-import { goalProgress } from './goal-integration.js?v=2.9.12';
-import { canonicalCategoryName } from './category-alias.js?v=2.9.12';
+import { listAllRows } from './pagination.js?v=2.9.14';
+import { supabase } from './supabase.js?v=2.9.14';
+import { getCurrentUser } from './database.js?v=2.9.14';
+import { budgetSummary } from './budget.js?v=2.9.14';
+import { buildCardInvoices } from './card-domain.js?v=2.9.14';
+import { goalProgress } from './goal-integration.js?v=2.9.14';
+import { canonicalCategoryName } from './category-alias.js?v=2.9.14';
 
 function monthKey(date){return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}`}
 function sameMonth(a,b){return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()}
@@ -64,14 +64,14 @@ export async function syncFinancialNotifications({budget,transactions,installmen
   }
 
   const today=new Date(now.getFullYear(),now.getMonth(),now.getDate(),12);
-  const summaries=cardInvoiceSummaries(cards||[],installments||[],invoiceStatuses||[],now);
+  const summaries=(cards||[]).flatMap(card=>buildCardInvoices(card,installments||[],invoiceStatuses||[]));
   for(const summary of summaries){
-    if(summary.total<=0||summary.status==='paid')continue;
+    if(summary.balanceDue<=0||summary.status==='paid')continue;
     const due=new Date(summary.dueDate.getFullYear(),summary.dueDate.getMonth(),summary.dueDate.getDate(),12);
     const days=Math.ceil((due-today)/86400000);
     if(days<0||days>5)continue;
     const when=days===0?'vence hoje':days===1?'vence amanhã':`vence em ${days} dias`;
-    rows.push({user_id:user.id,type:'invoice_due',title:`Fatura ${when}`,body:`A fatura de ${summary.card.name} ${when}. Confira o valor e o pagamento.`,target:'cards',target_id:summary.card.id,event_key:`invoice-due:${summary.card.id}:${summary.invoiceMonth}`});
+    rows.push({user_id:user.id,type:'invoice_due',title:`Fatura ${when}`,body:`A fatura de ${summary.card.name} ${when}. Confira o valor e o pagamento.`,target:'cards',target_id:summary.id||summary.card.id,event_key:`invoice-due:${summary.card.id}:${summary.invoiceMonth}`});
   }
 
   if(!rows.length)return 0;

@@ -1,33 +1,35 @@
 {
-  "version": "2.9.12",
-  "publishedAt": "10/10/2026",
+  "version": "2.9.14",
+  "publishedAt": "11/10/2026",
   "improvementCount": 5,
-  "title": "Mais confiabilidade nos dados e atualizações",
-  "summary": "Históricos completos, orçamento salvo por inteiro e navegação preservada.",
+  "title": "Cartões reconstruídos",
+  "summary": "Cada cartão tem sua página, gráfico de faturas e pagamentos vinculados.",
   "highlights": [
     {
-      "title": "Históricos completos",
-      "text": "Carregamento de todas as parcelas e registros financeiros."
+      "title": "Detalhes por cartão",
+      "text": "Limite disponível, fatura atual e compras organizadas por competência."
     },
     {
-      "title": "Atualizações consistentes",
-      "text": "Todos os arquivos do aplicativo usam a mesma versão."
+      "title": "Todas as faturas no gráfico",
+      "text": "Barras verticais por mês. Toque para consultar e pagar uma fatura."
     },
     {
-      "title": "Envios protegidos",
-      "text": "Retentativas reutilizam os identificadores da operação."
+      "title": "Pagamentos integral e parcial",
+      "text": "Data e valor registrados em Lançamentos, sem duplicar o consumo."
     },
     {
-      "title": "Orçamento íntegro",
-      "text": "Plano e limites são salvos juntos."
+      "title": "Fechamento e atraso automáticos",
+      "text": "Notificações únicas para faturas com saldo vencido."
     },
     {
-      "title": "Sessão sem interrupções",
-      "text": "A renovação da sessão mantém a tela aberta."
+      "title": "Histórico preservado",
+      "text": "Conciliação de faturas antigas e correções de pagamento rastreáveis."
     }
   ],
   "details": [
-    "Correções de confiabilidade sem alterar os conceitos dos cálculos financeiros.",
-    "O orçamento usa uma função transacional no Supabase."
+    "Sem seção separada de histórico de faturas.",
+    "Parcelas reconhecidas na competência; limite considera todas as faturas pendentes.",
+    "Saldo insuficiente exibe aviso e permite confirmar.",
+    "Inclui o redesign de exportação e as correções das versões anteriores."
   ]
 }

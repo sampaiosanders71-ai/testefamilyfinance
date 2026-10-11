@@ -1,0 +1,110 @@
+/* Cartões 2.9.14: seleção simples, detalhe por cartão e faturas acessíveis pelo gráfico. */
+.cards-workspace{max-width:1100px;margin-inline:auto}
+.cards-workspace .module-header{align-items:center;margin-bottom:22px}
+.cards-workspace .module-header h2{margin:0}
+.cards-workspace .cards-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.card-entry{display:flex;align-items:center;gap:16px;width:100%;min-height:112px;padding:22px;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--text);text-align:left;cursor:pointer}
+.card-entry>.ui-icon{width:32px;height:32px;color:var(--muted)}
+.card-entry>span:nth-child(2){display:grid;gap:7px;min-width:0;flex:1}
+.card-entry strong{font-size:1.03rem;overflow-wrap:anywhere}
+.card-entry small{color:var(--muted);font-size:.8rem}
+.card-entry-arrow{font-size:1.6rem;color:var(--muted)}
+.card-entry:hover{border-color:var(--muted)}
+.card-empty-state{padding:44px 20px;border:1px dashed var(--line);border-radius:16px;text-align:center;color:var(--muted);grid-column:1/-1}
+.card-empty-state>.ui-icon{width:36px;height:36px}
+.card-detail-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.card-detail-header h2{margin:0;min-width:0;flex:1;font-size:1.45rem;overflow-wrap:anywhere}
+.card-back,.card-settings{display:grid;place-items:center;flex-shrink:0;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:11px;background:transparent;color:var(--text);cursor:pointer}
+.card-back{font-size:1.8rem}
+.card-settings .ui-icon{width:19px;height:19px}
+#card-detail-content{display:grid;gap:24px}
+#card-detail-content>section{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px}
+#card-detail-content h3{margin:0 0 18px;font:600 .95rem Inter,system-ui,sans-serif}
+.card-available{display:block;margin-bottom:20px;font:700 2.2rem 'Space Grotesk',system-ui,sans-serif;letter-spacing:-.03em}
+.card-limit-meta{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;color:var(--muted);font-size:.77rem}
+.card-limit-meta b{font-weight:500;color:var(--text);margin-left:6px}
+.card-limit-bar{height:5px;border-radius:4px;background:var(--surface3);overflow:hidden;margin-top:16px}
+.card-limit-bar>span{display:block;height:100%;background:var(--orange);border-radius:4px}
+.card-current-invoice{display:flex;align-items:center;gap:20px;width:100%;border:0;padding:0;background:transparent;text-align:left;color:var(--text);cursor:pointer}
+.card-row-copy{display:grid;min-width:0;flex:1;gap:5px}
+.card-row-copy strong{font-size:.9rem;font-weight:600;overflow-wrap:anywhere}
+.card-row-copy small{font-size:.76rem;color:var(--muted);line-height:1.5}
+.card-current-value{text-align:right;flex-shrink:0;display:grid;gap:6px}
+.card-current-value>strong{font:700 1.35rem 'Space Grotesk',system-ui,sans-serif}
+.card-current-value small{color:var(--muted);font-size:.74rem}
+.card-row-arrow{font-size:1.6rem;color:var(--muted);flex-shrink:0}
+.card-status{display:inline-block;justify-self:start;color:var(--muted);font-size:.73rem;line-height:1.5;margin-top:5px}
+.card-status-paid{color:var(--green)}
+.card-status-overdue{color:var(--red)}
+.card-status-partial{color:var(--accent-text,var(--orange))}
+.card-barchart{display:flex;gap:14px;width:100%;min-width:0}
+.card-chart-scale{height:224px;padding-top:18px;display:flex;flex-direction:column;justify-content:space-between;flex-shrink:0;color:var(--muted);font-size:.65rem;min-width:70px;text-align:right}
+.card-chart-scroll{min-width:0;flex:1;overflow-x:auto;padding:6px 2px;scrollbar-width:thin;overscroll-behavior-x:contain}
+.card-chart-bars{position:relative;display:grid;grid-template-columns:repeat(var(--card-months),minmax(90px,1fr));min-width:calc(var(--card-months)*90px);background:repeating-linear-gradient(to top,transparent 0,transparent 99px,var(--line) 100px,transparent 101px);background-size:100% 204px;background-position:0 18px;background-repeat:no-repeat}
+.card-chart-column{display:flex;flex-direction:column;align-items:stretch;border:0;background:transparent;color:var(--text);cursor:pointer;height:256px;padding:20px 9px 0;gap:12px;min-width:0;border-radius:8px}
+.card-chart-track{height:202px;display:flex;align-items:flex-end;justify-content:center}
+.card-chart-fill{position:relative;display:block;width:40px;background:var(--orange);border-radius:5px 5px 0 0;opacity:.72;min-height:0}
+.card-chart-column.current .card-chart-fill,.card-chart-column:hover .card-chart-fill{opacity:1}
+.card-chart-value{position:absolute;bottom:calc(100% + 7px);left:50%;transform:translateX(-50%);white-space:nowrap;color:var(--text);font-size:.64rem;font-weight:600}
+.card-chart-month{font-size:.7rem;color:var(--muted);white-space:nowrap}
+.card-chart-column.current .card-chart-month{color:var(--accent-text,var(--orange))}
+.card-chart-column:hover{background:color-mix(in srgb,var(--orange) 5%,transparent)}
+.card-purchase-group+.card-purchase-group{margin-top:26px}
+.card-purchase-group h4{font-size:.77rem;font-weight:600;color:var(--muted);margin:0 0 8px}
+.card-purchase-row{display:flex;align-items:center;gap:12px;padding:16px 0;width:100%;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--text);text-align:left;cursor:pointer;min-width:0}
+.card-purchase-row:last-child{border-bottom:0}
+.card-purchase-row .category-icon-tile{width:38px;height:38px;flex-shrink:0}
+.card-row-amount{font-size:.84rem;white-space:nowrap;flex-shrink:0}
+.card-empty{padding:12px 0;margin:0;color:var(--muted);font-size:.84rem;line-height:1.6}
+.card-invoice-dialog .modal-card{width:min(600px,calc(100vw - 28px));max-height:calc(100dvh - 32px)}
+.card-invoice-dialog .modal-card.small{width:min(460px,calc(100vw - 28px))}
+.card-invoice-dialog .modal-head{align-items:flex-start;gap:14px}
+.card-invoice-dialog .modal-head h3{margin:0;line-height:1.4;overflow-wrap:anywhere;font-size:1.08rem;min-width:0}
+.card-invoice-dialog .modal-close{flex-shrink:0}
+.card-invoice-summary{display:flex;align-items:flex-start;gap:24px;justify-content:space-between;padding:12px 0 20px;border-bottom:1px solid var(--line)}
+.card-invoice-summary>div{display:grid;gap:9px}
+.card-invoice-summary>div>small{color:var(--muted);font-size:.78rem}
+.card-invoice-summary>div>strong{font:700 1.75rem 'Space Grotesk',system-ui,sans-serif}
+.card-invoice-summary dl,.card-payment-warning dl{display:grid;gap:10px;margin:0;flex:1;max-width:260px}
+.card-invoice-summary dl>div,.card-payment-warning dl>div{display:flex;justify-content:space-between;gap:16px;font-size:.77rem}
+.card-invoice-summary dt,.card-payment-warning dt{color:var(--muted)}
+.card-invoice-summary dd,.card-payment-warning dd{margin:0;text-align:right}
+.card-pay-button{width:100%;margin-top:18px;min-height:44px}
+.card-invoice-purchases,.card-payments-section{margin-top:24px}
+.card-invoice-dialog h4{font:600 .87rem Inter,system-ui,sans-serif;margin:18px 0 12px}
+.card-reconciliation,.card-lock-note{padding:14px;border:1px solid var(--line);background:var(--surface2);border-radius:10px;font-size:.78rem;line-height:1.6;color:var(--muted)}
+.card-reconciliation strong{color:var(--text);font-weight:600}
+.card-reconciliation p{margin:6px 0 0}
+.card-payment-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.card-payment-row>span{display:grid;gap:6px;min-width:0}
+.card-payment-row small{font-size:.74rem;color:var(--muted);overflow-wrap:anywhere}
+.card-payment-row .text-btn{width:auto;margin:0;font-size:.78rem;padding:10px 0;color:var(--muted)}
+.card-purchase-facts{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:22px 0}
+.card-purchase-facts dt{font-size:.73rem;color:var(--muted);margin-bottom:7px}
+.card-purchase-facts dd{margin:0;font-size:.85rem;overflow-wrap:anywhere}
+.card-related-invoice{display:flex;align-items:center;gap:14px;width:100%;padding:14px 0;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--text);font-size:.78rem;cursor:pointer;text-align:left}
+.card-related-invoice>span:first-child{flex:1}
+.card-payment-balance{display:grid;gap:8px;padding:18px;background:var(--surface2);border:1px solid var(--line);border-radius:12px;margin-bottom:20px}
+.card-payment-balance>span{font-size:.76rem;color:var(--muted)}
+.card-payment-balance>strong{font:700 1.7rem 'Space Grotesk',system-ui,sans-serif}
+.card-payment-warning{padding:16px;border:1px solid color-mix(in srgb,var(--orange) 45%,var(--line));border-radius:12px;background:color-mix(in srgb,var(--orange) 7%,var(--surface));font-size:.77rem;line-height:1.5;margin:16px 0}
+.card-payment-warning>strong{display:block;margin-bottom:14px;font-weight:600}
+.card-payment-warning dl{max-width:none}
+.card-payment-warning p{margin:14px 0 0;color:var(--muted)}
+.card-invoice-dialog .modal-actions{flex-wrap:wrap}
+.card-invoice-dialog .modal-actions button{min-height:44px}
+.card-invoice-dialog .modal-actions .text-btn{width:auto;margin:0;margin-right:auto;padding:10px 0}
+.purchase-card-caption{color:var(--muted);font-size:.83rem;margin:-8px 0 20px}
+.purchase-summary{color:var(--muted);font-size:.76rem;line-height:1.6;margin:4px 0 12px}
+.planning-card-panel{margin-bottom:20px}
+.planning-card-panel .section-title>strong{font-size:.86rem}
+.planning-card-obligation{display:flex;align-items:center;gap:16px;width:100%;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--text);padding:14px 0;text-align:left;cursor:pointer;font-size:.86rem}
+.planning-card-obligation>span{display:grid;flex:1;gap:6px;min-width:0}
+.planning-card-obligation small{font-size:.73rem;color:var(--muted);line-height:1.5}
+.card-planning-note{font-size:.72rem;line-height:1.6;margin:12px 0 0}
+.cards-workspace button:focus-visible,.card-invoice-dialog button:focus-visible{outline:2px solid var(--text);outline-offset:3px}
+.card-chart-scroll:focus-visible{outline:2px solid var(--muted);outline-offset:3px}
+.card-invoice-dialog button:disabled{opacity:.5;cursor:default}
+@media(max-width:600px){.cards-workspace .module-header{gap:12px}.cards-workspace .module-header h2{font-size:1.3rem}.cards-workspace .module-header .secondary-btn{padding:11px 12px;font-size:.8rem}.card-entry{padding:20px}.card-detail-header{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:10px}.card-detail-header h2{font-size:1.25rem}.card-detail-header>.primary-compact{grid-column:1/-1;min-height:44px}#card-detail-content{gap:18px}#card-detail-content>section{padding:18px}.card-available{font-size:1.95rem}.card-limit-meta{display:grid;gap:10px}.card-current-invoice{gap:10px}.card-current-value>strong{font-size:1.1rem}.card-current-invoice .card-row-copy strong{font-size:.8rem}.card-current-invoice .card-row-copy small{font-size:.7rem}.card-chart-scale{min-width:48px;font-size:.58rem}.card-barchart{gap:8px}.card-chart-bars{grid-template-columns:repeat(var(--card-months),minmax(96px,1fr));min-width:calc(var(--card-months)*96px)}.card-purchase-row{gap:9px}.card-purchase-row .category-icon-tile{width:32px;height:32px}.card-purchase-row .card-row-copy strong{font-size:.8rem}.card-row-amount{font-size:.76rem}.card-purchase-row .card-row-arrow{display:none}.card-invoice-dialog .modal-card{padding:18px;width:calc(100vw - 24px);max-height:calc(100dvh - 24px)}.card-invoice-summary{display:grid;gap:18px}.card-invoice-summary dl{max-width:none;width:100%}.card-invoice-dialog .modal-actions{gap:9px}.card-invoice-dialog .modal-actions .primary-compact{flex:1}.card-invoice-dialog .modal-actions .text-btn{font-size:.77rem}.card-related-invoice{gap:8px;font-size:.73rem}}
+/* Impede que a largura das barras force o grid externo a crescer no celular. */
+#card-detail-content,#card-detail-content>section{min-width:0}

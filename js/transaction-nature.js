@@ -1,3 +1,4 @@
+import { isCardInvoicePayment,isCardInvoiceReversal } from './financial-ledger.js?v=2.9.14';
 // Explicit user classification overrides legacy keyword inference.
 export function normalizeNatureText(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim()}
 export function suggestNature(description,category=''){
@@ -13,4 +14,4 @@ export function transactionNature(row){
  if(['consumption','allocation','transfer','resgate','income'].includes(row?.financial_nature))return row.financial_nature;
  return null;
 }
-export function natureLabel(row){const n=transactionNature(row);return ({consumption:'Despesa de consumo',allocation:'Reserva / investimento',transfer:'Transferência própria',resgate:'Resgate',income:'Receita'})[n]||'Classificação anterior';}
+export function natureLabel(row){if(isCardInvoicePayment(row))return 'Quitação de cartão';if(isCardInvoiceReversal(row))return 'Correção de pagamento';const n=transactionNature(row);return ({consumption:'Despesa de consumo',allocation:'Reserva / investimento',transfer:'Transferência própria',resgate:'Resgate',income:'Receita'})[n]||'Classificação anterior';}

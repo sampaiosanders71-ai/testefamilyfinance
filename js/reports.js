@@ -1,7 +1,7 @@
-import { buildFinancialMonthLedger, classifyTransaction } from './financial-ledger.js?v=2.9.12';
-import { canonicalCategoryName, canonicalCategoryAmounts, canonicalCategoryLimits } from './category-alias.js?v=2.9.12';
-import { ownTransferReview, legacyReview, reviewedPeriodRows } from './financial-integrity.js?v=2.9.12';
-import { buildVisualPdf, PDF_PAGE } from './pdf.js?v=2.9.12';
+import { buildFinancialMonthLedger, classifyTransaction } from './financial-ledger.js?v=2.9.14';
+import { canonicalCategoryName, canonicalCategoryAmounts, canonicalCategoryLimits } from './category-alias.js?v=2.9.14';
+import { ownTransferReview, legacyReview, reviewedPeriodRows } from './financial-integrity.js?v=2.9.14';
+import { buildVisualPdf, PDF_PAGE } from './pdf.js?v=2.9.14';
 
 const C = {
   ink:'#171717', muted:'#6f7379', subtle:'#9b9da1', panel:'#f5f2ed', line:'#dedbd5',
@@ -92,7 +92,15 @@ export function buildFinancialReportModel({transactions,installments,invoiceStat
   const reconciliation=ownTransferReview(transactions||[]);
   const periodIds=new Set(periodRows.map(r=>r.id));
   const transferReview={...reconciliation,pairs:reconciliation.pairs.filter(pair=>periodIds.has(pair.outId)||periodIds.has(pair.inId)),unmatched:reconciliation.unmatched.filter(row=>periodIds.has(row.id)),ambiguous:reconciliation.ambiguous.filter(row=>periodIds.has(row.id))};
-  return{keys,months,totals,categories:aggregateCategories(months),cards:aggregateCards(months),budget:aggregateBudget(months),audit:{legacy,transferReview}};
+  const selected=new Set(keys),cutoff=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+  const cardAuditRows=(installments||[]).filter(row=>selected.has(row.invoice_month)&&!row.ff2_card_purchases?.cancelled_at).map(row=>{
+    const purchase=row.ff2_card_purchases||{},opening=purchase.record_kind==='invoice_opening';
+    return {date:purchase.purchase_date||row.invoice_month,description:opening?'Saldo anterior de fatura (conciliação)':purchase.description||'Compra no cartão',category:opening?'Conciliação; fora do consumo':canonicalCategoryName(purchase.category,categories),amount:Number(row.amount)||0,
+      source:`${row.ff2_cards?.name||'Cartão'} | Fatura ${row.invoice_month.slice(0,7)} | ${opening?'Saldo anterior':`Parcela ${row.installment_no}/${purchase.installment_count||1}; total original R$ ${Number(purchase.total_amount||row.amount).toFixed(2).replace('.',',')}`}`};
+  });
+  for(const inv of invoiceStatuses||[]){if(selected.has(inv.invoice_month)&&inv.total_amount!=null)cardAuditRows.push({date:inv.invoice_month,description:'Conferência de fatura',category:'Total / pago / saldo devido',amount:Number(inv.balance_due)||0,source:`Fatura ${inv.invoice_month.slice(0,7)} | Total R$ ${Number(inv.total_amount).toFixed(2).replace('.',',')}; pago R$ ${Number(inv.paid_amount).toFixed(2).replace('.',',')}`});}
+  for(const row of transactions||[]){if(row.source==='card'&&['card_payment','card_payment_reversal'].includes(classifyTransaction(row))&&row.occurred_on<=cutoff&&(selected.has(row.occurred_on.slice(0,7)+'-01')||keys.some(key=>String(row.reference_key||'').includes(key))))cardAuditRows.push({date:row.occurred_on,description:row.description||'Pagamento de fatura',category:classifyTransaction(row)==='card_payment'?'Pagamento; fora do consumo':'Reversão; fora do consumo',amount:Number(row.amount)||0,source:row.notes||'Quitação vinculada à fatura'});}
+  return{keys,months,totals,cardAuditRows,categories:aggregateCategories(months),cards:aggregateCards(months),budget:aggregateBudget(months),audit:{legacy,transferReview}};
 }
 
 function wrapText(text,maxChars=70){const words=String(text||'').split(/\s+/).filter(Boolean),lines=[];let current='';for(const word of words){const next=current?`${current} ${word}`:word;if(next.length>maxChars&&current){lines.push(current);current=word}else current=next}if(current)lines.push(current);return lines.length?lines:['']}
@@ -319,6 +327,13 @@ function buildAnalyticalPages({model,comparisonModel,contextModel,formatDate,for
   const exampleRows=model.audit.legacy.slice(0,5).map(row=>({date:row.date,description:row.description,category:row.suggestion?`Sugestão: ${suggestionLabel[row.suggestion]||'Revisar'}`:'Revisar manual',amount:row.amount}));
   if(exampleRows.length){drawDetailHeader(auditPage,ay);drawDetailRows(auditPage,ay+18,exampleRows,formatDate,formatBRL);if(model.audit.legacy.length>5)text(auditPage,48,690,`Mais ${model.audit.legacy.length-5} registros antigos disponíveis no CSV e no Histórico.`,7.5,{color:C.muted});}
   else text(auditPage,48,ay,'Não foram identificados registros antigos sem natureza no período.',8,{color:C.muted});
+  const cardRows=model.cardAuditRows||[];
+  for(const [index,batch] of paginateDetailRows(cardRows,500,500).entries()){
+    if(!batch.length)continue;
+    const p=page();pages.push(p);reportTitle(p,index?'Cartões - continuação':'Cartões: compras e pagamentos','Valores originais, parcelas, conciliação, quitações e saldo devido.');
+    drawDetailHeader(p,190);drawDetailRows(p,208,batch,formatDate,formatBRL);
+    text(p,48,720,'Conciliação anterior e pagamentos não representam novas despesas de consumo.',7,{color:C.muted});
+  }
   return decorateReportPages(pages,{today,periodText});
 }
 

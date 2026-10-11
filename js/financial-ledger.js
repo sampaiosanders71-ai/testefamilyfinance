@@ -30,6 +30,7 @@ export function monthCutoffISO(key,{today=new Date(),throughDay=null}={}){
 export function isCardInvoicePayment(row){
   return Number(row?.direction)<0 && String(row?.source||'')==='card' && String(row?.reference_key||'').startsWith('invoice:');
 }
+export function isCardInvoiceReversal(row){return Number(row?.direction)>0&&String(row?.source||'')==='card'&&String(row?.reference_key||'').startsWith('invoice-reversal:')}
 export function isBalanceAdjustment(row){ return String(row?.type||'')==='balance_adjustment'; }
 
 const ALLOCATION_CATEGORY_RE=/(^|\b)(investimento|investimentos|autoinvestimento|reserva financeira|reserva de emergencia|poupanca|aplicacao)(\b|$)/i;
@@ -47,6 +48,7 @@ export function classifyTransaction(row){
   if(isBalanceAdjustment(row)) return 'adjustment';
   // A quitação da fatura não é nova despesa: as compras já foram reconhecidas nas parcelas.
   if(isCardInvoicePayment(row)) return 'card_payment';
+  if(isCardInvoiceReversal(row)) return 'card_payment_reversal';
   if(row?.financial_nature==='resgate')return direction>0?'transfer_in':'invalid';
   if(row?.financial_nature==='transfer')return direction>0?'transfer_in':'transfer_out';
   if(row?.financial_nature==='allocation')return direction<0?'allocation':'invalid';
@@ -117,13 +119,14 @@ export function buildFinancialMonthLedger({transactions=[],installments=[],invoi
       // Aportes não consomem orçamento de despesas; aparecem em allocationMap.
       details.push({date:occurred,description:row?.description||'Destinação financeira',category:row?.category||'Outros',source:'Reserva / investimento',amount,kind:'allocation'});
     }else if(kind==='card_payment') cardPayments+=amount;
+    else if(kind==='card_payment_reversal') cardPayments-=amount;
     else if(kind==='transfer_out') transferOut+=amount;
     else if(kind==='transfer_in') transferIn+=amount;
     else if(kind==='adjustment') adjustments+=direction*amount;
   }
 
   for(const row of installments||[]){
-    if(String(row?.invoice_month||'')!==key) continue;
+    if(String(row?.invoice_month||'')!==key || row?.ff2_card_purchases?.cancelled_at || row?.ff2_card_purchases?.record_kind==='invoice_opening') continue;
     const purchaseDate=String(row?.ff2_card_purchases?.purchase_date||'');
     const amount=number(row?.amount);
     if(cutoff.endsWith('-00') || (purchaseDate && validDate(purchaseDate) && purchaseDate>cutoff)){ futureCardExpense+=amount; continue; }
@@ -138,7 +141,9 @@ export function buildFinancialMonthLedger({transactions=[],installments=[],invoi
 
   const totalExpense=cashExpense+cardExpense;
   const cashOutflow=cashExpense+allocation+transferOut+cardPayments;
-  const committedCard=Object.values(cardMap).filter(card=>card.status!=='paid').reduce((sum,card)=>sum+card.total,0);
+  const pendingStatuses=(invoiceStatuses||[]).filter(row=>row.invoice_month===key&&row.balance_due!=null);
+  const knownCards=new Set(pendingStatuses.map(row=>row.card_id));
+  const committedCard=pendingStatuses.reduce((sum,row)=>sum+number(row.balance_due),0)+Object.values(cardMap).filter(card=>!knownCards.has(card.cardId)&&card.status!=='paid').reduce((sum,card)=>sum+card.total,0);
   return {
     key,cutoff,partial:cutoff<`${prefix}-${String(lastDay(Number(prefix.slice(0,4)),Number(prefix.slice(5,7)))).padStart(2,'0')}`,
     income,cashExpense,cardExpense,totalExpense,result:income-totalExpense,
