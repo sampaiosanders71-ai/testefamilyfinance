@@ -1,18 +1,26 @@
 {
-  "version": "2.9.17",
+  "version": "2.9.18",
   "publishedAt": "11/10/2026",
-  "improvementCount": 1,
-  "title": "Correção de faturas existentes",
-  "summary": "Edição do valor de faturas legadas sem pagamentos, com histórico da correção.",
+  "improvementCount": 3,
+  "title": "Novas telas de cartões",
+  "summary": "Visual aprovado, histórico com filtros e edição de fatura visível no resumo.",
   "highlights": [
     {
-      "title": "Editar valor da fatura",
-      "text": "Informe o total correto de uma fatura legada ainda sem pagamentos. A diferença fica registrada como correção."
+      "title": "Gerenciamento do cartão",
+      "text": "Degradê laranja no limite, gráfico ampliado e ações para fatura, detalhes e próximas competências."
+    },
+    {
+      "title": "Histórico com filtros",
+      "text": "Consulte todas as faturas ou filtre anteriores, atual e futuras."
+    },
+    {
+      "title": "Edição fácil de encontrar",
+      "text": "Editar fatura aparece no topo do resumo quando o saldo legado ainda permite correção."
     }
   ],
   "details": [
-    "O valor original e a conciliação permanecem preservados.",
-    "Faturas quitadas e com pagamentos continuam protegidas.",
-    "Mantém compras, estornos, gráfico e histórico discreto."
+    "A janela da fatura mantém o resumo e pagamento em destaque, com detalhamento acessível.",
+    "O gráfico inclui todos os meses registrados e oferece seleção de período.",
+    "As proteções financeiras e os dados existentes permanecem preservados."
   ]
 }
