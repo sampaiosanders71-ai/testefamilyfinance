@@ -1,5 +1,5 @@
-import { supabase } from './supabase.js?v=2.9.16';
-import { getCurrentUser } from './database.js?v=2.9.16';
+import { supabase } from './supabase.js?v=2.9.17';
+import { getCurrentUser } from './database.js?v=2.9.17';
 
 export async function updateProfileSettings({ displayName, theme }) {
   const user = await getCurrentUser();

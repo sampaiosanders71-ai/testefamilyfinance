@@ -1,26 +1,18 @@
 {
-  "version": "2.9.16",
+  "version": "2.9.17",
   "publishedAt": "11/10/2026",
-  "improvementCount": 3,
-  "title": "Ajustes e conciliação de cartões",
-  "summary": "Estornos, encargos e conciliação explícita, preservando o histórico financeiro.",
+  "improvementCount": 1,
+  "title": "Correção de faturas existentes",
+  "summary": "Edição do valor de faturas legadas sem pagamentos, com histórico da correção.",
   "highlights": [
     {
-      "title": "Ajustes e estornos rastreáveis",
-      "text": "Registre créditos, débitos, juros e devoluções conforme confirmado pelo emissor."
-    },
-    {
-      "title": "Histórico financeiro protegido",
-      "text": "Descrição e categoria podem ser corrigidas sem reescrever valores de faturas quitadas."
-    },
-    {
-      "title": "Conciliação confirmada",
-      "text": "Vincule compras identificadas ao saldo legado com confirmação e trilha de auditoria."
+      "title": "Editar valor da fatura",
+      "text": "Informe o total correto de uma fatura legada ainda sem pagamentos. A diferença fica registrada como correção."
     }
   ],
   "details": [
-    "Mantém o gráfico vertical e o acesso discreto ao histórico de faturas.",
-    "Pagamentos e devoluções permitem consultar o lançamento vinculado.",
-    "Liberações de limite dependem de confirmação; juros não são calculados automaticamente."
+    "O valor original e a conciliação permanecem preservados.",
+    "Faturas quitadas e com pagamentos continuam protegidas.",
+    "Mantém compras, estornos, gráfico e histórico discreto."
   ]
 }

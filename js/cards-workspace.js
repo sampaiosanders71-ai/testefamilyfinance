@@ -1,11 +1,11 @@
-import {initCardAdjustments} from './card-adjustments-workspace.js?v=2.9.16';
-import { buildCardInvoices,cardLimitSummary,cardToday,cardMonth,cardDate,invoiceStatusLabel } from './card-domain.js?v=2.9.16';
-import { payCardInvoice,reverseCardPayment,deleteCard } from './cards.js?v=2.9.16';
-import { formOperation,clearFormOperation } from './request-operation.js?v=2.9.16';
-import { calculateCashStats } from './finance.js?v=2.9.16';
-import { formatBRL,formatDate,monthLabel,escapeHTML,openDialog,closeDialog,setFormError,toast } from './ui.js?v=2.9.16';
-import { categoryIconSVG } from './categories.js?v=2.9.16';
-import { canonicalCategoryName } from './category-alias.js?v=2.9.16';
+import {initCardAdjustments} from './card-adjustments-workspace.js?v=2.9.17';
+import { buildCardInvoices,cardLimitSummary,cardToday,cardMonth,cardDate,invoiceStatusLabel } from './card-domain.js?v=2.9.17';
+import { payCardInvoice,reverseCardPayment,deleteCard } from './cards.js?v=2.9.17';
+import { formOperation,clearFormOperation } from './request-operation.js?v=2.9.17';
+import { calculateCashStats } from './finance.js?v=2.9.17';
+import { formatBRL,formatDate,monthLabel,escapeHTML,openDialog,closeDialog,setFormError,toast } from './ui.js?v=2.9.17';
+import { categoryIconSVG } from './categories.js?v=2.9.17';
+import { canonicalCategoryName } from './category-alias.js?v=2.9.17';
 const e=escapeHTML;
 const icon=(name)=>`<svg class="ui-icon" aria-hidden="true"><use href="#i-${name}"></use></svg>`;
 const shortMonth=key=>new Intl.DateTimeFormat('pt-BR',{month:'short',year:'numeric'}).format(cardDate(key)).replace('.','').replace(' de ','/');
@@ -154,6 +154,7 @@ export function initCardsWorkspace({getState,onRefresh,onOperation,onNewPurchase
    if(button.dataset.cardRelatedInvoice){closeDialog('card-purchase-dialog');return openInvoice(button.dataset.cardRelatedInvoice,button.dataset.cardMonth);}
    if(button.dataset.cardPurchase)return openPurchase(button.dataset.cardPurchase);
    if(button.hasAttribute('data-card-new-adjustment'))return adjustmentsUI.openAdjustment(selectedInvoice(activeInvoice.cardId,activeInvoice.key));
+   if(button.hasAttribute('data-card-edit-invoice'))return adjustmentsUI.openAdjustment(selectedInvoice(activeInvoice.cardId,activeInvoice.key),null,null,'invoice_total');
    if(button.hasAttribute('data-card-conciliate'))return adjustmentsUI.openReconciliation(selectedInvoice(activeInvoice.cardId,activeInvoice.key));
    if(button.id==='card-purchase-refund')return adjustmentsUI.openAdjustment(null,state().purchases.find(p=>p.id===activePurchase));
    if(button.hasAttribute('data-card-pay'))return openPayment();

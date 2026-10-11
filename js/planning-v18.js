@@ -1,7 +1,7 @@
-import { operationIds, insertOnce } from './request-operation.js?v=2.9.16';
-import { listAllRows } from './pagination.js?v=2.9.16';
-import { supabase } from './supabase.js?v=2.9.16';
-import { getCurrentUser } from './database.js?v=2.9.16';
+import { operationIds, insertOnce } from './request-operation.js?v=2.9.17';
+import { listAllRows } from './pagination.js?v=2.9.17';
+import { supabase } from './supabase.js?v=2.9.17';
+import { getCurrentUser } from './database.js?v=2.9.17';
 
 export function planningMonthKey(value=new Date()){
   const date=value instanceof Date?value:new Date(`${String(value).slice(0,7)}-01T12:00:00`);
