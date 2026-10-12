@@ -1,26 +1,22 @@
 {
-  "version": "2.9.19",
-  "publishedAt": "11/10/2026",
-  "improvementCount": 3,
-  "title": "Edição de faturas corrigida",
-  "summary": "Salve valor, data e competência, inclusive mantendo o mesmo valor.",
+  "version": "2.9.20",
+  "publishedAt": "12/10/2026",
+  "improvementCount": 2,
+  "title": "Consulta de faturas simplificada",
+  "summary": "Resumo e compras em destaque; pagamentos e ajustes acessíveis em Gerenciar fatura.",
   "highlights": [
     {
-      "title": "Mesmo valor permitido",
-      "text": "Confirme a fatura sem precisar inventar uma alteração no total."
+      "title": "Consulta mais limpa",
+      "text": "Compras e parcelas ficam visíveis junto ao resumo, sem blocos de pagamentos e ajustes na consulta."
     },
     {
-      "title": "Data e competência editáveis",
-      "text": "Corrija o registro e transfira uma fatura legada elegível para o mês correto."
-    },
-    {
-      "title": "Formulário sem travamento",
-      "text": "Campos voltam a ficar disponíveis após falhas. Confirmações repetidas não duplicam a fatura."
+      "title": "Gerenciamento sob demanda",
+      "text": "Acesse pagamentos, correções, encargos e conciliação pelo botão Gerenciar fatura."
     }
   ],
   "details": [
-    "Mantém as telas aprovadas e o acesso à edição no topo.",
-    "Registra confirmação e histórico mesmo quando o total permanece igual.",
-    "Preserva pagamentos e impede transferência sobre uma competência já ocupada."
+    "Mantém edição, confirmação com mesmo valor e registro de pagamento.",
+    "Remove o antigo expansor de detalhes e a orientação longa da consulta.",
+    "Preserva os registros e as regras financeiras existentes."
   ]
 }

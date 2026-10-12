@@ -1,11 +1,11 @@
-import {initCardAdjustments} from './card-adjustments-workspace.js?v=2.9.19';
-import { buildCardInvoices,cardLimitSummary,cardToday,cardMonth,cardDate,invoiceStatusLabel } from './card-domain.js?v=2.9.19';
-import { payCardInvoice,reverseCardPayment,deleteCard } from './cards.js?v=2.9.19';
-import { formOperation,clearFormOperation } from './request-operation.js?v=2.9.19';
-import { calculateCashStats } from './finance.js?v=2.9.19';
-import { formatBRL,formatDate,monthLabel,escapeHTML,openDialog,closeDialog,setFormError,toast } from './ui.js?v=2.9.19';
-import { categoryIconSVG } from './categories.js?v=2.9.19';
-import { canonicalCategoryName } from './category-alias.js?v=2.9.19';
+import {initCardAdjustments} from './card-adjustments-workspace.js?v=2.9.20';
+import { buildCardInvoices,cardLimitSummary,cardToday,cardMonth,cardDate,invoiceStatusLabel } from './card-domain.js?v=2.9.20';
+import { payCardInvoice,reverseCardPayment,deleteCard } from './cards.js?v=2.9.20';
+import { formOperation,clearFormOperation } from './request-operation.js?v=2.9.20';
+import { calculateCashStats } from './finance.js?v=2.9.20';
+import { formatBRL,formatDate,monthLabel,escapeHTML,openDialog,closeDialog,setFormError,toast } from './ui.js?v=2.9.20';
+import { categoryIconSVG } from './categories.js?v=2.9.20';
+import { canonicalCategoryName } from './category-alias.js?v=2.9.20';
 const e=escapeHTML;
 const icon=(name)=>`<svg class="ui-icon" aria-hidden="true"><use href="#i-${name}"></use></svg>`;
 const shortMonth=key=>new Intl.DateTimeFormat('pt-BR',{month:'short',year:'numeric'}).format(cardDate(key)).replace('.','').replace(' de ','/');
@@ -87,21 +87,35 @@ export function initCardsWorkspace({getState,onRefresh,onOperation,onNewPurchase
  function openCard(id){if(!findCard(id))return;if(selectedCardId!==id)chartPeriod='all';selectedCardId=id;render();document.getElementById('card-detail-name').focus();}
  function openInvoice(cardId,key=cardMonth()){
   if(!selectedInvoice(cardId,key))return;
-  activeInvoice={cardId,key};document.getElementById('card-invoice-expanded')?.removeAttribute('open');renderInvoice();openDialog('invoice-dialog');
+  closeDialog('invoice-manage-dialog');activeInvoice={cardId,key};renderInvoice();openDialog('invoice-dialog');
  }
  function openInvoiceById(id){const stored=state().invoiceStatuses.find(inv=>inv.id===id);if(stored){openCard(stored.card_id);openInvoice(stored.card_id,stored.invoice_month)}else if(findCard(id)){openCard(id);openInvoice(id)}}
  function renderInvoice(){
   if(!activeInvoice)return;
   const inv=selectedInvoice(activeInvoice.cardId,activeInvoice.key);if(!inv)return;
   document.getElementById('invoice-title').textContent=`${inv.card.name} · ${monthLabel(cardDate(inv.invoiceMonth))}`;
-  const payments=(state().cardPayments||[]).filter(p=>p.invoice_id===inv.id).sort((a,b)=>String(b.paid_on).localeCompare(String(a.paid_on))||String(b.id).localeCompare(String(a.id)));
-  const expanded=document.getElementById('card-invoice-expanded')?.open||false;
   const hasOpening=inv.rows.some(r=>r.ff2_card_purchases?.record_kind==='invoice_opening');
-  document.getElementById('invoice-content').innerHTML=`${document.getElementById('card-invoice-history-dialog').open?'<button type="button" class="card-history-link card-history-return" data-card-history-return>‹ Voltar ao histórico</button>':''}<div class="card-invoice-top-actions">${canEditInvoice(inv)?'<button type="button" class="secondary-btn card-edit-invoice-button" data-card-edit-invoice>'+icon('pencil')+' Editar fatura</button>':hasOpening?'<span class="card-history-caption">'+(inv.settledAt?'Valor protegido: esta fatura possui histórico quitado.':'Valor protegido: esta fatura possui pagamentos.')+'</span>':'<button type="button" class="secondary-btn" data-card-invoice-details>Editar compras</button>'}</div><div class="card-invoice-summary"><div><small>Valor da fatura</small><strong>${e(formatBRL(inv.total))}</strong>${statusBadge(inv)}</div><dl><div><dt>${icon('calendar')}Fechamento</dt><dd>${formatDate(inv.closingOn)}</dd></div><div><dt>${icon('calendar')}Vencimento</dt><dd>${formatDate(inv.dueOn)}</dd></div><div><dt>${icon('card')}Pago</dt><dd>${e(formatBRL(inv.paidAmount))}</dd></div><div><dt>${icon('clock')}Saldo devido</dt><dd>${e(formatBRL(inv.balanceDue))}</dd></div></dl></div><p class="card-history-caption">Base ${e(formatBRL(inv.baseAmount))} · Ajustes líquidos ${e(formatBRL(inv.netAdjustments))}</p>
+  document.getElementById('invoice-content').innerHTML=`${document.getElementById('card-invoice-history-dialog').open?'<button type="button" class="card-history-link card-history-return" data-card-history-return>‹ Voltar ao histórico</button>':''}<div class="card-invoice-top-actions">${canEditInvoice(inv)?'<button type="button" class="secondary-btn card-edit-invoice-button" data-card-edit-invoice>'+icon('pencil')+' Editar fatura</button>':hasOpening?'<span class="card-history-caption">'+(inv.settledAt?'Valor protegido: esta fatura possui histórico quitado.':'Valor protegido: esta fatura possui pagamentos.')+'</span>':'<button type="button" class="secondary-btn" data-card-invoice-details>Editar compras</button>'}</div><div class="card-invoice-summary"><div><small>Valor da fatura</small><strong>${e(formatBRL(inv.total))}</strong>${statusBadge(inv)}</div><dl><div><dt>${icon('calendar')}Fechamento</dt><dd>${formatDate(inv.closingOn)}</dd></div><div><dt>${icon('calendar')}Vencimento</dt><dd>${formatDate(inv.dueOn)}</dd></div><div><dt>${icon('card')}Pago</dt><dd>${e(formatBRL(inv.paidAmount))}</dd></div><div><dt>${icon('clock')}Saldo devido</dt><dd>${e(formatBRL(inv.balanceDue))}</dd></div></dl></div>
   ${inv.balanceDue>0?'<button type="button" class="primary-compact card-pay-button" data-card-pay>'+icon('card')+' Registrar pagamento</button>':''}
-  <details id="card-invoice-expanded" class="card-invoice-expanded" ${expanded?'open':''}><summary>Detalhes da fatura · compras, pagamentos e ajustes</summary>${!hasOpening?'<p class="card-history-caption">O total é calculado pelas compras. Selecione uma compra para editar descrição, categoria ou, quando permitido, valor e parcelas.</p>':''}<section class="card-invoice-purchases"><h4>Compras e parcelas</h4>${inv.rows.filter(row=>row.ff2_card_purchases?.record_kind!=='invoice_opening').map(purchaseRow).join('')||(!inv.reconciledAmount?empty('Nenhuma compra nesta fatura.'):'')}</section>
-  <section class="card-payments-section"><h4>Pagamentos</h4>${payments.length?payments.map(p=>`<div class="card-payment-row"><span><strong>${e(formatBRL(p.amount))}</strong><small>${formatDate(p.paid_on)}${p.reversed_at?' · Revertido':''}</small>${p.reversed_at?`<small>${e(p.reversal_reason||'')}</small>`:''}</span>${p.transaction_id?`<button type="button" class="card-history-link" data-card-linked-transaction="${e(p.transaction_id)}">Ver lançamento</button>`:''}${p.reversal_transaction_id?`<button type="button" class="card-history-link" data-card-linked-transaction="${e(p.reversal_transaction_id)}">Ver devolução</button>`:''}${!p.reversed_at?`<button type="button" class="text-btn" data-card-reverse="${e(p.id)}">Corrigir</button>`:''}</div>`).join(''):empty(inv.paidAmount>0?'Quitação anterior preservada na conciliação.':'Nenhum pagamento registrado.')}</section>${adjustmentsUI.invoiceExtras(inv)}</details>`;
+  <section class="card-invoice-purchases card-consult-purchases" tabindex="-1"><h4>Compras e parcelas</h4>${inv.rows.filter(row=>row.ff2_card_purchases?.record_kind!=='invoice_opening').map(purchaseRow).join('')||empty('Nenhuma compra detalhada nesta fatura.')}</section>
+  <div class="card-invoice-manage-access"><button type="button" class="card-history-link card-manage-link" data-card-manage aria-haspopup="dialog" aria-controls="invoice-manage-dialog">${icon('settings')}<span>Gerenciar fatura</span></button></div>`;
+  if(document.getElementById('invoice-manage-dialog').open)renderInvoiceManagement();
  }
+ function renderInvoiceManagement(){
+  const inv=activeInvoice&&selectedInvoice(activeInvoice.cardId,activeInvoice.key);if(!inv){closeDialog('invoice-manage-dialog');return;}
+  const panel=document.querySelector('#invoice-manage-dialog .modal-card'),scroll=panel.scrollTop;
+  document.getElementById('invoice-manage-title').textContent=`${inv.card.name} · ${monthLabel(cardDate(inv.invoiceMonth))}`;
+  const payments=(state().cardPayments||[]).filter(p=>p.invoice_id===inv.id).sort((a,b)=>String(b.paid_on).localeCompare(String(a.paid_on))||String(b.id).localeCompare(String(a.id)));
+  document.getElementById('invoice-management-content').innerHTML=`<p class="card-history-caption card-management-summary">Valor da fatura <strong>${e(formatBRL(inv.total))}</strong> · Saldo devido <strong>${e(formatBRL(inv.balanceDue))}</strong></p><p class="card-history-caption">Base ${e(formatBRL(inv.baseAmount))} · Ajustes líquidos ${e(formatBRL(inv.netAdjustments))}</p>
+  <section class="card-payments-section"><h4>Pagamentos</h4>${payments.length?payments.map(p=>`<div class="card-payment-row"><span><strong>${e(formatBRL(p.amount))}</strong><small>${formatDate(p.paid_on)}${p.reversed_at?' · Revertido':''}</small>${p.reversed_at?`<small>${e(p.reversal_reason||'')}</small>`:''}</span>${p.transaction_id?`<button type="button" class="card-history-link" data-card-linked-transaction="${e(p.transaction_id)}">Ver lançamento</button>`:''}${p.reversal_transaction_id?`<button type="button" class="card-history-link" data-card-linked-transaction="${e(p.reversal_transaction_id)}">Ver devolução</button>`:''}${!p.reversed_at?`<button type="button" class="text-btn" data-card-reverse="${e(p.id)}">Corrigir</button>`:''}</div>`).join(''):empty(inv.paidAmount>0?'Quitação anterior preservada na conciliação.':'Nenhum pagamento registrado.')}</section>${adjustmentsUI.invoiceExtras(inv)}`;
+  panel.scrollTop=scroll;
+ }
+ function openInvoiceManagement(){
+  if(!activeInvoice||!selectedInvoice(activeInvoice.cardId,activeInvoice.key))return;
+  renderInvoiceManagement();openDialog('invoice-manage-dialog');
+  document.querySelector('#invoice-manage-dialog .modal-card').scrollTop=0;
+ }
+
  function openPurchase(id){
   const purchase=state().purchases.find(p=>p.id===id);if(!purchase){toast('Aguarde a sincronização dos detalhes da compra.','error');return;}
   activePurchase=id;
@@ -167,9 +181,11 @@ export function initCardsWorkspace({getState,onRefresh,onOperation,onNewPurchase
    if(button.hasAttribute('data-card-settings'))return onEditCard(selectedCardId);
    if(button.dataset.cardHistoryFilter){historyFilter=button.dataset.cardHistoryFilter;document.getElementById('card-invoice-history-list').scrollTop=0;return renderInvoiceHistory();}
    if(button.hasAttribute('data-card-future-invoices'))return openInvoiceHistory('future');
-   if(button.hasAttribute('data-card-current-details')){openInvoice(selectedCardId);document.getElementById('card-invoice-expanded').open=true;return;}
+   if(button.hasAttribute('data-card-current-details'))return openInvoice(selectedCardId);
    if(button.hasAttribute('data-card-current-edit')){openInvoice(selectedCardId);return adjustmentsUI.openAdjustment(selectedInvoice(selectedCardId,cardMonth()),null,null,'invoice_total');}
-   if(button.hasAttribute('data-card-invoice-details')){document.getElementById('card-invoice-expanded').open=true;document.getElementById('card-invoice-expanded').scrollIntoView({block:'nearest'});return;}
+   if(button.hasAttribute('data-card-invoice-details')){const purchases=document.querySelector('#invoice-content .card-invoice-purchases');purchases.scrollIntoView({block:'nearest'});purchases.querySelector('button')?.focus({preventScroll:true});return;}
+   if(button.hasAttribute('data-card-manage'))return openInvoiceManagement();
+   if(button.hasAttribute('data-card-management-return'))return closeDialog('invoice-manage-dialog');
    if(button.hasAttribute('data-card-invoice-history')||button.hasAttribute('data-card-recent-history'))return openInvoiceHistory();
    if(button.hasAttribute('data-card-history-return'))return closeDialog('invoice-dialog');
    if(button.dataset.cardInvoice)return openInvoice(button.dataset.cardInvoice,button.dataset.cardMonth);
@@ -188,7 +204,10 @@ export function initCardsWorkspace({getState,onRefresh,onOperation,onNewPurchase
   }catch(error){console.error(error);toast(cardErrorMessage(error),'error');}
  });
  document.addEventListener('change',event=>{if(event.target.matches('[data-card-chart-period]')){chartPeriod=event.target.value;render();document.querySelector('[data-card-chart-period]')?.focus();}});
+ document.getElementById('invoice-manage-dialog').addEventListener('close',()=>{if(document.getElementById('invoice-dialog').open)document.querySelector('[data-card-manage]')?.focus({preventScroll:true});});
+ document.getElementById('invoice-manage-dialog').addEventListener('cancel',event=>{if(paying||adjustmentsUI.isBusy())event.preventDefault();});
  document.getElementById('invoice-dialog').addEventListener('close',()=>{
+  closeDialog('invoice-manage-dialog');
   if(document.getElementById('card-invoice-history-dialog').open&&activeInvoice?.cardId===historyCardId){
    document.querySelector(`#card-invoice-history-list [data-card-month="${activeInvoice.key}"]`)?.focus({preventScroll:true});
   }
@@ -201,7 +220,7 @@ export function initCardsWorkspace({getState,onRefresh,onOperation,onNewPurchase
  for(const id of ['card-payment-mode','card-payment-date','card-payment-amount'])document.getElementById(id).addEventListener('input',paymentFieldsChanged);
  document.getElementById('card-reversal-form').addEventListener('submit',submitReversal);
  for(const id of ['card-payment-dialog','card-reversal-dialog'])document.getElementById(id).addEventListener('cancel',event=>{if(paying)event.preventDefault()});
- return {render,openInvoice,openInvoiceById,reset(){adjustmentsUI.reset();selectedCardId=null;activeInvoice=null;activePurchase=null;historyCardId=null;for(const id of ['card-invoice-history-dialog','invoice-dialog','card-payment-dialog','card-purchase-dialog','card-reversal-dialog'])closeDialog(id);},isBusy:()=>paying||adjustmentsUI.isBusy()};
+ return {render,openInvoice,openInvoiceById,reset(){adjustmentsUI.reset();selectedCardId=null;activeInvoice=null;activePurchase=null;historyCardId=null;for(const id of ['invoice-manage-dialog','card-invoice-history-dialog','invoice-dialog','card-payment-dialog','card-purchase-dialog','card-reversal-dialog'])closeDialog(id);},isBusy:()=>paying||adjustmentsUI.isBusy()};
 }
 export function cardErrorMessage(error){
  const messages={SETTLED_INVOICE_IMMUTABLE:'Esta fatura possui histórico quitado e não pode ser reescrita. Registre um ajuste em outra competência.',PURCHASE_HAS_ADJUSTMENTS:'Esta compra possui ajustes ou conciliação. Corrija somente descrição e categoria.',INVOICE_ALREADY_PAID:'Esta fatura já está quitada. Atualize os dados.',INVOICE_HAS_PAYMENTS:'Corrija os pagamentos desta fatura antes de alterar a compra.',INVALID_PAYMENT_AMOUNT:'O pagamento deve ser maior que zero e até o saldo devido.',INVALID_PAYMENT_DATE:'Informe uma data de pagamento até hoje.',CARD_HAS_BALANCE:'Quite todas as faturas antes de arquivar o cartão.',CARD_PAYMENT_LINKED:'Corrija este pagamento nos detalhes da fatura.',RECONCILIATION_LOCKED:'Este registro é um saldo de conciliação e mantém o histórico anterior.',REQUEST_CONFLICT:'Esta operação mudou. Feche o formulário e tente novamente.',INVALID_INSTALLMENTS:'Revise a quantidade de parcelas e o valor da compra.'};
