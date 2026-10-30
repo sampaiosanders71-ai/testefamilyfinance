@@ -16,21 +16,23 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@700;800&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
-<link href="css/app.css?v=2.9.27" rel="stylesheet"><link href="css/nature.css?v=2.9.27" rel="stylesheet">
-<link href="css/motion-v15.css?v=2.9.27" rel="stylesheet">
-<link href="css/download-motion-v16.css?v=2.9.27" rel="stylesheet">
-<link href="css/family-monitor-v17.css?v=2.9.27" rel="stylesheet"/>
-<link href="css/planning-v18.css?v=2.9.27" rel="stylesheet"/>
-<link href="css/categories-budget.css?v=2.9.27" rel="stylesheet"/>
-<link href="css/context-help.css?v=2.9.27" rel="stylesheet"/>
-<link href="css/dashboard-v29.css?v=2.9.27" rel="stylesheet"/>
-<link rel="stylesheet" href="./css/financial-view-293.css?v=2.9.27"/><link rel="stylesheet" href="./css/reserve-299.css?v=2.9.27"/><link rel="stylesheet" href="./css/ui-295.css?v=2.9.27"/>
-<link href="css/report-export.css?v=2.9.27" rel="stylesheet"/>
-<link href="css/cards-workspace.css?v=2.9.27" rel="stylesheet"/>
-<link rel="stylesheet" href="css/analytics-redesign.css?v=2.9.27"/>
-<link rel="stylesheet" href="css/family-pagination.css?v=2.9.27"/>
-<link rel="stylesheet" href="css/brand.css?v=2.9.27"/>
-<link rel="stylesheet" href="css/total-details.css?v=2.9.27"/>
+<link href="css/app.css?v=2.9.28" rel="stylesheet"><link href="css/nature.css?v=2.9.28" rel="stylesheet">
+<link href="css/motion-v15.css?v=2.9.28" rel="stylesheet">
+<link href="css/download-motion-v16.css?v=2.9.28" rel="stylesheet">
+<link href="css/family-monitor-v17.css?v=2.9.28" rel="stylesheet"/>
+<link href="css/planning-v18.css?v=2.9.28" rel="stylesheet"/>
+<link href="css/categories-budget.css?v=2.9.28" rel="stylesheet"/>
+<link href="css/context-help.css?v=2.9.28" rel="stylesheet"/>
+<link href="css/dashboard-v29.css?v=2.9.28" rel="stylesheet"/>
+<link rel="stylesheet" href="./css/financial-view-293.css?v=2.9.28"/><link rel="stylesheet" href="./css/reserve-299.css?v=2.9.28"/><link rel="stylesheet" href="./css/ui-295.css?v=2.9.28"/>
+<link href="css/report-export.css?v=2.9.28" rel="stylesheet"/>
+<link href="css/cards-workspace.css?v=2.9.28" rel="stylesheet"/>
+<link rel="stylesheet" href="css/analytics-redesign.css?v=2.9.28"/>
+<link rel="stylesheet" href="css/family-pagination.css?v=2.9.28"/>
+<link rel="stylesheet" href="css/brand.css?v=2.9.28"/>
+<link rel="stylesheet" href="css/total-details.css?v=2.9.28"/>
+<link rel="stylesheet" href="css/invoice-workspace.css?v=2.9.28"/>
+<link rel="stylesheet" href="css/cards-refresh.css?v=2.9.28"/>
 </head>
 <body>
 <svg aria-hidden="true" class="icon-sprite" focusable="false">
@@ -172,7 +174,7 @@
 </section>
 <section class="module-view hidden cards-workspace" id="module-cards">
 <div id="cards-overview"><div class="module-header card-overview-header"><span class="card-heading-icon" aria-hidden="true"><svg class="ui-icon"><use href="#i-card"/></svg></span><div><h2>Cartões</h2><p>Gerencie seus cartões registrados no Family Finance.</p></div><button class="primary-compact" id="new-card-btn" type="button">＋ Novo cartão</button></div><div class="cards-grid" id="cards-list"></div></div>
-<div id="card-detail" class="hidden"><div class="card-detail-header"><button class="card-back" data-card-back type="button" aria-label="Voltar para cartões">‹</button><span class="card-heading-icon" aria-hidden="true"><svg class="ui-icon"><use href="#i-card"/></svg></span><h2 id="card-detail-name" tabindex="-1"></h2><button class="card-settings" data-card-settings type="button" aria-label="Editar cartão"><svg class="ui-icon" aria-hidden="true"><use href="#i-settings"/></svg></button><button class="primary-compact" data-card-new-purchase type="button">＋ Nova compra</button></div><div id="card-detail-content"></div></div>
+<div id="card-detail" class="hidden"><div class="card-detail-header"><button class="card-back" data-card-back type="button" aria-label="Voltar para cartões">‹</button><span class="card-heading-icon" aria-hidden="true"><svg class="ui-icon"><use href="#i-card"/></svg></span><h2 id="card-detail-name" tabindex="-1"></h2><button class="card-settings" data-card-settings type="button" aria-label="Editar cartão" title="Editar cartão"><svg class="ui-icon" aria-hidden="true"><use href="#i-pencil"/></svg></button><button class="primary-compact" data-card-new-purchase type="button">＋ Nova compra</button></div><div id="card-detail-content"></div></div>
 </section>
 <section class="module-view hidden" id="module-goals">
 <div class="module-header"><div><span class="eyebrow">OBJETIVOS</span><h2>Metas</h2></div><button class="primary-compact" id="new-goal-btn">＋ Nova meta</button></div>
@@ -227,7 +229,7 @@
 <section class="planning-unified-view hidden" id="planning-view-limits" role="tabpanel" aria-labelledby="planning-tab-limits" data-planning-view="limits">
 <div id="budget-limits-main">
 <div class="planning-section-head">
-<div><div class="help-heading-row"><h3>Limites do mês</h3><button aria-label="Ajuda sobre Limites do mês" class="context-help-btn section-help-btn" data-help-key="planning-limits" title="Ajuda sobre Limites do mês" type="button">?</button></div></div>
+<div><div class="help-heading-row"><h3>Limites do mês <span class="limit-heading-count"><span id="budget-category-count">0</span> <span id="budget-category-count-label">categorias</span></span><span id="budget-active-category-count" class="planning-sr-only"></span></h3><button aria-label="Ajuda sobre Limites do mês" class="context-help-btn section-help-btn" data-help-key="planning-limits" title="Ajuda sobre Limites do mês" type="button">?</button></div></div>
 <div class="budget-manager-actions"><button class="secondary-btn budget-suggestion-open" id="budget-suggestion-toggle" type="button"><svg aria-hidden="true" class="ui-icon"><use href="#i-analytics"></use></svg><span>Sugestão de limites</span></button><button class="primary-compact" id="budget-new-btn" type="button">＋ Novo limite</button></div>
 </div>
 <span class="hidden" id="budget-month-label"></span>
@@ -236,13 +238,13 @@
 <article class="panel-card budget-overview-card"><span>Limites definidos</span><strong id="budget-total-limit">R$ 0,00</strong><small>Soma dos limites do mês</small></article>
 <article class="panel-card budget-overview-card"><span>Realizado</span><strong class="negative" id="budget-total-spent">R$ 0,00</strong><small id="budget-spent-percent">0% dos limites</small></article>
 <article class="panel-card budget-overview-card"><span>Disponível</span><strong class="positive" id="budget-total-available">R$ 0,00</strong><small id="budget-available-percent">0% restante</small></article>
-<article class="panel-card budget-overview-card"><span>Categorias com limite</span><strong id="budget-category-count">0</strong><small id="budget-active-category-count">de 0 categorias ativas</small></article>
+
 </section>
 <section class="panel-card budget-category-panel planning-limit-panel">
 <div class="section-title budget-category-panel-head"><div><div class="help-heading-row"><h3>Limites por categoria <span id="budget-category-title-count"></span></h3><button aria-label="Ajuda sobre Limites por categoria" class="context-help-btn section-help-btn" data-help-key="planning-layered-limits" title="Ajuda sobre Limites por categoria" type="button">?</button></div></div></div>
 <div class="budget-category-list" id="budget-items"></div>
 </section>
-<aside class="panel-card budget-category-helper planning-category-helper"><div class="budget-helper-icon">⚙</div><div><div class="help-heading-row"><h3>Categorias centralizadas</h3><button aria-label="Ajuda sobre Categorias centralizadas" class="context-help-btn section-help-btn" data-help-key="centralized-categories" title="Ajuda sobre Categorias centralizadas" type="button">?</button></div></div><button class="text-btn budget-manage-categories" data-open-categories="" type="button">Gerenciar categorias →</button></aside>
+<aside class="invoice-category-shortcut"><button class="text-btn budget-manage-categories" data-open-categories="" type="button">Gerenciar categorias →</button></aside>
 </div>
 <section aria-live="polite" class="budget-suggestion-page hidden" id="budget-suggestion-page">
 <button class="settings-back-btn budget-suggestion-back" id="budget-suggestion-back" type="button">← Voltar para Limites</button>
@@ -366,7 +368,7 @@
 </button>
 <button class="settings-hub-link" data-settings-page="backup" type="button">
 <span class="settings-hub-icon"><svg aria-hidden="true" class="ui-icon"><use href="#i-file-chart"></use></svg></span>
-<span class="settings-hub-copy"><strong>Backup</strong><small>Backup, recuperação e migração de dados</small></span>
+<span class="settings-hub-copy"><strong>Importar dados antigos</strong><small>Trazer registros da versão anterior</small></span>
 <span aria-hidden="true" class="settings-hub-chevron">›</span>
 </button>
 <button class="settings-hub-link danger" data-settings-page="logout" type="button">
@@ -400,7 +402,7 @@
 <p class="muted settings-help" id="pwa-install-status">Verificando compatibilidade de instalação…</p>
 <div class="settings-inline-note"><strong>Dica:</strong><span>Depois de instalado, o Family Finance pode ser aberto direto pela tela inicial ou pelo menu de aplicativos.</span></div>
 <div class="settings-update-grid">
-<div class="settings-update-version"><span>Versão instalada</span><strong id="install-current-version">2.9.11</strong></div>
+<div class="settings-update-version"><span>Versão instalada</span><strong id="install-current-version">2.9.28</strong></div>
 <div class="settings-update-version"><span>Versão disponível</span><strong id="install-available-version">Verificando…</strong></div>
 </div>
 <div class="settings-update-state"><span class="status-pill" id="install-update-status">Verificando atualizações…</span></div>
@@ -408,7 +410,7 @@
 </article>
 </div>
 <div class="hidden settings-page" id="settings-backup-panel">
-<div class="module-header settings-page-header"><div><button class="settings-back-link" data-settings-back="" type="button">← Configurações</button><h2>Backup</h2></div></div>
+<div class="module-header settings-page-header"><div><button class="settings-back-link" data-settings-back="" type="button">← Configurações</button><h2>Importar dados antigos</h2></div></div>
 <article class="panel-card settings-page-card migration-card">
 <div class="section-title"><div><h3>Dados da versão anterior</h3></div><span class="status-pill" id="migration-status-pill">Não migrado</span></div>
 <div class="settings-inline-note"><strong>Como funciona hoje:</strong><span>Os dados atuais já ficam vinculados à sua conta. Esta área serve para trazer dados da versão anterior com segurança.</span></div>
@@ -501,7 +503,7 @@
 <div class="modal-head"><div><span class="eyebrow">CARTÃO</span><h3 id="card-dialog-title">Novo cartão</h3></div><button class="modal-close" data-close-dialog="card-dialog" type="button">×</button></div>
 <input id="card-id" type="hidden"/>
 <div class="field"><label for="card-name">Nome</label><input id="card-name" maxlength="80" placeholder="Ex: Inter" required="" type="text"/></div>
-<div class="field"><label for="card-limit">Limite</label><input id="card-limit" min="0" required="" step="0.01" type="number"/></div>
+<div class="field"><label for="card-limit">Limite total</label><input id="card-limit" min="0" required="" step="0.01" type="number"/></div>
 <div class="form-grid two"><div class="field"><label for="card-closing">Fechamento</label><input id="card-closing" max="31" min="1" required="" type="number"/></div><div class="field"><label for="card-due">Vencimento</label><input id="card-due" max="31" min="1" required="" type="number"/></div></div>
 <div class="field"><label for="card-interest">Juros rotativo (% a.m.)</label><input id="card-interest" max="50" min="0" step="0.01" type="number" value="0"/></div>
 <p class="form-error hidden" id="card-form-error"></p>
@@ -533,8 +535,8 @@
 <dialog class="modal card-invoice-dialog" id="card-conciliation-dialog" aria-labelledby="card-conciliation-title"><form class="modal-card" id="card-conciliation-form"><div class="modal-head"><h3 id="card-conciliation-title">Conciliar saldo legado</h3><button type="button" class="modal-close" data-close-dialog="card-conciliation-dialog" aria-label="Fechar conciliação">×</button></div><p class="card-history-caption" id="card-conciliation-origin"></p><div class="field"><label for="card-conciliation-installment">Compra / parcela identificada</label><select id="card-conciliation-installment" required></select></div><div class="field"><label for="card-conciliation-amount">Valor desta parcela já incluído no saldo antigo</label><input id="card-conciliation-amount" type="number" min="0" step="0.01" required/><small class="card-history-caption">Use zero para corrigir uma vinculação anterior. As operações permanecem registradas.</small></div><div class="field"><label for="card-conciliation-reason">Origem / motivo da conciliação</label><input id="card-conciliation-reason" minlength="3" maxlength="500" required/></div><label class="check-row"><input id="card-conciliation-confirmed" type="checkbox" required/><span>Confirmei que este valor compõe a fatura legada. Ele será compensado para evitar dupla contagem.</span></label><p class="form-error hidden" id="card-conciliation-error" role="alert"></p><div class="modal-actions"><button type="button" class="secondary-btn" data-close-dialog="card-conciliation-dialog">Cancelar</button><button type="submit" class="primary-compact" id="card-conciliation-save">Confirmar conciliação</button></div></form></dialog>
 <dialog class="modal card-invoice-dialog" id="card-linked-transaction-dialog" aria-labelledby="card-linked-transaction-title"><div class="modal-card"><div class="modal-head"><h3 id="card-linked-transaction-title">Lançamento vinculado</h3><button type="button" class="modal-close" data-close-dialog="card-linked-transaction-dialog" aria-label="Fechar lançamento">×</button></div><div id="card-linked-transaction-content"></div></div></dialog>
 <dialog class="modal card-invoice-dialog card-invoice-history-dialog" id="card-invoice-history-dialog" aria-labelledby="card-invoice-history-title"><div class="modal-card"><div class="modal-head"><div><span class="eyebrow" id="card-invoice-history-card"></span><h3 id="card-invoice-history-title">Histórico de faturas</h3><p class="card-history-caption">Faturas anteriores, atuais e futuras deste cartão.</p></div><button class="modal-close" data-close-dialog="card-invoice-history-dialog" type="button" aria-label="Fechar histórico de faturas">×</button></div><div class="card-history-filters" role="group" aria-label="Filtrar faturas"><button type="button" data-card-history-filter="all" aria-pressed="true">Todas</button><button type="button" data-card-history-filter="past" aria-pressed="false">Anteriores</button><button type="button" data-card-history-filter="current" aria-pressed="false">Atual</button><button type="button" data-card-history-filter="future" aria-pressed="false">Futuras</button></div><p class="card-history-caption" id="card-history-result" role="status" aria-live="polite"></p><div id="card-invoice-history-list" class="card-invoice-history-list"></div></div></dialog>
-<dialog class="modal card-invoice-dialog" id="invoice-dialog" aria-labelledby="invoice-title"><div class="modal-card"><div class="modal-head"><div><span class="eyebrow">FATURA</span><h3 id="invoice-title">Fatura</h3></div><button class="modal-close" data-close-dialog="invoice-dialog" type="button">×</button></div><div id="invoice-content"></div></div></dialog>
-<dialog class="modal card-invoice-dialog" id="invoice-manage-dialog" aria-labelledby="invoice-manage-title"><div class="modal-card"><div class="modal-head"><div><span class="eyebrow">GERENCIAR FATURA</span><h3 id="invoice-manage-title" tabindex="-1">Gerenciar fatura</h3></div><button class="modal-close" data-close-dialog="invoice-manage-dialog" type="button" aria-label="Fechar gerenciamento da fatura">×</button></div><div id="invoice-management-content"></div><div class="modal-actions"><button type="button" class="secondary-btn" data-card-management-return>Voltar à fatura</button></div></div></dialog>
+<dialog class="modal card-invoice-dialog" id="invoice-dialog" aria-labelledby="invoice-title" aria-describedby="invoice-card-name"><div class="modal-card"><div class="modal-head"><div><span class="eyebrow" id="invoice-card-name">FATURA</span><h3 id="invoice-title">Fatura</h3></div><button class="modal-close" data-close-dialog="invoice-dialog" type="button" aria-label="Fechar fatura">×</button></div><div id="invoice-content"></div></div></dialog>
+
 
 <dialog class="modal card-invoice-dialog" id="card-purchase-dialog" aria-labelledby="card-purchase-title"><div class="modal-card"><div class="modal-head"><h3 id="card-purchase-title">Detalhes da compra</h3><button class="modal-close" data-close-dialog="card-purchase-dialog" type="button" aria-label="Fechar detalhes da compra">×</button></div><div id="card-purchase-detail"></div><div class="modal-actions"><button class="text-btn danger" id="card-purchase-delete" type="button">Excluir compra</button><button class="secondary-btn" id="card-purchase-refund" type="button">Ajuste / estorno</button><button class="secondary-btn" id="card-purchase-edit" type="button">Editar compra</button></div></div></dialog>
 <dialog class="modal card-invoice-dialog" id="card-payment-dialog" aria-labelledby="card-payment-title"><form class="modal-card small" id="card-payment-form"><div class="modal-head"><h3 id="card-payment-title">Pagar fatura</h3><button class="modal-close" data-close-dialog="card-payment-dialog" type="button" aria-label="Fechar pagamento">×</button></div><div class="card-payment-balance"><span>Saldo devido</span><strong id="card-payment-due"></strong></div><div class="field"><label for="card-payment-mode">Pagamento</label><select id="card-payment-mode"><option value="full">Integral</option><option value="partial">Parcial</option></select></div><div class="field"><label for="card-payment-date">Data do pagamento</label><input id="card-payment-date" required type="date"/></div><div class="field hidden" id="card-payment-amount-wrap"><label for="card-payment-amount">Valor do pagamento</label><input id="card-payment-amount" min="0.01" step="0.01" type="number"/></div><div class="card-payment-warning hidden" id="card-payment-warning" role="alert"></div><p class="form-error hidden" id="card-payment-error" role="alert"></p><div class="modal-actions"><button class="secondary-btn" data-close-dialog="card-payment-dialog" type="button">Cancelar</button><button class="primary-compact" id="card-payment-save" type="submit">Confirmar pagamento</button></div></form></dialog>
@@ -719,7 +721,7 @@
 </dialog>
 <dialog class="modal" id="reserve-dialog"><div class="modal-card reserve-dialog-card"><div class="modal-head"><div><span class="eyebrow">RESERVAS E INVESTIMENTOS</span><h3>Saldo guardado</h3></div><button class="modal-close" type="button" data-close-dialog="reserve-dialog" aria-label="Fechar">×</button></div><div id="reserve-detail-body"></div></div></dialog>
 <dialog class="modal" id="dre-dialog"><div class="modal-card"><div class="modal-head"><div><span class="eyebrow">DRE</span><h3 id="dre-title">Demonstrativo do mês</h3></div><button class="modal-close" data-close-dialog="dre-dialog" type="button">×</button></div><div id="dre-content"></div></div></dialog>
-<script defer src="js/context-help.js?v=2.9.27"></script><script src="js/app.js?v=2.9.27" type="module"></script>
+<script defer src="js/context-help.js?v=2.9.28"></script><script src="js/app.js?v=2.9.28" type="module"></script>
 <dialog class="modal" id="goal-history-dialog"><div class="modal-card"><div class="modal-head"><div><span class="eyebrow">META</span><h3 id="goal-history-title">Histórico</h3></div><button type="button" class="modal-close" data-close-dialog="goal-history-dialog" aria-label="Fechar">×</button></div><div id="goal-history-content"></div></div></dialog>
 <dialog id="total-detail-dialog" aria-labelledby="total-detail-title"><header class="total-detail-head"><div class="total-detail-heading"><div><h2 id="total-detail-title" tabindex="-1">Composição do total</h2><p id="total-detail-subtitle"></p></div><button id="total-detail-close" type="button" aria-label="Fechar consulta">×</button></div><strong id="total-detail-value"></strong><p id="total-detail-note"></p></header><div id="total-detail-rows"></div><footer class="total-detail-footer"><nav id="total-detail-nav" aria-label="Páginas da composição" hidden><button id="total-detail-previous" type="button">‹ Anterior</button><span id="total-detail-page" tabindex="-1" aria-live="polite" aria-atomic="true"></span><button id="total-detail-next" type="button">Próxima ›</button></nav><div class="total-detail-sum"><span>Total da composição</span><strong id="total-detail-sum"></strong></div><button id="total-detail-dismiss" type="button">Fechar</button></footer></dialog>
 </body>

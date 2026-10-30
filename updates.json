@@ -1,26 +1,30 @@
 {
-  "version": "2.9.27",
-  "publishedAt": "29/10/2026",
-  "improvementCount": 3,
-  "title": "Confira de onde vêm os totais",
-  "summary": "Consulte a composição de saldos, previsões, despesas, faturas e metas.",
+  "version": "2.9.28",
+  "publishedAt": "30/10/2026",
+  "improvementCount": 4,
+  "title": "Cartões com uma consulta mais simples",
+  "summary": "Fatura em destaque, limite compacto e uma janela única para consultar e gerenciar seus registros.",
   "highlights": [
     {
-      "title": "Conferência dos valores",
-      "text": "Totais de Início, Planejamento, Análises, Cartões e Metas mostram os registros ou a memória de cálculo que os compõem."
+      "title": "Fatura em primeiro plano",
+      "text": "O valor da fatura e o botão Ver fatura abrem a mesma janela, com compras, pagamentos e ajustes em abas."
     },
     {
-      "title": "Quatro itens por página",
-      "text": "As novas consultas usam Anterior e Próxima acima de quatro itens, mantendo o total completo em todas as páginas."
+      "title": "Quatro registros por página",
+      "text": "A consulta preserva o total completo e usa paginação acima de quatro registros."
     },
     {
-      "title": "Família com acesso conferido",
-      "text": "A composição compartilhada respeita as permissões atuais e mantém os dados somente para consulta."
+      "title": "Cartão mais organizado",
+      "text": "Limite compacto, gráfico por mês e um único acesso discreto ao histórico. O lápis permite editar os dados do cartão."
+    },
+    {
+      "title": "Menos repetições",
+      "text": "Limites e Configurações ficam mais diretos. A importação de dados antigos recebe um nome que descreve sua função."
     }
   ],
   "details": [
-    "Ao selecionar um registro próprio, a consulta fecha e localiza a origem, sem abrir uma nova janela por cima.",
-    "Mantém a logo, os temas e os tamanhos existentes da interface.",
-    "Não altera movimentações financeiras nem exige migração no banco."
+    "Mantém os registros de faturas informadas, pagamentos, estornos e conciliações, com as regras de proteção existentes.",
+    "Preserva a conferência de totais dos outros módulos, a paleta e os temas claro e escuro.",
+    "Não exige migração nem alteração no banco de dados."
   ]
 }
