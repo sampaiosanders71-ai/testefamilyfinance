@@ -1,8 +1,8 @@
-import {pagedList,recentRecords} from './list-pagination.js?v=2.9.24';
-import {recordCardAdjustment,reconcileCardLegacy,editCardInvoice} from './cards.js?v=2.9.24';
-import {cardAdjustmentLabel,parseCardInvoiceAmount,cardToday,cardMonth,cardDate,buildCardInvoices} from './card-domain.js?v=2.9.24';
-import {formOperation,clearFormOperation} from './request-operation.js?v=2.9.24';
-import {formatBRL,formatDate,monthLabel,escapeHTML,openDialog,closeDialog,setFormError,toast} from './ui.js?v=2.9.24';
+import {pagedList,recentRecords} from './list-pagination.js?v=2.9.27';
+import {recordCardAdjustment,reconcileCardLegacy,editCardInvoice} from './cards.js?v=2.9.27';
+import {cardAdjustmentLabel,parseCardInvoiceAmount,cardToday,cardMonth,cardDate,buildCardInvoices} from './card-domain.js?v=2.9.27';
+import {formOperation,clearFormOperation} from './request-operation.js?v=2.9.27';
+import {formatBRL,formatDate,monthLabel,escapeHTML,openDialog,closeDialog,setFormError,toast} from './ui.js?v=2.9.27';
 const e=escapeHTML,$=id=>document.getElementById(id);
 export function initCardAdjustments({getState,onRefresh,onOperation,onInvoiceEdited}){
  let context=null,busy=false,negativeApproved=false,reconciliationInvoice=null,invoiceEditor=null;
