@@ -1,9 +1,9 @@
-import { listAllRows } from './pagination.js?v=2.9.28';
-import { canonicalCategoryAmounts, canonicalCategoryLimits } from './category-alias.js?v=2.9.28';
-import { supabase } from './supabase.js?v=2.9.28';
-import { getCurrentUser } from './database.js?v=2.9.28';
-import { monthISO } from './finance.js?v=2.9.28';
-import { buildFinancialMonthLedger } from './financial-ledger.js?v=2.9.28';
+import { listAllRows } from './pagination.js?v=2.9.29';
+import { canonicalCategoryAmounts, canonicalCategoryLimits } from './category-alias.js?v=2.9.29';
+import { supabase } from './supabase.js?v=2.9.29';
+import { getCurrentUser } from './database.js?v=2.9.29';
+import { monthISO } from './finance.js?v=2.9.29';
+import { buildFinancialMonthLedger } from './financial-ledger.js?v=2.9.29';
 
 export const BUDGET_CATEGORIES = ['Alimentação','Transporte','Moradia','Saúde','Lazer','Educação','Assinaturas','Dívidas','Investimento','Outros'];
 

@@ -1,12 +1,12 @@
-import { initTotalDetails } from './total-details.js?v=2.9.28';
-import { composition,compositionRow,periodEntries,monthModel,transactionEntry,planningEntries,goalComposition,cashBalanceComposition,invoiceEntry } from './total-composition.js?v=2.9.28';
-import { calculateCashStats,localISO,monthISO } from './finance.js?v=2.9.28';
-import { cardInvoiceSummaries } from './cards.js?v=2.9.28';
-import { buildDashboardCashView } from './dashboard-cash.js?v=2.9.28';
-import { buildReservePosition } from './reserve-position.js?v=2.9.28';
-import { buildFinancialMonthLedger,classifyTransaction } from './financial-ledger.js?v=2.9.28';
-import { summarizePlanning } from './planning-v18.js?v=2.9.28';
-import { monthLabel } from './ui.js?v=2.9.28';
+import { initTotalDetails } from './total-details.js?v=2.9.29';
+import { composition,compositionRow,periodEntries,monthModel,transactionEntry,planningEntries,goalComposition,cashBalanceComposition,invoiceEntry } from './total-composition.js?v=2.9.29';
+import { calculateCashStats,localISO,monthISO } from './finance.js?v=2.9.29';
+import { cardInvoiceSummaries } from './cards.js?v=2.9.29';
+import { buildDashboardCashView } from './dashboard-cash.js?v=2.9.29';
+import { buildReservePosition } from './reserve-position.js?v=2.9.29';
+import { buildFinancialMonthLedger,classifyTransaction } from './financial-ledger.js?v=2.9.29';
+import { summarizePlanning } from './planning-v18.js?v=2.9.29';
+import { monthLabel } from './ui.js?v=2.9.29';
 
 export function initTotalWorkspace({getContext,onNavigate,verifyFamily}){
  const details=initTotalDetails({onNavigate});

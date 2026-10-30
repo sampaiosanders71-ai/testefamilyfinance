@@ -54,3 +54,5 @@
  .invoice-history-return{display:none}
  .invoice-financial-note,.invoice-credit-note{grid-column:1;grid-row:2;align-self:end;margin:0;font-size:.62rem}
 }
+
+.invoice-purchase-editable{outline:1px solid color-mix(in srgb,var(--orange) 30%,transparent);outline-offset:-1px}.invoice-list .invoice-purchase-editable .card-row-arrow{display:flex;color:var(--orange2)}.invoice-purchase-editable .card-row-arrow svg{width:15px;height:15px}

@@ -1,30 +1,22 @@
 {
-  "version": "2.9.28",
+  "version": "2.9.29",
   "publishedAt": "30/10/2026",
-  "improvementCount": 4,
-  "title": "Cartões com uma consulta mais simples",
-  "summary": "Fatura em destaque, limite compacto e uma janela única para consultar e gerenciar seus registros.",
+  "improvementCount": 2,
+  "title": "Correção da edição de compras",
+  "summary": "A edição abre os dados da compra sem depender do carregamento de outras áreas.",
   "highlights": [
     {
-      "title": "Fatura em primeiro plano",
-      "text": "O valor da fatura e o botão Ver fatura abrem a mesma janela, com compras, pagamentos e ajustes em abas."
+      "title": "Edição disponível",
+      "text": "Busca a compra selecionada diretamente e mantém o carregamento de compras independente de Família e migração."
     },
     {
-      "title": "Quatro registros por página",
-      "text": "A consulta preserva o total completo e usa paginação acima de quatro registros."
-    },
-    {
-      "title": "Cartão mais organizado",
-      "text": "Limite compacto, gráfico por mês e um único acesso discreto ao histórico. O lápis permite editar os dados do cartão."
-    },
-    {
-      "title": "Menos repetições",
-      "text": "Limites e Configurações ficam mais diretos. A importação de dados antigos recebe um nome que descreve sua função."
+      "title": "Escolha mais clara",
+      "text": "Uma compra abre diretamente; com vários itens, o lápis identifica a compra a editar. Falhas de acesso ou conexão são informadas."
     }
   ],
   "details": [
-    "Mantém os registros de faturas informadas, pagamentos, estornos e conciliações, com as regras de proteção existentes.",
-    "Preserva a conferência de totais dos outros módulos, a paleta e os temas claro e escuro.",
-    "Não exige migração nem alteração no banco de dados."
+    "Mantém as regras de proteção de faturas pagas, ajustes e conciliações.",
+    "Preserva a tela do cartão e a janela de fatura aprovadas.",
+    "Não exige migração de banco."
   ]
 }

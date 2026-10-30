@@ -1,38 +1,38 @@
-import { initTotalWorkspace } from './total-workspace.js?v=2.9.28';
-import { pagedList, recentRecords, clearListPages, revealListRecord } from './list-pagination.js?v=2.9.28';
-import { initCardsWorkspace,cardErrorMessage } from './cards-workspace.js?v=2.9.28';
-import { adjustmentsAsInstallments,buildCardInvoices,cardToday,cardMonth,invoiceStatusLabel } from './card-domain.js?v=2.9.28';
-import { formOperation, clearFormOperation } from './request-operation.js?v=2.9.28';
-import { canonicalCategoryName, canonicalCategoryAmounts, canonicalCategoryLimits } from './category-alias.js?v=2.9.28';
-import { spendingInPastMonths } from './budget-suggestion.js?v=2.9.28';
-import { signIn,signUp,signOut,getSession,onAuthChange } from './auth.js?v=2.9.28';
-import { ensureProfile,foundationHealthCheck } from './database.js?v=2.9.28';
-import { listFamilyData,sendFamilyInvite,respondFamilyInvite,cancelFamilyInvite,updateFamilyPermissions,removeFamilyLink,loadFamilyOverview,subscribeFamilyOverview,getFamilyAccess,familyAccessSignature } from './family.js?v=2.9.28';
-import { getLegacyMigrationStatus,claimLegacyAccount } from './migration.js?v=2.9.28';
-import { updateProfileSettings } from './settings.js?v=2.9.28';
-import { initPWA, activateAppUpdate } from './pwa.js?v=2.9.28';
-import { localISO,listTransactions,createTransaction,updateTransaction,deleteTransaction,applyBalanceAdjustment,calculateCashStats,filterTransactions } from './finance.js?v=2.9.28';
-import { listCards,createCard,updateCard,deleteCard,createPurchase,updatePurchase,deletePurchase,listPurchases,listInstallments,listInvoiceStatuses,setInvoicePaid,listCardPayments,listCardAdjustments,listCardReconciliations,cardInvoiceSummaries } from './cards.js?v=2.9.28';
-import { listGoals,createGoal,updateGoal,deleteGoal } from './goals.js?v=2.9.28';
-import { getBudget,listBudgetsByMonths,saveBudget,budgetSummary } from './budget.js?v=2.9.28';
-import { listCategories,activeCategories,createCategory,updateCategory,setCategoryActive,deleteCustomCategory,categoryIconSVG,normalizeCategoryIconKey,CATEGORY_ICON_OPTIONS,CATEGORY_COLOR_OPTIONS } from './categories.js?v=2.9.28';
-import { planningMonthKey,planningMonthDate,shiftPlanningMonth,planningMonthInput,planningLocalISO,listPlanningMonth,listPlanningByMonths,createPlanningItem,updatePlanningItem,cancelPlanningItem,completePlanningItem,movePlanningItem,movePendingPlanningMonth,planningNextMonthDate,planningStatusLabel,planningNature,summarizePlanning,summarizePlanningPeriod } from './planning-v18.js?v=2.9.28';
-import { listNotifications,markNotificationRead,markAllNotificationsRead,markNotificationsForTarget,syncFinancialNotifications,subscribeNotifications } from './notifications.js?v=2.9.28';
-import { setAuthMode,showAuth,showApp,showModule,setAuthError,setAuthBusy,setAppBusy,toast,setLoading,formatBRL,formatDate,monthLabel,escapeHTML,openDialog,closeDialog,setFormError,emptyState,applyTheme,captureDashboardMoneyState,prepareDashboardMoneyChange,playDashboardMoneyChange,settleDashboardMoneyChange } from './ui.js?v=2.9.28';
-import { getMonthlyDRE,getReportMonthOptions,downloadFinancialReportPDF } from './reports.js?v=2.9.28';
-import { beginDownloadMotion } from './download-motion-v16.js?v=2.9.28';
-import { familyMonthKey,familyDateFromMonth,shiftFamilyMonth,buildFamilyMonitorModel,filterFamilyTransactions,captureFamilyMetricState,animateFamilyMetricChange } from './family-monitor-v17.js?v=2.9.28';
-import { buildFinancialMonthLedger,isCardInvoicePayment,isCardInvoiceReversal,isCardPurchaseRefund,classifyTransaction } from './financial-ledger.js?v=2.9.28';
-import { needsLegacyReview, legacyReview, ownTransferReview } from './financial-integrity.js?v=2.9.28';
-import { downloadFinancialRowsCSV } from './report-export.js?v=2.9.28';
-import { suggestNature,natureLabel } from './transaction-nature.js?v=2.9.28';
-import { goalProgress, financialViewSummary } from './goal-integration.js?v=2.9.28';
-import { buildReservePosition } from './reserve-position.js?v=2.9.28';
-import { saveReserveReconciliation } from './reserve-reconciliation.js?v=2.9.28';
-import { analysisMonthKey,analysisMonthDate,shiftAnalysisMonth,yearMonthKeys,equivalentComparisonSpec,availableAnalysisYears,buildAnalysisPeriod,comparePeriodTotals,compareCategories,compareCards,aggregateBudgetComparison,strongestCategoryChanges,buildMonthlyInsights,buildYearInsights,groupCategoryRowsWithRemainder } from './analytics.js?v=2.9.28';
-import { buildDashboardOverview } from './dashboard-overview.js?v=2.9.28';
-import { buildDashboardCashView, paidInvoiceMonthsForPurchase } from './dashboard-cash.js?v=2.9.28';
-import { initUpdateCenter, promptAppUpdateIfNeeded } from './update-center.js?v=2.9.28';
+import { initTotalWorkspace } from './total-workspace.js?v=2.9.29';
+import { pagedList, recentRecords, clearListPages, revealListRecord } from './list-pagination.js?v=2.9.29';
+import { initCardsWorkspace,cardErrorMessage,showCardError } from './cards-workspace.js?v=2.9.29';
+import { adjustmentsAsInstallments,buildCardInvoices,cardToday,cardMonth,invoiceStatusLabel } from './card-domain.js?v=2.9.29';
+import { formOperation, clearFormOperation } from './request-operation.js?v=2.9.29';
+import { canonicalCategoryName, canonicalCategoryAmounts, canonicalCategoryLimits } from './category-alias.js?v=2.9.29';
+import { spendingInPastMonths } from './budget-suggestion.js?v=2.9.29';
+import { signIn,signUp,signOut,getSession,onAuthChange } from './auth.js?v=2.9.29';
+import { ensureProfile,foundationHealthCheck } from './database.js?v=2.9.29';
+import { listFamilyData,sendFamilyInvite,respondFamilyInvite,cancelFamilyInvite,updateFamilyPermissions,removeFamilyLink,loadFamilyOverview,subscribeFamilyOverview,getFamilyAccess,familyAccessSignature } from './family.js?v=2.9.29';
+import { getLegacyMigrationStatus,claimLegacyAccount } from './migration.js?v=2.9.29';
+import { updateProfileSettings } from './settings.js?v=2.9.29';
+import { initPWA, activateAppUpdate } from './pwa.js?v=2.9.29';
+import { localISO,listTransactions,createTransaction,updateTransaction,deleteTransaction,applyBalanceAdjustment,calculateCashStats,filterTransactions } from './finance.js?v=2.9.29';
+import { listCards,createCard,updateCard,deleteCard,createPurchase,updatePurchase,deletePurchase,getPurchase,listPurchases,listInstallments,listInvoiceStatuses,setInvoicePaid,listCardPayments,listCardAdjustments,listCardReconciliations,cardInvoiceSummaries } from './cards.js?v=2.9.29';
+import { listGoals,createGoal,updateGoal,deleteGoal } from './goals.js?v=2.9.29';
+import { getBudget,listBudgetsByMonths,saveBudget,budgetSummary } from './budget.js?v=2.9.29';
+import { listCategories,activeCategories,createCategory,updateCategory,setCategoryActive,deleteCustomCategory,categoryIconSVG,normalizeCategoryIconKey,CATEGORY_ICON_OPTIONS,CATEGORY_COLOR_OPTIONS } from './categories.js?v=2.9.29';
+import { planningMonthKey,planningMonthDate,shiftPlanningMonth,planningMonthInput,planningLocalISO,listPlanningMonth,listPlanningByMonths,createPlanningItem,updatePlanningItem,cancelPlanningItem,completePlanningItem,movePlanningItem,movePendingPlanningMonth,planningNextMonthDate,planningStatusLabel,planningNature,summarizePlanning,summarizePlanningPeriod } from './planning-v18.js?v=2.9.29';
+import { listNotifications,markNotificationRead,markAllNotificationsRead,markNotificationsForTarget,syncFinancialNotifications,subscribeNotifications } from './notifications.js?v=2.9.29';
+import { setAuthMode,showAuth,showApp,showModule,setAuthError,setAuthBusy,setAppBusy,toast,setLoading,formatBRL,formatDate,monthLabel,escapeHTML,openDialog,closeDialog,setFormError,emptyState,applyTheme,captureDashboardMoneyState,prepareDashboardMoneyChange,playDashboardMoneyChange,settleDashboardMoneyChange } from './ui.js?v=2.9.29';
+import { getMonthlyDRE,getReportMonthOptions,downloadFinancialReportPDF } from './reports.js?v=2.9.29';
+import { beginDownloadMotion } from './download-motion-v16.js?v=2.9.29';
+import { familyMonthKey,familyDateFromMonth,shiftFamilyMonth,buildFamilyMonitorModel,filterFamilyTransactions,captureFamilyMetricState,animateFamilyMetricChange } from './family-monitor-v17.js?v=2.9.29';
+import { buildFinancialMonthLedger,isCardInvoicePayment,isCardInvoiceReversal,isCardPurchaseRefund,classifyTransaction } from './financial-ledger.js?v=2.9.29';
+import { needsLegacyReview, legacyReview, ownTransferReview } from './financial-integrity.js?v=2.9.29';
+import { downloadFinancialRowsCSV } from './report-export.js?v=2.9.29';
+import { suggestNature,natureLabel } from './transaction-nature.js?v=2.9.29';
+import { goalProgress, financialViewSummary } from './goal-integration.js?v=2.9.29';
+import { buildReservePosition } from './reserve-position.js?v=2.9.29';
+import { saveReserveReconciliation } from './reserve-reconciliation.js?v=2.9.29';
+import { analysisMonthKey,analysisMonthDate,shiftAnalysisMonth,yearMonthKeys,equivalentComparisonSpec,availableAnalysisYears,buildAnalysisPeriod,comparePeriodTotals,compareCategories,compareCards,aggregateBudgetComparison,strongestCategoryChanges,buildMonthlyInsights,buildYearInsights,groupCategoryRowsWithRemainder } from './analytics.js?v=2.9.29';
+import { buildDashboardOverview } from './dashboard-overview.js?v=2.9.29';
+import { buildDashboardCashView, paidInvoiceMonthsForPurchase } from './dashboard-cash.js?v=2.9.29';
+import { initUpdateCenter, promptAppUpdateIfNeeded } from './update-center.js?v=2.9.29';
 
 let authMode='login', authBusy=false, appActionBusy=false, reportDownloadBusy=false, enterAppPromise=null, refreshBusy=false, bootstrapGeneration=0, notificationChannel=null, familyMonitorChannel=null;
 let currentUser=null, currentProfile=null;
@@ -108,14 +108,17 @@ async function executeLogout({closeMobile=false}={}){
 function renderBootstrapCore(){renderHome();renderTransactionPeriodOptions();renderTransactions();renderCards();renderGoals();renderBudget();renderPlanningHome()}
 
 async function loadDeferredStartupData(generation){
-  try{
-    const [purchases,family,migration]=await Promise.all([listPurchases(),listFamilyData(),getLegacyMigrationStatus()]);
-    if(generation!==bootstrapGeneration||!currentUser)return;
-    state.purchases=purchases;state.family=family;state.migration=migration;
-    renderCards();renderFamily();renderSettings();
-  }catch(error){
-    if(generation===bootstrapGeneration){console.warn('Dados secundários não carregados no primeiro momento:',error);toast('Algumas informações secundárias ainda não foram sincronizadas.','error')}
-  }
+  const current=()=>generation===bootstrapGeneration&&!!currentUser;
+  const tasks=[
+    ['compras',listPurchases,rows=>{state.purchases=rows;renderCards()}],
+    ['família',listFamilyData,data=>{state.family=data;renderFamily()}],
+    ['migração',getLegacyMigrationStatus,data=>{state.migration=data;renderSettings()}]
+  ];
+  const results=await Promise.allSettled(tasks.map(async([label,load,apply])=>{
+    try{const data=await load();if(current())apply(data)}
+    catch(error){if(current())console.warn(`Carregamento de ${label}:`,error);throw error;}
+  }));
+  if(current()&&results.some(result=>result.status==='rejected'))toast('Algumas informações ainda não foram sincronizadas. Você pode tentar novamente.','error');
 }
 
 async function loadNotificationStartupData(generation){
@@ -1358,16 +1361,31 @@ function openNewPurchase(cardId){
   document.getElementById('purchase-date').value=cardToday();document.getElementById('purchase-dialog-title').textContent='Nova compra';
   updatePurchaseSummary();setFormError('purchase-form-error','');openDialog('purchase-dialog');
 }
-function openEditPurchase(id){
-  const p=state.purchases.find(x=>x.id===id);if(!p)return;
-  if(p.record_kind==='invoice_opening')return toast('Este registro preserva o saldo de conciliação.','error');
-  document.getElementById('purchase-form').reset();fillCategorySelect('purchase-category',p.category||'Outros','expense');
-  document.getElementById('purchase-id').value=p.id;document.getElementById('purchase-card-id').value=p.card_id;
-  document.getElementById('purchase-description').value=p.description;document.getElementById('purchase-total').value=Number(p.total_amount);
-  document.getElementById('purchase-mode').value=Number(p.installment_count)>1?'installments':'single';
-  document.getElementById('purchase-installments').value=Math.max(2,Number(p.installment_count));
-  document.getElementById('purchase-date').value=p.purchase_date;document.getElementById('purchase-category').value=p.category||'Outros';
-  document.getElementById('purchase-dialog-title').textContent='Editar compra';updatePurchaseSummary();setPurchaseFinancialLock(purchaseTouchesPaidInvoice(id));setFormError('purchase-form-error','');openDialog('purchase-dialog');
+async function resolvePurchase(id){
+  document.querySelectorAll('.card-operation-error').forEach(node=>node.remove());
+  const owner=currentUser?.id;
+  if(!owner)throw new Error('AUTH_REQUIRED');
+  const purchase=await getPurchase(id);
+  if(currentUser?.id!==owner)throw new Error('SESSION_CHANGED');
+  if(purchase.user_id!==owner)throw new Error('PURCHASE_NOT_FOUND');
+  const index=state.purchases.findIndex(row=>row.id===purchase.id);
+  if(index<0)state.purchases.push(purchase);else state.purchases[index]=purchase;
+  return purchase;
+}
+async function openEditPurchase(id){
+  if(appActionBusy||!currentUser)return;
+  try{
+    const p=await runAppOperation('Carregando compra…','Buscando os dados atuais para edição.',()=>resolvePurchase(id));
+    if(!p)return;
+    if(p.record_kind==='invoice_opening')return toast('Este registro preserva o saldo de conciliação.','error');
+    document.getElementById('purchase-form').reset();fillCategorySelect('purchase-category',p.category||'Outros','expense');
+    document.getElementById('purchase-id').value=p.id;document.getElementById('purchase-card-id').value=p.card_id;
+    document.getElementById('purchase-description').value=p.description;document.getElementById('purchase-total').value=Number(p.total_amount);
+    document.getElementById('purchase-mode').value=Number(p.installment_count)>1?'installments':'single';
+    document.getElementById('purchase-installments').value=Math.max(2,Number(p.installment_count));
+    document.getElementById('purchase-date').value=p.purchase_date;document.getElementById('purchase-category').value=p.category||'Outros';
+    document.getElementById('purchase-dialog-title').textContent='Editar compra';updatePurchaseSummary();setPurchaseFinancialLock(purchaseTouchesPaidInvoice(id));setFormError('purchase-form-error','');openDialog('purchase-dialog');
+  }catch(error){console.error(error);showCardError(error);}
 }
 
 function openNewGoal(){document.getElementById('goal-form').reset();document.getElementById('goal-id').value='';document.getElementById('goal-saved').value='0';document.getElementById('goal-dialog-title').textContent='Nova meta';setFormError('goal-form-error','');openDialog('goal-dialog')}
@@ -1558,7 +1576,7 @@ async function handleDynamicClick(event){const target=event.target.closest('butt
   if(target.dataset.deleteGoal){if(!confirm('Excluir esta meta?'))return;return await runAppOperation('Excluindo meta…','Removendo a meta selecionada.',async()=>{await deleteGoal(target.dataset.deleteGoal);toast('Meta excluída.','success');syncOperationMessage();await refreshAll()})}
   if(target.dataset.goModule){if(target.dataset.goModule==='settings')closeSettingsPages();if(target.dataset.goModule==='planning'){showModule('planning');if(target.dataset.planningTarget)setPlanningSection(target.dataset.planningTarget);void loadPlanningMonth(planningDate,{quiet:true});return}return showModule(target.dataset.goModule)}
 }catch(e){console.error(e);toast(e.message||'Não foi possível concluir a ação.','error')}}
-function bindUI(){cardsWorkspace=initCardsWorkspace({totalDetails,getState:()=>state,onRefresh:()=>refreshAll({throwOnError:true}),onOperation:runAppOperation,onNewPurchase:openNewPurchase,onEditPurchase:openEditPurchase,onEditCard:openEditCard,onCancelPurchase:async id=>runAppOperation('Excluindo compra…','Preservando o histórico da exclusão.',async()=>{await deletePurchase(id);await refreshAll();toast('Compra excluída.','success')},{animateDashboard:true})});
+function bindUI(){cardsWorkspace=initCardsWorkspace({totalDetails,getState:()=>state,onRefresh:()=>refreshAll({throwOnError:true}),onOperation:runAppOperation,onNewPurchase:openNewPurchase,onLoadPurchase:resolvePurchase,onEditPurchase:openEditPurchase,onEditCard:openEditCard,onCancelPurchase:async id=>runAppOperation('Excluindo compra…','Preservando o histórico da exclusão.',async()=>{await deletePurchase(id);await refreshAll();toast('Compra excluída.','success')},{animateDashboard:true})});
   document.getElementById('purchase-mode').addEventListener('change',updatePurchaseSummary);document.getElementById('purchase-installments').addEventListener('input',updatePurchaseSummary);
 document.querySelectorAll('form').forEach(form=>form.addEventListener('reset',()=>clearFormOperation(form)));setAuthMode(authMode);fillCategorySelect('transaction-category','',categoryKindFromDirection(document.getElementById('transaction-direction')?.value||1));fillCategorySelect('purchase-category','','expense');fillCategorySelect('planning-category','',categoryKindFromDirection(document.getElementById('planning-direction')?.value||1));document.getElementById('transaction-filter-month').value='';document.getElementById('app-loading-dialog')?.addEventListener('cancel',event=>event.preventDefault());
   document.getElementById('auth-toggle').addEventListener('click',()=>{if(authBusy)return;authMode=authMode==='login'?'register':'login';setAuthError('');setAuthMode(authMode)});
