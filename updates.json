@@ -1,18 +1,21 @@
 {
-  "version": "2.9.33",
+  "version": "2.9.34",
   "publishedAt": "31/10/2026",
-  "improvementCount": 1,
-  "title": "Início sem repetição de faturas",
-  "summary": "O indicador Fatura do mês concentra a consulta às faturas no Início.",
+  "improvementCount": 2,
+  "title": "Consultas mais simples no Início",
+  "summary": "Saldo atual fica apenas como valor. A composição de Investido / reservado abre pelo próprio valor.",
   "highlights": [
     {
-      "title": "Mais espaço para Metas e Limites",
-      "text": "O bloco Próximas faturas foi retirado. Toque em Fatura do mês para consultar os cartões e abrir cada fatura."
+      "title": "Saldo atual sem consulta",
+      "text": "O valor deixa de abrir o histórico. O lápis de ajuste, o resultado de caixa e o saldo previsto continuam disponíveis."
+    },
+    {
+      "title": "Reservas no mesmo padrão dos indicadores",
+      "text": "Toque no valor de Investido / reservado para consultar sua composição. O card fica sem legendas extras, botão ou seta."
     }
   ],
   "details": [
-    "Preserva a composição por cartão, a paginação e os detalhes das faturas.",
-    "Ajusta a disposição de Metas e Limites em telas intermediárias.",
-    "Mantém valores, cálculos e recursos do módulo Cartões."
+    "Preserva os saldos, os cálculos e a paginação das composições.",
+    "Informações sobre valores pendentes continuam dentro da consulta de reservas."
   ]
 }

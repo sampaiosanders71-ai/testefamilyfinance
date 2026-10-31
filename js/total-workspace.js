@@ -1,16 +1,16 @@
-import {goalAppearance} from './goal-appearance.js?v=2.9.33';
-import {goalIconSVG} from './goal-icons.js?v=2.9.33';
-import {categoryIconSVG,CATEGORY_COLOR_OPTIONS} from './categories.js?v=2.9.33';
-import {canonicalCategoryName} from './category-alias.js?v=2.9.33';
-import { initTotalDetails } from './total-details.js?v=2.9.33';
-import { composition,compositionRow,periodEntries,monthModel,transactionEntry,planningEntries,goalComposition,cashBalanceComposition,invoiceEntry } from './total-composition.js?v=2.9.33';
-import { calculateCashStats,localISO,monthISO } from './finance.js?v=2.9.33';
-import { cardInvoiceSummaries } from './cards.js?v=2.9.33';
-import { buildDashboardCashView } from './dashboard-cash.js?v=2.9.33';
-import { buildReservePosition } from './reserve-position.js?v=2.9.33';
-import { buildFinancialMonthLedger,classifyTransaction } from './financial-ledger.js?v=2.9.33';
-import { summarizePlanning } from './planning-v18.js?v=2.9.33';
-import { monthLabel } from './ui.js?v=2.9.33';
+import {goalAppearance} from './goal-appearance.js?v=2.9.34';
+import {goalIconSVG} from './goal-icons.js?v=2.9.34';
+import {categoryIconSVG,CATEGORY_COLOR_OPTIONS} from './categories.js?v=2.9.34';
+import {canonicalCategoryName} from './category-alias.js?v=2.9.34';
+import { initTotalDetails } from './total-details.js?v=2.9.34';
+import { composition,compositionRow,periodEntries,monthModel,transactionEntry,planningEntries,goalComposition,invoiceEntry } from './total-composition.js?v=2.9.34';
+import { calculateCashStats,localISO,monthISO } from './finance.js?v=2.9.34';
+import { cardInvoiceSummaries } from './cards.js?v=2.9.34';
+import { buildDashboardCashView } from './dashboard-cash.js?v=2.9.34';
+import { buildReservePosition } from './reserve-position.js?v=2.9.34';
+import { buildFinancialMonthLedger,classifyTransaction } from './financial-ledger.js?v=2.9.34';
+import { summarizePlanning } from './planning-v18.js?v=2.9.34';
+import { monthLabel } from './ui.js?v=2.9.34';
 
 export function initTotalWorkspace({getContext,onNavigate,verifyFamily}){
  const details=initTotalDetails({onNavigate,getAppearance:visualAppearance});
@@ -52,7 +52,6 @@ export function initTotalWorkspace({getContext,onNavigate,verifyFamily}){
  }
  function home(field){
   const {state:s,dashboardDate:d}=getContext(),cash=calculateCashStats(s.transactions,d),inv=cardInvoiceSummaries(s.cards,s.installments,s.invoiceStatuses,d),view=buildDashboardCashView({cash,transactions:s.transactions,invoiceSummaries:inv,refDate:d}),base=period(s,d),month=monthISO(d),today=localISO();
-  if(field==='balance')return cashBalanceComposition(s.transactions,cash.balance);
   if(field==='income')return composition('Receitas realizadas',cash.income,periodEntries({...base,field:'income'}),{subtitle:monthLabel(d)});
   if(field==='expense'){
    const rows=periodEntries({...base,field:'cashExpense'});
@@ -63,7 +62,7 @@ export function initTotalWorkspace({getContext,onNavigate,verifyFamily}){
   if(field==='cards')return composition('Faturas do mês',inv.reduce((a,i)=>a+i.total,0),inv.map(i=>invoiceEntry(i)),{subtitle:monthLabel(d),note:'Totais das faturas registradas no mês, incluindo bases e ajustes confirmados.'});
   if(field==='projected'){
    const future=s.transactions.filter(t=>String(t.occurred_on).startsWith(month.slice(0,7))&&t.occurred_on>today&&/^\d{4}-\d{2}-\d{2}$/.test(t.occurred_on));
-   return composition('Saldo previsto',view.projected,[compositionRow('balance','Saldo disponível hoje',cash.balance,'Todos os períodos até hoje',{kind:'composition',key:'home:balance'}),...future.map(t=>transactionEntry(t)),...inv.filter(i=>i.status!=='paid').map(i=>invoiceEntry(i,-i.balanceDue,'Fatura aberta · '+i.card.name))],{subtitle:monthLabel(d),signed:true,note:'Saldo atual + lançamentos futuros registrados no mês − saldos de faturas abertas do mês. Os planos pendentes não são somados.'});
+   return composition('Saldo previsto',view.projected,[compositionRow('balance','Saldo disponível hoje',cash.balance,'Todos os períodos até hoje'),...future.map(t=>transactionEntry(t)),...inv.filter(i=>i.status!=='paid').map(i=>invoiceEntry(i,-i.balanceDue,'Fatura aberta · '+i.card.name))],{subtitle:monthLabel(d),signed:true,note:'Saldo atual + lançamentos futuros registrados no mês − saldos de faturas abertas do mês. Os planos pendentes não são somados.'});
   }
   if(field==='reserve'){
    const position=buildReservePosition({goals:s.goals,transactions:s.transactions,today});
@@ -73,8 +72,8 @@ export function initTotalWorkspace({getContext,onNavigate,verifyFamily}){
   }
  }
  function wireHome(){
-  for(const [id,field]of [['stat-balance','balance'],['stat-income','income'],['stat-expense','expense'],['stat-month-result','result'],['stat-projected','projected'],['stat-card-expense','cards']])attach('#'+id,'home:'+field,()=>home(field),({balance:'Saldo atual',income:'Receitas realizadas',expense:'Despesas pagas',result:'Resultado de caixa',projected:'Saldo previsto',cards:'Faturas do mês'})[field]);
-  details.register('home:reserve',()=>home('reserve'));
+  for(const [id,field]of [['stat-income','income'],['stat-expense','expense'],['stat-month-result','result'],['stat-projected','projected'],['stat-card-expense','cards']])attach('#'+id,'home:'+field,()=>home(field),({income:'Receitas realizadas',expense:'Despesas pagas',result:'Resultado de caixa',projected:'Saldo previsto',cards:'Faturas do mês'})[field]);
+  attach('#stat-allocation','home:reserve',()=>home('reserve'),'Investido / reservado');
   attach('#home-planning-pending','home:plans',()=>{const {state:s,dashboardDate:d}=getContext();return plan(s.planning,'pendingExpense','A pagar',d)});
  }
  function wirePlanning(){
@@ -84,7 +83,7 @@ export function initTotalWorkspace({getContext,onNavigate,verifyFamily}){
   }
   for(const [id,field,title]of [['planning-allocation-realized','allocation','Reservado neste mês'],['planning-allocation-future','futureAllocation','Reservas futuras registradas']])attach('#'+id,'planning:'+field,()=>{const {state:s,planningDate:d}=getContext(),ledger=buildFinancialMonthLedger({transactions:s.transactions,monthKey:d});return composition(title,ledger[field],periodEntries({...period(s,d),field}),{subtitle:monthLabel(d),note:'Somente aportes registrados em lançamentos. Previsões pendentes do Planejamento ficam fora deste total.'})});
   const el=document.getElementById('planning-cash-projected'),d=getContext().planningDate;
-  if(monthISO(d)===monthISO(new Date()))attach(el,'planning:cash',()=>{const {state:s,planningDate:d}=getContext(),cash=calculateCashStats(s.transactions,d);return composition('Projeção do saldo livre',cash.projectedCashBalance,[compositionRow('balance','Saldo atual',cash.balance,'Até hoje',{kind:'composition',key:'home:balance'}),...s.transactions.filter(t=>String(t.occurred_on).startsWith(monthISO(d).slice(0,7))&&t.occurred_on>localISO()&&/^\d{4}-\d{2}-\d{2}$/.test(t.occurred_on)).map(t=>transactionEntry(t))],{subtitle:monthLabel(d),signed:true,note:'Saldo atual + lançamentos futuros deste mês. Inclui reservas futuras registradas; não soma planos pendentes nem desconta novamente faturas.'})});
+  if(monthISO(d)===monthISO(new Date()))attach(el,'planning:cash',()=>{const {state:s,planningDate:d}=getContext(),cash=calculateCashStats(s.transactions,d);return composition('Projeção do saldo livre',cash.projectedCashBalance,[compositionRow('balance','Saldo atual',cash.balance,'Até hoje'),...s.transactions.filter(t=>String(t.occurred_on).startsWith(monthISO(d).slice(0,7))&&t.occurred_on>localISO()&&/^\d{4}-\d{2}-\d{2}$/.test(t.occurred_on)).map(t=>transactionEntry(t))],{subtitle:monthLabel(d),signed:true,note:'Saldo atual + lançamentos futuros deste mês. Inclui reservas futuras registradas; não soma planos pendentes nem desconta novamente faturas.'})});
   else if(el){delete el.dataset.totalDetail;el.classList.remove('total-detail-trigger');el.removeAttribute('role');el.removeAttribute('tabindex');el.removeAttribute('aria-haspopup');el.removeAttribute('aria-controls');el.removeAttribute('aria-label');}
  }
  function wireGoals(){
