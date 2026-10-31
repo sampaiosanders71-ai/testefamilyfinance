@@ -1,17 +1,18 @@
 {
-  "version": "2.9.32",
+  "version": "2.9.33",
   "publishedAt": "31/10/2026",
   "improvementCount": 1,
-  "title": "Início mais simples",
-  "summary": "Removemos o DRE como funcionalidade separada.",
+  "title": "Início sem repetição de faturas",
+  "summary": "O indicador Fatura do mês concentra a consulta às faturas no Início.",
   "highlights": [
     {
-      "title": "Menos consultas repetidas",
-      "text": "O botão e a janela do DRE foram retirados. Análises e Relatórios continuam com seus próprios recursos."
+      "title": "Mais espaço para Metas e Limites",
+      "text": "O bloco Próximas faturas foi retirado. Toque em Fatura do mês para consultar os cartões e abrir cada fatura."
     }
   ],
   "details": [
-    "Reorganiza os três atalhos restantes no Início.",
-    "Preserva os dados financeiros, os cálculos e a exportação dos relatórios."
+    "Preserva a composição por cartão, a paginação e os detalhes das faturas.",
+    "Ajusta a disposição de Metas e Limites em telas intermediárias.",
+    "Mantém valores, cálculos e recursos do módulo Cartões."
   ]
 }
