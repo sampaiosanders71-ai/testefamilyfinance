@@ -1,22 +1,22 @@
 {
-  "version": "2.9.29",
+  "version": "2.9.30",
   "publishedAt": "30/10/2026",
   "improvementCount": 2,
-  "title": "Correção da edição de compras",
-  "summary": "A edição abre os dados da compra sem depender do carregamento de outras áreas.",
+  "title": "Cabeçalhos mais diretos",
+  "summary": "Cada página mantém seu nome no topo, com menos repetições no conteúdo.",
   "highlights": [
     {
-      "title": "Edição disponível",
-      "text": "Busca a compra selecionada diretamente e mantém o carregamento de compras independente de Família e migração."
+      "title": "Identificação sem repetição",
+      "text": "Configurações e suas páginas usam o cabeçalho superior como identificação principal. Os títulos internos continuam disponíveis para leitores de tela."
     },
     {
-      "title": "Escolha mais clara",
-      "text": "Uma compra abre diretamente; com vários itens, o lápis identifica a compra a editar. Falhas de acesso ou conexão são informadas."
+      "title": "Mais espaço para o conteúdo",
+      "text": "Barra de ações e navegação de retorno ficam compactas. Títulos de seções, ajuda e controles são preservados."
     }
   ],
   "details": [
-    "Mantém as regras de proteção de faturas pagas, ajustes e conciliações.",
-    "Preserva a tela do cartão e a janela de fatura aprovadas.",
-    "Não exige migração de banco."
+    "Retira rótulos genéricos e a repetição do mês ao lado do seletor em Início.",
+    "Mantém a paleta, os tamanhos aprovados e as correções da edição de compras.",
+    "Não altera cálculos, registros ou regras de acesso."
   ]
 }

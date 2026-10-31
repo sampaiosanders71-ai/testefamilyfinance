@@ -1,7 +1,7 @@
-import { listAllRows } from './pagination.js?v=2.9.29';
-import { ADDITIONAL_CATEGORY_ICONS } from './category-extra-icons.js?v=2.9.29';
-import { supabase } from './supabase.js?v=2.9.29';
-import { getCurrentUser } from './database.js?v=2.9.29';
+import { listAllRows } from './pagination.js?v=2.9.30';
+import { ADDITIONAL_CATEGORY_ICONS } from './category-extra-icons.js?v=2.9.30';
+import { supabase } from './supabase.js?v=2.9.30';
+import { getCurrentUser } from './database.js?v=2.9.30';
 
 export const CATEGORY_DEFAULTS = [
   { kind:'expense', name:'Alimentação', origin:'default', default_key:'expense_food', icon_key:'food', color_key:'orange', sort_order:10 },
