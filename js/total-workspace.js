@@ -1,16 +1,16 @@
-import {goalAppearance} from './goal-appearance.js?v=2.9.31';
-import {goalIconSVG} from './goal-icons.js?v=2.9.31';
-import {categoryIconSVG,CATEGORY_COLOR_OPTIONS} from './categories.js?v=2.9.31';
-import {canonicalCategoryName} from './category-alias.js?v=2.9.31';
-import { initTotalDetails } from './total-details.js?v=2.9.31';
-import { composition,compositionRow,periodEntries,monthModel,transactionEntry,planningEntries,goalComposition,cashBalanceComposition,invoiceEntry } from './total-composition.js?v=2.9.31';
-import { calculateCashStats,localISO,monthISO } from './finance.js?v=2.9.31';
-import { cardInvoiceSummaries } from './cards.js?v=2.9.31';
-import { buildDashboardCashView } from './dashboard-cash.js?v=2.9.31';
-import { buildReservePosition } from './reserve-position.js?v=2.9.31';
-import { buildFinancialMonthLedger,classifyTransaction } from './financial-ledger.js?v=2.9.31';
-import { summarizePlanning } from './planning-v18.js?v=2.9.31';
-import { monthLabel } from './ui.js?v=2.9.31';
+import {goalAppearance} from './goal-appearance.js?v=2.9.32';
+import {goalIconSVG} from './goal-icons.js?v=2.9.32';
+import {categoryIconSVG,CATEGORY_COLOR_OPTIONS} from './categories.js?v=2.9.32';
+import {canonicalCategoryName} from './category-alias.js?v=2.9.32';
+import { initTotalDetails } from './total-details.js?v=2.9.32';
+import { composition,compositionRow,periodEntries,monthModel,transactionEntry,planningEntries,goalComposition,cashBalanceComposition,invoiceEntry } from './total-composition.js?v=2.9.32';
+import { calculateCashStats,localISO,monthISO } from './finance.js?v=2.9.32';
+import { cardInvoiceSummaries } from './cards.js?v=2.9.32';
+import { buildDashboardCashView } from './dashboard-cash.js?v=2.9.32';
+import { buildReservePosition } from './reserve-position.js?v=2.9.32';
+import { buildFinancialMonthLedger,classifyTransaction } from './financial-ledger.js?v=2.9.32';
+import { summarizePlanning } from './planning-v18.js?v=2.9.32';
+import { monthLabel } from './ui.js?v=2.9.32';
 
 export function initTotalWorkspace({getContext,onNavigate,verifyFamily}){
  const details=initTotalDetails({onNavigate,getAppearance:visualAppearance});

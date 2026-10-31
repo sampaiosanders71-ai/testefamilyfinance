@@ -1,4 +1,4 @@
-import { supabase } from './supabase.js?v=2.9.31';
+import { supabase } from './supabase.js?v=2.9.32';
 
 let currentUserCache = null;
 

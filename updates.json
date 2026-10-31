@@ -1,26 +1,17 @@
 {
-  "version": "2.9.31",
-  "publishedAt": "30/10/2026",
-  "improvementCount": 3,
-  "title": "Metas com identidade, consultas mais leves",
-  "summary": "Ícones personalizáveis nas metas, cores automáticas e cards mais compactos.",
+  "version": "2.9.32",
+  "publishedAt": "31/10/2026",
+  "improvementCount": 1,
+  "title": "Início mais simples",
+  "summary": "Removemos o DRE como funcionalidade separada.",
   "highlights": [
     {
-      "title": "Metas com a sua cara",
-      "text": "Escolha o ícone ao criar ou editar. O app define uma cor e mantém essa identidade entre dispositivos."
-    },
-    {
-      "title": "Composição mais direta",
-      "text": "Receitas, despesas, faturas e reservas ganham cores e ícones. Até quatro registros por página, com o total completo no rodapé."
-    },
-    {
-      "title": "Cartões mais compactos",
-      "text": "Cards menores destacam a fatura. O detalhe usa melhor o espaço e mantém histórico, gráfico e ações."
+      "title": "Menos consultas repetidas",
+      "text": "O botão e a janela do DRE foram retirados. Análises e Relatórios continuam com seus próprios recursos."
     }
   ],
   "details": [
-    "Metas existentes recebem aparência estável e podem ter seu ícone alterado.",
-    "Preserva valores, vínculos, cálculos, permissões e edição de compras.",
-    "Mantém a paleta do app nos modos claro e escuro."
+    "Reorganiza os três atalhos restantes no Início.",
+    "Preserva os dados financeiros, os cálculos e a exportação dos relatórios."
   ]
 }

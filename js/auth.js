@@ -1,5 +1,5 @@
-import { supabase } from './supabase.js?v=2.9.31';
-import { setCurrentUserCache, clearCurrentUserCache } from './database.js?v=2.9.31';
+import { supabase } from './supabase.js?v=2.9.32';
+import { setCurrentUserCache, clearCurrentUserCache } from './database.js?v=2.9.32';
 
 const DIRECT_LOGIN_PREFIX = 'ff-direct-login:';
 

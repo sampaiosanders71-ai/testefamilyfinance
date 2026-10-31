@@ -25,7 +25,7 @@
 #module-home .balance-bottom span{color:#fff;font-size:.78rem}
 #module-home .balance-bottom strong{display:block;margin-top:3px;font-size:1.18rem;overflow-wrap:anywhere}
 #module-home .balance-divider{margin:14px 0 12px}
-#module-home .quick-actions{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+#module-home .quick-actions{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 #module-home .action-card{display:flex;gap:11px;padding:14px 12px;min-width:0;border-radius:var(--home-radius);background:linear-gradient(125deg,var(--surface),var(--surface2))}
 #module-home .action-card>span{flex:0 0 39px;height:44px;width:39px}
 #module-home .action-card>div{min-width:0}
@@ -83,3 +83,5 @@
   #module-home .home-kpi strong{grid-column:1/-1;font-size:clamp(1rem,4.4vw,1.2rem);overflow-wrap:normal;word-break:normal}
   #module-home .home-kpi small{grid-column:1/-1;margin:0}
 }
+
+@media(max-width:1270px){#module-home .quick-actions>.action-card:last-child{grid-column:1/-1}}
