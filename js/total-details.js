@@ -1,7 +1,7 @@
-import { formatBRL,escapeHTML,toast } from './ui.js?v=2.9.30';
-import { composition } from './total-composition.js?v=2.9.30';
+import { formatBRL,escapeHTML,toast } from './ui.js?v=2.9.31';
+import { composition } from './total-composition.js?v=2.9.31';
 
-export function initTotalDetails({onNavigate=()=>{},onDenied=()=>{}}={}){
+export function initTotalDetails({onNavigate=()=>{},onDenied=()=>{},getAppearance=()=>({})}={}){
  const providers=new Map(),dialog=document.getElementById('total-detail-dialog');
  let active=null,spec=null,revision=0,busy=false,suspended=[];
  const el=id=>document.getElementById('total-detail-'+id);
@@ -22,7 +22,7 @@ export function initTotalDetails({onNavigate=()=>{},onDenied=()=>{}}={}){
  function close({restore=true}={}){
   const old=active,previous=suspended;revision++;active=null;spec=null;suspended=[];busy=false;
   if(dialog.open)dialog.close();dialog.removeAttribute('aria-busy');
-  el('title').textContent='';el('rows').replaceChildren();el('note').textContent='';el('value').textContent='';el('subtitle').textContent='';el('sum').textContent='';
+  el('title').textContent='';el('rows').replaceChildren();el('note').textContent='';el('note').hidden=true;el('icon').replaceChildren();delete dialog.dataset.tone;el('value').textContent='';el('subtitle').textContent='';el('sum').textContent='';
   for(const item of previous||[]){if(restore&&item.dialog.isConnected){item.dialog.showModal();item.dialog.querySelector('.modal-card')?.scrollTo(0,item.scroll)}delete item.dialog.dataset.totalDetailSuspended;}
   if(restore&&old?.opener?.isConnected)old.opener.focus({preventScroll:true});
  }
@@ -30,12 +30,15 @@ export function initTotalDetails({onNavigate=()=>{},onDenied=()=>{}}={}){
   if(!active||!spec)return;
   active.page=Math.max(1,Math.min(active.page,Math.max(1,Math.ceil(spec.rows.length/4))));
   const start=(active.page-1)*4,visible=spec.rows.slice(start,start+4),pages=Math.max(1,Math.ceil(spec.rows.length/4));
+  const visual=getAppearance(spec,active.key);dialog.dataset.tone=visual.tone||'neutral';el('icon').innerHTML=visual.icon||'';
   el('title').textContent=spec.title;el('subtitle').textContent=[spec.subtitle,`${spec.rows.length} ${spec.rows.length===1?'item':'itens'} na composição`].filter(Boolean).join(' · ');
   el('value').textContent=spec.unit==='count'?String(spec.total):formatBRL(spec.total);
-  el('note').textContent=spec.note||'Selecione um registro para localizá-lo na sua origem.';
+  el('note').textContent=spec.warning||'';el('note').hidden=!spec.warning;
   el('rows').innerHTML=visible.length?visible.map((row,i)=>{
    const tag=row.action?'button':'div',signed=spec.signed||row.amount<0,amount=spec.unit==='count'?String(row.amount):`${signed?(row.amount<0?'− ':'+ '):''}${formatBRL(Math.abs(row.amount))}`;
-   return `<${tag} ${row.action?'type="button"':''} class="total-detail-row" data-total-row="${start+i}" ${row.action?'aria-label="'+escapeHTML('Localizar '+row.label)+'"':''}><span class="total-detail-row-copy"><strong title="${escapeHTML(row.label)}">${escapeHTML(row.label)}</strong><small title="${escapeHTML(row.meta)}">${escapeHTML(row.meta)}</small></span><strong class="total-detail-row-value ${row.amount<0?'negative':''}">${escapeHTML(amount)}</strong>${row.action?'<span class="total-detail-arrow" aria-hidden="true">›</span>':''}</${tag}>`;
+   const visual=getAppearance(spec,active.key,row),color=visual.colorKind&&visual.colorKey;
+   const attributes=visual.colorKind==='category'&&color?`class="total-detail-row-icon category-color-${escapeHTML(color)}" data-category-color`:visual.colorKind==='goal'&&color?`class="total-detail-row-icon" data-goal-color style="--goal-color:var(--goal-${escapeHTML(color)})"`:'class="total-detail-row-icon"';
+   return `<${tag} ${row.action?'type="button"':''} class="total-detail-row" data-total-row="${start+i}" ${row.action?'aria-label="'+escapeHTML('Localizar '+row.label)+'"':''}><span ${attributes} aria-hidden="true">${visual.icon||''}</span><span class="total-detail-row-copy"><strong title="${escapeHTML(row.label)}">${escapeHTML(row.label)}</strong><small title="${escapeHTML(row.meta)}">${escapeHTML(row.meta)}</small></span><strong class="total-detail-row-value ${row.amount<0?'negative':''}">${escapeHTML(amount)}</strong>${row.action?'<span class="total-detail-arrow" aria-hidden="true">›</span>':''}</${tag}>`;
   }).join(''):'<p class="total-detail-empty">Nenhum registro compõe este total.</p>';
   el('nav').hidden=spec.rows.length<=4;el('previous').disabled=active.page===1;el('next').disabled=active.page===pages;
   el('page').textContent=`Página ${active.page} de ${pages}`;
@@ -63,7 +66,7 @@ export function initTotalDetails({onNavigate=()=>{},onDenied=()=>{}}={}){
   active={key:String(key),opener:opener||document.activeElement,page:1};spec=null;
   if(await resolve()){dialog.showModal();el('title').focus({preventScroll:true})}
  }
- el('close').addEventListener('click',()=>close());el('dismiss').addEventListener('click',()=>close());
+ el('close').addEventListener('click',()=>close());
  dialog.addEventListener('cancel',event=>{event.preventDefault();close()});
  dialog.addEventListener('keydown',event=>{
   if(event.key!=='Tab')return;

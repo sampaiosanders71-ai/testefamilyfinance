@@ -1,4 +1,4 @@
-import { APP_VERSION } from './version.js?v=2.9.30';
+import { APP_VERSION } from './version.js?v=2.9.31';
 
 const DISMISS_PREFIX='ff:update-dismissed:';
 let latestRelease=null;

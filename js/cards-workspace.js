@@ -1,14 +1,14 @@
-import {invoiceWorkspaceModel,invoiceWorkspacePage} from './invoice-workspace-model.js?v=2.9.30';
-import { limitComposition } from './total-composition.js?v=2.9.30';
-import {pagedList,recentRecords} from './list-pagination.js?v=2.9.30';
-import {initCardAdjustments} from './card-adjustments-workspace.js?v=2.9.30';
-import { buildCardInvoices,cardLimitSummary,cardToday,cardMonth,cardDate,invoiceStatusLabel,cardAdjustmentLabel } from './card-domain.js?v=2.9.30';
-import { payCardInvoice,reverseCardPayment,deleteCard } from './cards.js?v=2.9.30';
-import { formOperation,clearFormOperation } from './request-operation.js?v=2.9.30';
-import { calculateCashStats } from './finance.js?v=2.9.30';
-import { formatBRL,formatDate,monthLabel,escapeHTML,openDialog,closeDialog,setFormError,toast } from './ui.js?v=2.9.30';
-import { categoryIconSVG } from './categories.js?v=2.9.30';
-import { canonicalCategoryName } from './category-alias.js?v=2.9.30';
+import {invoiceWorkspaceModel,invoiceWorkspacePage} from './invoice-workspace-model.js?v=2.9.31';
+import { limitComposition } from './total-composition.js?v=2.9.31';
+import {pagedList,recentRecords} from './list-pagination.js?v=2.9.31';
+import {initCardAdjustments} from './card-adjustments-workspace.js?v=2.9.31';
+import { buildCardInvoices,cardLimitSummary,cardToday,cardMonth,cardDate,invoiceStatusLabel,cardAdjustmentLabel } from './card-domain.js?v=2.9.31';
+import { payCardInvoice,reverseCardPayment,deleteCard } from './cards.js?v=2.9.31';
+import { formOperation,clearFormOperation } from './request-operation.js?v=2.9.31';
+import { calculateCashStats } from './finance.js?v=2.9.31';
+import { formatBRL,formatDate,monthLabel,escapeHTML,openDialog,closeDialog,setFormError,toast } from './ui.js?v=2.9.31';
+import { categoryIconSVG } from './categories.js?v=2.9.31';
+import { canonicalCategoryName } from './category-alias.js?v=2.9.31';
 const e=escapeHTML;
 const icon=(name)=>`<svg class="ui-icon" aria-hidden="true"><use href="#i-${name}"></use></svg>`;
 const shortMonth=key=>new Intl.DateTimeFormat('pt-BR',{month:'short',year:'numeric'}).format(cardDate(key)).replace('.','').replace(' de ','/');
@@ -51,7 +51,7 @@ export function initCardsWorkspace({totalDetails,getState,onRefresh,onOperation,
  function render(){
   const previousScroll=document.querySelector('.card-chart-scroll')?.scrollLeft||0;
   const current=cardMonth();
-  document.getElementById('cards-list').innerHTML=state().cards.length?state().cards.map(card=>{const inv=invoices(card).find(item=>item.invoiceMonth===current);return `<button type="button" class="card-entry" data-card-open="${e(card.id)}">${icon('card')}<span><strong>${e(card.name)}</strong><small>Fatura atual · ${e(formatBRL(inv?.total||0))}</small></span><span class="card-entry-arrow" aria-hidden="true">›</span></button>`}).join(''):`<div class="card-empty-state">${icon('card')}<p>Nenhum cartão cadastrado.</p><button type="button" class="secondary-btn" data-card-create>Adicionar primeiro cartão</button></div>`;
+  document.getElementById('cards-list').innerHTML=state().cards.length?state().cards.map(card=>{const inv=invoices(card).find(item=>item.invoiceMonth===current);return `<button type="button" class="card-entry" data-card-open="${e(card.id)}"><span class="card-entry-head"><span class="card-entry-icon" aria-hidden="true">${icon('card')}</span><strong>${e(card.name)}</strong><span class="card-entry-arrow" aria-hidden="true">›</span></span><span class="card-entry-invoice"><small>Fatura atual</small><strong>${e(formatBRL(inv?.total||0))}</strong></span></button>`}).join(''):`<div class="card-empty-state">${icon('card')}<p>Nenhum cartão cadastrado.</p><button type="button" class="secondary-btn" data-card-create>Adicionar primeiro cartão</button></div>`;
   const card=findCard(selectedCardId);if(!card)selectedCardId=null;
   document.getElementById('cards-overview').classList.toggle('hidden',!!card);
   document.getElementById('card-detail').classList.toggle('hidden',!card);
@@ -64,7 +64,7 @@ export function initCardsWorkspace({totalDetails,getState,onRefresh,onOperation,
   <div class="card-focus-facts"><span>${icon('calendar')}Vence ${formatDate(currentInvoice.dueOn)}</span>${currentInvoice.paidAmount>0?`<span>Pago <b class="positive">${e(formatBRL(currentInvoice.paidAmount))}</b></span><span>Falta pagar <b>${e(formatBRL(currentInvoice.balanceDue))}</b></span>`:''}</div>
   <div class="card-focus-actions"><button type="button" class="primary-compact card-current-invoice" data-card-invoice="${e(card.id)}" data-card-month="${current}">Ver fatura <span aria-hidden="true">›</span></button><button type="button" class="secondary-btn" data-card-new-purchase>＋ Nova compra</button></div></section>
   <section class="card-limit-panel card-limit-compact" aria-labelledby="card-limit-title"><div class="card-limit-top"><h3 id="card-limit-title">Limite disponível</h3><strong class="card-available ${limit.available<0?'negative':''}">${e(formatBRL(limit.available))}</strong></div><div class="card-limit-bar" role="meter" aria-label="Utilização do limite" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(limit.utilization)}" aria-valuetext="${e(formatBRL(limit.committed))} comprometidos de ${e(formatBRL(limit.total))}"><span style="width:${limit.utilization.toFixed(2)}%"></span></div><div class="card-limit-meta"><span>Em uso <b>${e(formatBRL(limit.committed))}</b></span><span>Total <b>${e(formatBRL(limit.total))}</b></span></div></section>
-  <section class="card-chart-section" aria-labelledby="card-chart-title"><div class="card-section-heading"><h3 id="card-chart-title">Faturas por mês</h3><button type="button" class="card-history-link" data-card-invoice-history>${icon('clock')}<span>Histórico</span><span aria-hidden="true">›</span></button></div><div class="card-chart-subhead"><span>Selecione um mês para consultar</span><label class="card-chart-period-label"><span class="sr-only">Período do gráfico</span><select data-card-chart-period aria-label="Período do gráfico"><option value="all" ${chartPeriod==='all'?'selected':''}>Todos os meses</option><option value="6" ${chartPeriod==='6'?'selected':''}>Últimos 6 meses</option><option value="12" ${chartPeriod==='12'?'selected':''}>Últimos 12 meses</option><option value="future" ${chartPeriod==='future'?'selected':''}>Faturas futuras</option></select></label></div>${chart(card,items)}</section>
+  <section class="card-chart-section" aria-labelledby="card-chart-title"><div class="card-section-heading"><h3 id="card-chart-title">Faturas por mês</h3><div class="card-chart-controls"><button type="button" class="card-history-link" data-card-invoice-history>${icon('clock')}<span>Histórico</span><span aria-hidden="true">›</span></button><label class="card-chart-period-label"><span class="sr-only">Período do gráfico</span><select data-card-chart-period aria-label="Período do gráfico"><option value="all" ${chartPeriod==='all'?'selected':''}>Todos os meses</option><option value="6" ${chartPeriod==='6'?'selected':''}>Últimos 6 meses</option><option value="12" ${chartPeriod==='12'?'selected':''}>Últimos 12 meses</option><option value="future" ${chartPeriod==='future'?'selected':''}>Faturas futuras</option></select></label></div></div>${chart(card,items)}</section>
   <details class="card-history-section card-purchase-history"><summary><span>Compras deste cartão</span><span aria-hidden="true">⌄</span></summary>${purchaseHistory(card)}</details>`;
 
   wireCardTotals(card,limit,currentInvoice);

@@ -1,18 +1,55 @@
-import { initTotalDetails } from './total-details.js?v=2.9.30';
-import { composition,compositionRow,periodEntries,monthModel,transactionEntry,planningEntries,goalComposition,cashBalanceComposition,invoiceEntry } from './total-composition.js?v=2.9.30';
-import { calculateCashStats,localISO,monthISO } from './finance.js?v=2.9.30';
-import { cardInvoiceSummaries } from './cards.js?v=2.9.30';
-import { buildDashboardCashView } from './dashboard-cash.js?v=2.9.30';
-import { buildReservePosition } from './reserve-position.js?v=2.9.30';
-import { buildFinancialMonthLedger,classifyTransaction } from './financial-ledger.js?v=2.9.30';
-import { summarizePlanning } from './planning-v18.js?v=2.9.30';
-import { monthLabel } from './ui.js?v=2.9.30';
+import {goalAppearance} from './goal-appearance.js?v=2.9.31';
+import {goalIconSVG} from './goal-icons.js?v=2.9.31';
+import {categoryIconSVG,CATEGORY_COLOR_OPTIONS} from './categories.js?v=2.9.31';
+import {canonicalCategoryName} from './category-alias.js?v=2.9.31';
+import { initTotalDetails } from './total-details.js?v=2.9.31';
+import { composition,compositionRow,periodEntries,monthModel,transactionEntry,planningEntries,goalComposition,cashBalanceComposition,invoiceEntry } from './total-composition.js?v=2.9.31';
+import { calculateCashStats,localISO,monthISO } from './finance.js?v=2.9.31';
+import { cardInvoiceSummaries } from './cards.js?v=2.9.31';
+import { buildDashboardCashView } from './dashboard-cash.js?v=2.9.31';
+import { buildReservePosition } from './reserve-position.js?v=2.9.31';
+import { buildFinancialMonthLedger,classifyTransaction } from './financial-ledger.js?v=2.9.31';
+import { summarizePlanning } from './planning-v18.js?v=2.9.31';
+import { monthLabel } from './ui.js?v=2.9.31';
 
 export function initTotalWorkspace({getContext,onNavigate,verifyFamily}){
- const details=initTotalDetails({onNavigate});
+ const details=initTotalDetails({onNavigate,getAppearance:visualAppearance});
  const attach=(target,key,provider,label)=>details.attach(typeof target==='string'?document.querySelector(target):target,key,provider,label);
  const period=(state,date)=>({transactions:state.transactions,installments:state.installments,categories:state.categories,model:monthModel(date)});
  const plan=(items,field,title,date)=>{const summary=summarizePlanning(items);return composition(title,field==='pending'?summary.pendingIncome+summary.pendingExpense:summary[field],planningEntries(items,field),{subtitle:monthLabel(date),signed:['plannedResult'].includes(field),note:field==='pendingExpense'?'Somente despesas de consumo pendentes. Reservas, transferências, cancelados e adiados ficam fora.':field==='pendingIncome'?'Recebimentos pendentes do mês. Recebidos, cancelados e adiados ficam fora.':field==='deferred'?'Itens adiados no período selecionado.':field==='plannedResult'?'Receitas planejadas − despesas de consumo planejadas. Exclui cancelados e adiados.':field==='pending'?'Recebimentos e despesas de consumo pendentes. Reservas e transferências ficam fora deste valor.':'Somente planos ativos do período selecionado; cancelados e adiados ficam fora.'})};
+ function visualAppearance(spec,key,row=null){
+  const context=getContext(),shared=key.startsWith('family:'),data=shared?context.family?.data:null;
+  const goals=shared?(data?.link?.can_view_goals?data.goals||[]:[]):context.state.goals;
+  const transactions=shared?(data?.link?.can_view_transactions?data.transactions||[]:[]):context.state.transactions;
+  const installments=shared?(data?.link?.can_view_cards?data.installments||[]:[]):context.state.installments;
+  const categories=shared?data?.categories||[]:context.state.categories;
+  const svg=name=>`<svg class="ui-icon" aria-hidden="true"><use href="#i-${name}"></use></svg>`;
+  const title=spec.title.toLocaleLowerCase('pt-BR');
+  let tone='neutral',icon=svg('wallet');
+  if(/receita|receber|recebida/.test(title)){tone='income';icon=svg('trending-up');}
+  else if(/despesa|pagar|gasto|consumo/.test(title)){tone='expense';icon=svg('receipt');}
+  else if(/fatura|cartão|cartões|limite disponível|limite comprometido/.test(title)){tone='invoice';icon=svg('card');}
+  else if(/reserv|invest|aporte/.test(title)){tone='reserve';icon=svg('piggy');}
+  const selectedGoal=key.startsWith('goal:')?goals.find(goal=>goal.id===key.slice(5)):shared&&key.includes(':goal:')?goals.find(goal=>goal.id===key.split(':').at(-1)):null;
+  if(selectedGoal){const appearance=goalAppearance(selectedGoal);tone=appearance.colorKey;icon=goalIconSVG(appearance.iconKey);}
+  if(!row)return {tone,icon};
+  const goalId=row.action?.kind==='goal'?row.action.id:row.id.startsWith('goal:')?row.id.slice(5):row.id.startsWith('shared-goal:')?row.id.slice(12):null;
+  const goal=goals.find(goal=>goal.id===goalId);
+  if(goal){const appearance=goalAppearance(goal);return {icon:goalIconSVG(appearance.iconKey),colorKind:tone==='reserve'?null:'goal',colorKey:appearance.colorKey};}
+  if(row.action?.kind==='invoice'&&!row.action.purchaseId||row.id.startsWith('invoice:'))return {icon:svg('card')};
+  const transactionId=row.action?.kind==='transaction'?row.action.id:row.id.startsWith('transaction:')?row.id.slice(12):null;
+  const transaction=transactions.find(item=>item.id===transactionId);
+  const part=installments.find(item=>row.id==='installment:'+item.id||row.action?.installmentId===item.id);
+  const planId=row.action?.kind==='plan'?row.action.id:null;
+  const plan=planId?[...(context.planningItems||[]),...(context.state.planning||[])].find(item=>item.id===planId):null;
+  const record=transaction||plan||part?.ff2_card_purchases;
+  if(record){
+   const name=canonicalCategoryName(record.category||'Outros',categories),kind=Number(record.direction)>0?'income':'expense';
+   const category=categories.find(item=>!item.is_deleted&&item.name.toLocaleLowerCase('pt-BR')===name.toLocaleLowerCase('pt-BR')&&(item.kind===kind||item.kind==='both'));
+   if(category)return {icon:categoryIconSVG(category.icon_key||'tag'),colorKind:'category',colorKey:CATEGORY_COLOR_OPTIONS.some(([key])=>key===category.color_key)?category.color_key:'slate'};
+  }
+  return {icon:selectedGoal?goalIconSVG(goalAppearance(selectedGoal).iconKey):icon};
+ }
  function home(field){
   const {state:s,dashboardDate:d}=getContext(),cash=calculateCashStats(s.transactions,d),inv=cardInvoiceSummaries(s.cards,s.installments,s.invoiceStatuses,d),view=buildDashboardCashView({cash,transactions:s.transactions,invoiceSummaries:inv,refDate:d}),base=period(s,d),month=monthISO(d),today=localISO();
   if(field==='balance')return cashBalanceComposition(s.transactions,cash.balance);
@@ -32,7 +69,7 @@ export function initTotalWorkspace({getContext,onNavigate,verifyFamily}){
    const position=buildReservePosition({goals:s.goals,transactions:s.transactions,today});
    const rows=position.accountedGoals.map(({goal,progress})=>compositionRow('goal:'+goal.id,goal.name,progress.saved,'Saldo atual da meta',{kind:'goal',id:goal.id}));
    rows.push(...position.independent.map(t=>transactionEntry(t,t.financial_nature==='allocation'?Number(t.amount):-Number(t.amount))));
-   return composition('Saldo reservado confirmado',position.confirmedBalance,rows,{subtitle:'Até '+today.split('-').reverse().join('/'),signed:true,note:'Metas não arquivadas + reservas independentes confirmadas − resgates independentes. '+position.pending.length+' movimentos não conciliados e '+position.archivedWithFunds.length+' metas arquivadas com saldo ficam fora deste total.'});
+   return composition('Saldo reservado confirmado',position.confirmedBalance,rows,{subtitle:'Até '+today.split('-').reverse().join('/'),signed:true,warning:[position.pending.length?`${position.pending.length} movimentos pendentes fora do total`:null,position.archivedWithFunds.length?`${position.archivedWithFunds.length} metas arquivadas com saldo fora do total`:null].filter(Boolean).join(' · '),note:'Metas não arquivadas + reservas independentes confirmadas − resgates independentes. '+position.pending.length+' movimentos não conciliados e '+position.archivedWithFunds.length+' metas arquivadas com saldo ficam fora deste total.'});
   }
  }
  function wireHome(){

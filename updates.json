@@ -1,22 +1,26 @@
 {
-  "version": "2.9.30",
+  "version": "2.9.31",
   "publishedAt": "30/10/2026",
-  "improvementCount": 2,
-  "title": "Cabeçalhos mais diretos",
-  "summary": "Cada página mantém seu nome no topo, com menos repetições no conteúdo.",
+  "improvementCount": 3,
+  "title": "Metas com identidade, consultas mais leves",
+  "summary": "Ícones personalizáveis nas metas, cores automáticas e cards mais compactos.",
   "highlights": [
     {
-      "title": "Identificação sem repetição",
-      "text": "Configurações e suas páginas usam o cabeçalho superior como identificação principal. Os títulos internos continuam disponíveis para leitores de tela."
+      "title": "Metas com a sua cara",
+      "text": "Escolha o ícone ao criar ou editar. O app define uma cor e mantém essa identidade entre dispositivos."
     },
     {
-      "title": "Mais espaço para o conteúdo",
-      "text": "Barra de ações e navegação de retorno ficam compactas. Títulos de seções, ajuda e controles são preservados."
+      "title": "Composição mais direta",
+      "text": "Receitas, despesas, faturas e reservas ganham cores e ícones. Até quatro registros por página, com o total completo no rodapé."
+    },
+    {
+      "title": "Cartões mais compactos",
+      "text": "Cards menores destacam a fatura. O detalhe usa melhor o espaço e mantém histórico, gráfico e ações."
     }
   ],
   "details": [
-    "Retira rótulos genéricos e a repetição do mês ao lado do seletor em Início.",
-    "Mantém a paleta, os tamanhos aprovados e as correções da edição de compras.",
-    "Não altera cálculos, registros ou regras de acesso."
+    "Metas existentes recebem aparência estável e podem ter seu ícone alterado.",
+    "Preserva valores, vínculos, cálculos, permissões e edição de compras.",
+    "Mantém a paleta do app nos modos claro e escuro."
   ]
 }

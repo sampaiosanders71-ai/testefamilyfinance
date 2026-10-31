@@ -16,23 +16,24 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@700;800&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
-<link href="css/app.css?v=2.9.30" rel="stylesheet"><link href="css/nature.css?v=2.9.30" rel="stylesheet">
-<link href="css/motion-v15.css?v=2.9.30" rel="stylesheet">
-<link href="css/download-motion-v16.css?v=2.9.30" rel="stylesheet">
-<link href="css/family-monitor-v17.css?v=2.9.30" rel="stylesheet"/>
-<link href="css/planning-v18.css?v=2.9.30" rel="stylesheet"/>
-<link href="css/categories-budget.css?v=2.9.30" rel="stylesheet"/>
-<link href="css/context-help.css?v=2.9.30" rel="stylesheet"/>
-<link href="css/dashboard-v29.css?v=2.9.30" rel="stylesheet"/>
-<link rel="stylesheet" href="./css/financial-view-293.css?v=2.9.30"/><link rel="stylesheet" href="./css/reserve-299.css?v=2.9.30"/><link rel="stylesheet" href="./css/ui-295.css?v=2.9.30"/>
-<link href="css/report-export.css?v=2.9.30" rel="stylesheet"/>
-<link href="css/cards-workspace.css?v=2.9.30" rel="stylesheet"/>
-<link rel="stylesheet" href="css/analytics-redesign.css?v=2.9.30"/>
-<link rel="stylesheet" href="css/family-pagination.css?v=2.9.30"/>
-<link rel="stylesheet" href="css/brand.css?v=2.9.30"/>
-<link rel="stylesheet" href="css/total-details.css?v=2.9.30"/>
-<link rel="stylesheet" href="css/invoice-workspace.css?v=2.9.30"/>
-<link rel="stylesheet" href="css/cards-refresh.css?v=2.9.30"/>
+<link href="css/app.css?v=2.9.31" rel="stylesheet"><link href="css/nature.css?v=2.9.31" rel="stylesheet">
+<link href="css/motion-v15.css?v=2.9.31" rel="stylesheet">
+<link href="css/download-motion-v16.css?v=2.9.31" rel="stylesheet">
+<link href="css/family-monitor-v17.css?v=2.9.31" rel="stylesheet"/>
+<link href="css/planning-v18.css?v=2.9.31" rel="stylesheet"/>
+<link href="css/categories-budget.css?v=2.9.31" rel="stylesheet"/>
+<link href="css/context-help.css?v=2.9.31" rel="stylesheet"/>
+<link href="css/dashboard-v29.css?v=2.9.31" rel="stylesheet"/>
+<link rel="stylesheet" href="./css/financial-view-293.css?v=2.9.31"/><link rel="stylesheet" href="./css/reserve-299.css?v=2.9.31"/><link rel="stylesheet" href="./css/ui-295.css?v=2.9.31"/>
+<link href="css/report-export.css?v=2.9.31" rel="stylesheet"/>
+<link href="css/cards-workspace.css?v=2.9.31" rel="stylesheet"/>
+<link rel="stylesheet" href="css/analytics-redesign.css?v=2.9.31"/>
+<link rel="stylesheet" href="css/family-pagination.css?v=2.9.31"/>
+<link rel="stylesheet" href="css/brand.css?v=2.9.31"/>
+<link rel="stylesheet" href="css/total-details.css?v=2.9.31"/>
+<link rel="stylesheet" href="css/invoice-workspace.css?v=2.9.31"/>
+<link rel="stylesheet" href="css/cards-refresh.css?v=2.9.31"/>
+<link rel="stylesheet" href="css/interfaces-2931.css?v=2.9.31"/>
 </head>
 <body>
 <svg aria-hidden="true" class="icon-sprite" focusable="false">
@@ -402,7 +403,7 @@
 <p class="muted settings-help" id="pwa-install-status">Verificando compatibilidade de instalação…</p>
 <div class="settings-inline-note"><strong>Dica:</strong><span>Depois de instalado, o Family Finance pode ser aberto direto pela tela inicial ou pelo menu de aplicativos.</span></div>
 <div class="settings-update-grid">
-<div class="settings-update-version"><span>Versão instalada</span><strong id="install-current-version">2.9.30</strong></div>
+<div class="settings-update-version"><span>Versão instalada</span><strong id="install-current-version">2.9.31</strong></div>
 <div class="settings-update-version"><span>Versão disponível</span><strong id="install-available-version">Verificando…</strong></div>
 </div>
 <div class="settings-update-state"><span class="status-pill" id="install-update-status">Verificando atualizações…</span></div>
@@ -541,10 +542,10 @@
 <dialog class="modal card-invoice-dialog" id="card-purchase-dialog" aria-labelledby="card-purchase-title"><div class="modal-card"><div class="modal-head"><h3 id="card-purchase-title">Detalhes da compra</h3><button class="modal-close" data-close-dialog="card-purchase-dialog" type="button" aria-label="Fechar detalhes da compra">×</button></div><div id="card-purchase-detail"></div><div class="modal-actions"><button class="text-btn danger" id="card-purchase-delete" type="button">Excluir compra</button><button class="secondary-btn" id="card-purchase-refund" type="button">Ajuste / estorno</button><button class="secondary-btn" id="card-purchase-edit" type="button">Editar compra</button></div></div></dialog>
 <dialog class="modal card-invoice-dialog" id="card-payment-dialog" aria-labelledby="card-payment-title"><form class="modal-card small" id="card-payment-form"><div class="modal-head"><h3 id="card-payment-title">Pagar fatura</h3><button class="modal-close" data-close-dialog="card-payment-dialog" type="button" aria-label="Fechar pagamento">×</button></div><div class="card-payment-balance"><span>Saldo devido</span><strong id="card-payment-due"></strong></div><div class="field"><label for="card-payment-mode">Pagamento</label><select id="card-payment-mode"><option value="full">Integral</option><option value="partial">Parcial</option></select></div><div class="field"><label for="card-payment-date">Data do pagamento</label><input id="card-payment-date" required type="date"/></div><div class="field hidden" id="card-payment-amount-wrap"><label for="card-payment-amount">Valor do pagamento</label><input id="card-payment-amount" min="0.01" step="0.01" type="number"/></div><div class="card-payment-warning hidden" id="card-payment-warning" role="alert"></div><p class="form-error hidden" id="card-payment-error" role="alert"></p><div class="modal-actions"><button class="secondary-btn" data-close-dialog="card-payment-dialog" type="button">Cancelar</button><button class="primary-compact" id="card-payment-save" type="submit">Confirmar pagamento</button></div></form></dialog>
 <dialog class="modal card-invoice-dialog" id="card-reversal-dialog" aria-labelledby="card-reversal-title"><form class="modal-card small" id="card-reversal-form"><div class="modal-head"><h3 id="card-reversal-title">Corrigir pagamento</h3><button class="modal-close" data-close-dialog="card-reversal-dialog" type="button" aria-label="Fechar correção">×</button></div><input id="card-reversal-id" type="hidden"/><p class="card-lock-note">O pagamento original será preservado. A correção devolve o valor ao saldo disponível e reabre o saldo devido.</p><div class="field"><label for="card-reversal-reason">Motivo da correção</label><input id="card-reversal-reason" maxlength="240" minlength="3" required type="text"/></div><p class="form-error hidden" id="card-reversal-error" role="alert"></p><div class="modal-actions"><button class="secondary-btn" data-close-dialog="card-reversal-dialog" type="button">Cancelar</button><button class="primary-compact" id="card-reversal-save" type="submit">Reverter pagamento</button></div></form></dialog>
-<dialog class="modal" id="goal-dialog">
+<dialog class="modal" id="goal-dialog" aria-labelledby="goal-dialog-title">
 <form class="modal-card small" id="goal-form" method="dialog">
 <div class="modal-head"><div><span class="eyebrow">META</span><h3 id="goal-dialog-title">Nova meta</h3></div><button class="modal-close" data-close-dialog="goal-dialog" type="button">×</button></div>
-<input id="goal-id" type="hidden"/><div class="field"><label for="goal-name">Nome</label><input id="goal-name" maxlength="100" required="" type="text"/></div><div class="form-grid two"><div class="field"><label for="goal-target">Objetivo</label><input id="goal-target" min="0.01" required="" step="0.01" type="number"/></div><div class="field"><label for="goal-saved">Já guardado (sem aportes vinculados)</label><input id="goal-saved" min="0" step="0.01" type="number" value="0"/></div></div><div class="field"><label for="goal-due">Prazo</label><input id="goal-due" type="date"/></div><p class="form-error hidden" id="goal-form-error"></p><div class="modal-actions"><button class="secondary-btn" data-close-dialog="goal-dialog" type="button">Cancelar</button><button class="primary-compact" id="goal-save-btn" type="submit">Salvar meta</button></div>
+<input id="goal-id" type="hidden"/><div class="field"><label for="goal-name">Nome</label><input id="goal-name" maxlength="100" required="" type="text"/></div><div class="field goal-icon-field"><label id="goal-icon-label" for="goal-icon-toggle">Ícone</label><input id="goal-icon-key" type="hidden" value="goal-target"/><input id="goal-color-key" type="hidden"/><button type="button" class="category-picker-toggle" id="goal-icon-toggle" aria-labelledby="goal-icon-label goal-icon-trigger-label" aria-expanded="false" aria-controls="goal-icon-panel"><span class="category-picker-preview" id="goal-icon-preview" aria-hidden="true"></span><span id="goal-icon-trigger-label">Escolher ícone</span><span class="category-picker-chevron" aria-hidden="true">⌄</span></button><div id="goal-icon-panel" class="goal-icon-panel hidden"><div id="goal-icon-grid" class="category-icon-grid" role="radiogroup" aria-label="Ícones da meta"></div></div></div><div class="form-grid two"><div class="field"><label for="goal-target">Objetivo</label><input id="goal-target" min="0.01" required="" step="0.01" type="number"/></div><div class="field"><label for="goal-saved">Já guardado (sem aportes vinculados)</label><input id="goal-saved" min="0" step="0.01" type="number" value="0"/></div></div><div class="field"><label for="goal-due">Prazo</label><input id="goal-due" type="date"/></div><p class="form-error hidden" id="goal-form-error"></p><div class="modal-actions"><button class="secondary-btn" data-close-dialog="goal-dialog" type="button">Cancelar</button><button class="primary-compact" id="goal-save-btn" type="submit">Salvar meta</button></div>
 </form>
 </dialog>
 <dialog class="modal" id="budget-category-dialog">
@@ -721,8 +722,8 @@
 </dialog>
 <dialog class="modal" id="reserve-dialog"><div class="modal-card reserve-dialog-card"><div class="modal-head"><div><span class="eyebrow">RESERVAS E INVESTIMENTOS</span><h3>Saldo guardado</h3></div><button class="modal-close" type="button" data-close-dialog="reserve-dialog" aria-label="Fechar">×</button></div><div id="reserve-detail-body"></div></div></dialog>
 <dialog class="modal" id="dre-dialog"><div class="modal-card"><div class="modal-head"><div><span class="eyebrow">DRE</span><h3 id="dre-title">Demonstrativo do mês</h3></div><button class="modal-close" data-close-dialog="dre-dialog" type="button">×</button></div><div id="dre-content"></div></div></dialog>
-<script defer src="js/context-help.js?v=2.9.30"></script><script src="js/app.js?v=2.9.30" type="module"></script>
+<script defer src="js/context-help.js?v=2.9.31"></script><script src="js/app.js?v=2.9.31" type="module"></script>
 <dialog class="modal" id="goal-history-dialog"><div class="modal-card"><div class="modal-head"><div><span class="eyebrow">META</span><h3 id="goal-history-title">Histórico</h3></div><button type="button" class="modal-close" data-close-dialog="goal-history-dialog" aria-label="Fechar">×</button></div><div id="goal-history-content"></div></div></dialog>
-<dialog id="total-detail-dialog" aria-labelledby="total-detail-title"><header class="total-detail-head"><div class="total-detail-heading"><div><h2 id="total-detail-title" tabindex="-1">Composição do total</h2><p id="total-detail-subtitle"></p></div><button id="total-detail-close" type="button" aria-label="Fechar consulta">×</button></div><strong id="total-detail-value"></strong><p id="total-detail-note"></p></header><div id="total-detail-rows"></div><footer class="total-detail-footer"><nav id="total-detail-nav" aria-label="Páginas da composição" hidden><button id="total-detail-previous" type="button">‹ Anterior</button><span id="total-detail-page" tabindex="-1" aria-live="polite" aria-atomic="true"></span><button id="total-detail-next" type="button">Próxima ›</button></nav><div class="total-detail-sum"><span>Total da composição</span><strong id="total-detail-sum"></strong></div><button id="total-detail-dismiss" type="button">Fechar</button></footer></dialog>
+<dialog id="total-detail-dialog" aria-labelledby="total-detail-title"><header class="total-detail-head"><div class="total-detail-heading"><span class="total-detail-main-icon" id="total-detail-icon" aria-hidden="true"></span><div><h2 id="total-detail-title" tabindex="-1">Composição do total</h2><p id="total-detail-subtitle"></p></div><button id="total-detail-close" type="button" aria-label="Fechar consulta">×</button></div><strong id="total-detail-value"></strong><p id="total-detail-note" role="status" hidden></p></header><div id="total-detail-rows"></div><footer class="total-detail-footer"><nav id="total-detail-nav" aria-label="Páginas da composição" hidden><button id="total-detail-previous" type="button">‹ Anterior</button><span id="total-detail-page" tabindex="-1" aria-live="polite" aria-atomic="true"></span><button id="total-detail-next" type="button">Próxima ›</button></nav><div class="total-detail-sum"><span>Total da composição</span><strong id="total-detail-sum"></strong></div></footer></dialog>
 </body>
 </html>
