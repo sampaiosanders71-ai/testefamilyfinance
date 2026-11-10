@@ -1,18 +1,18 @@
 {
-  "version": "2.9.38",
+  "version": "2.9.39",
   "publishedAt": "10/11/2026",
   "improvementCount": 1,
-  "title": "Últimos lançamentos com a mesma organização do histórico",
-  "summary": "O resumo do Início agora acompanha o visual do módulo Lançamentos.",
+  "title": "Evolução com preenchimento em degradê",
+  "summary": "O gráfico de receitas e despesas agora acompanha a referência visual aprovada.",
   "highlights": [
     {
-      "title": "Linhas compactas no dashboard",
-      "text": "Natureza acima da descrição, ícone da categoria e valores com ações à direita, com separadores entre registros."
+      "title": "Áreas com as cores das linhas",
+      "text": "Laranja para receitas e azul para despesas, desaparecendo até a base, com intensidade ajustada ao tema."
     }
   ],
   "details": [
-    "Mantém os cinco registros recentes do mês selecionado e o acesso Ver todos.",
-    "Preserva a edição, a exclusão e as restrições dos lançamentos vinculados a cartões.",
-    "Usa a paleta atual nos temas claro e escuro, com adaptação ao celular e ao computador."
+    "Mantém as linhas, os pontos, a grade, os períodos e os valores existentes.",
+    "Disponível nos temas claro e escuro, no celular e no computador.",
+    "A mudança é visual e preserva os cálculos financeiros."
   ]
 }

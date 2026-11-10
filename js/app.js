@@ -1,40 +1,40 @@
-import {GOAL_DEFAULT_ICON,goalAppearance,normalizeGoalIcon,nextGoalColor} from './goal-appearance.js?v=2.9.38';
-import {GOAL_ICON_OPTIONS,goalIconSVG} from './goal-icons.js?v=2.9.38';
-import { initTotalWorkspace } from './total-workspace.js?v=2.9.38';
-import { pagedList, recentRecords, clearListPages, revealListRecord } from './list-pagination.js?v=2.9.38';
-import { initCardsWorkspace,cardErrorMessage,showCardError } from './cards-workspace.js?v=2.9.38';
-import { adjustmentsAsInstallments,buildCardInvoices,cardToday,cardMonth } from './card-domain.js?v=2.9.38';
-import { formOperation, clearFormOperation } from './request-operation.js?v=2.9.38';
-import { canonicalCategoryName, canonicalCategoryAmounts, canonicalCategoryLimits } from './category-alias.js?v=2.9.38';
-import { spendingInPastMonths } from './budget-suggestion.js?v=2.9.38';
-import { signIn,signUp,signOut,getSession,onAuthChange } from './auth.js?v=2.9.38';
-import { ensureProfile,foundationHealthCheck } from './database.js?v=2.9.38';
-import { listFamilyData,sendFamilyInvite,respondFamilyInvite,cancelFamilyInvite,updateFamilyPermissions,removeFamilyLink,loadFamilyOverview,subscribeFamilyOverview,getFamilyAccess,familyAccessSignature } from './family.js?v=2.9.38';
-import { getLegacyMigrationStatus,claimLegacyAccount } from './migration.js?v=2.9.38';
-import { updateProfileSettings } from './settings.js?v=2.9.38';
-import { initPWA, activateAppUpdate } from './pwa.js?v=2.9.38';
-import { localISO,listTransactions,createTransaction,updateTransaction,deleteTransaction,applyBalanceAdjustment,calculateCashStats,filterTransactions } from './finance.js?v=2.9.38';
-import { listCards,createCard,updateCard,deleteCard,createPurchase,updatePurchase,deletePurchase,getPurchase,listPurchases,listInstallments,listInvoiceStatuses,setInvoicePaid,listCardPayments,listCardAdjustments,listCardReconciliations } from './cards.js?v=2.9.38';
-import { listGoals,createGoal,updateGoal,deleteGoal } from './goals.js?v=2.9.38';
-import { getBudget,listBudgetsByMonths,saveBudget,budgetSummary } from './budget.js?v=2.9.38';
-import { listCategories,activeCategories,createCategory,updateCategory,setCategoryActive,deleteCustomCategory,categoryIconSVG,normalizeCategoryIconKey,CATEGORY_ICON_OPTIONS,CATEGORY_COLOR_OPTIONS } from './categories.js?v=2.9.38';
-import { planningMonthKey,planningMonthDate,shiftPlanningMonth,planningMonthInput,planningLocalISO,listPlanningMonth,listPlanningByMonths,createPlanningItem,updatePlanningItem,cancelPlanningItem,completePlanningItem,movePlanningItem,movePendingPlanningMonth,planningNextMonthDate,planningStatusLabel,planningNature,summarizePlanning,summarizePlanningPeriod } from './planning-v18.js?v=2.9.38';
-import { listNotifications,markNotificationRead,markAllNotificationsRead,markNotificationsForTarget,syncFinancialNotifications,subscribeNotifications } from './notifications.js?v=2.9.38';
-import { setAuthMode,showAuth,showApp,showModule,setAuthError,setAuthBusy,setAppBusy,toast,setLoading,formatBRL,formatDate,monthLabel,escapeHTML,openDialog,closeDialog,setFormError,emptyState,applyTheme,captureDashboardMoneyState,prepareDashboardMoneyChange,playDashboardMoneyChange,settleDashboardMoneyChange } from './ui.js?v=2.9.38';
-import { getReportMonthOptions,downloadFinancialReportPDF } from './reports.js?v=2.9.38';
-import { beginDownloadMotion } from './download-motion-v16.js?v=2.9.38';
-import { familyMonthKey,familyDateFromMonth,shiftFamilyMonth,buildFamilyMonitorModel,filterFamilyTransactions,captureFamilyMetricState,animateFamilyMetricChange } from './family-monitor-v17.js?v=2.9.38';
-import { buildFinancialMonthLedger,isCardInvoicePayment,isCardInvoiceReversal,isCardPurchaseRefund,classifyTransaction } from './financial-ledger.js?v=2.9.38';
-import { needsLegacyReview, legacyReview, ownTransferReview } from './financial-integrity.js?v=2.9.38';
-import { downloadFinancialRowsCSV } from './report-export.js?v=2.9.38';
-import { suggestNature,natureLabel } from './transaction-nature.js?v=2.9.38';
-import { goalProgress, financialViewSummary } from './goal-integration.js?v=2.9.38';
-import { buildReservePosition } from './reserve-position.js?v=2.9.38';
-import { saveReserveReconciliation } from './reserve-reconciliation.js?v=2.9.38';
-import { analysisMonthKey,analysisMonthDate,shiftAnalysisMonth,yearMonthKeys,equivalentComparisonSpec,availableAnalysisYears,buildAnalysisPeriod,comparePeriodTotals,compareCategories,compareCards,aggregateBudgetComparison,strongestCategoryChanges,buildMonthlyInsights,buildYearInsights,groupCategoryRowsWithRemainder } from './analytics.js?v=2.9.38';
-import { buildDashboardOverview } from './dashboard-overview.js?v=2.9.38';
-import { buildDashboardCashView, buildDashboardCardView, paidInvoiceMonthsForPurchase } from './dashboard-cash.js?v=2.9.38';
-import { initUpdateCenter, promptAppUpdateIfNeeded } from './update-center.js?v=2.9.38';
+import {GOAL_DEFAULT_ICON,goalAppearance,normalizeGoalIcon,nextGoalColor} from './goal-appearance.js?v=2.9.39';
+import {GOAL_ICON_OPTIONS,goalIconSVG} from './goal-icons.js?v=2.9.39';
+import { initTotalWorkspace } from './total-workspace.js?v=2.9.39';
+import { pagedList, recentRecords, clearListPages, revealListRecord } from './list-pagination.js?v=2.9.39';
+import { initCardsWorkspace,cardErrorMessage,showCardError } from './cards-workspace.js?v=2.9.39';
+import { adjustmentsAsInstallments,buildCardInvoices,cardToday,cardMonth } from './card-domain.js?v=2.9.39';
+import { formOperation, clearFormOperation } from './request-operation.js?v=2.9.39';
+import { canonicalCategoryName, canonicalCategoryAmounts, canonicalCategoryLimits } from './category-alias.js?v=2.9.39';
+import { spendingInPastMonths } from './budget-suggestion.js?v=2.9.39';
+import { signIn,signUp,signOut,getSession,onAuthChange } from './auth.js?v=2.9.39';
+import { ensureProfile,foundationHealthCheck } from './database.js?v=2.9.39';
+import { listFamilyData,sendFamilyInvite,respondFamilyInvite,cancelFamilyInvite,updateFamilyPermissions,removeFamilyLink,loadFamilyOverview,subscribeFamilyOverview,getFamilyAccess,familyAccessSignature } from './family.js?v=2.9.39';
+import { getLegacyMigrationStatus,claimLegacyAccount } from './migration.js?v=2.9.39';
+import { updateProfileSettings } from './settings.js?v=2.9.39';
+import { initPWA, activateAppUpdate } from './pwa.js?v=2.9.39';
+import { localISO,listTransactions,createTransaction,updateTransaction,deleteTransaction,applyBalanceAdjustment,calculateCashStats,filterTransactions } from './finance.js?v=2.9.39';
+import { listCards,createCard,updateCard,deleteCard,createPurchase,updatePurchase,deletePurchase,getPurchase,listPurchases,listInstallments,listInvoiceStatuses,setInvoicePaid,listCardPayments,listCardAdjustments,listCardReconciliations } from './cards.js?v=2.9.39';
+import { listGoals,createGoal,updateGoal,deleteGoal } from './goals.js?v=2.9.39';
+import { getBudget,listBudgetsByMonths,saveBudget,budgetSummary } from './budget.js?v=2.9.39';
+import { listCategories,activeCategories,createCategory,updateCategory,setCategoryActive,deleteCustomCategory,categoryIconSVG,normalizeCategoryIconKey,CATEGORY_ICON_OPTIONS,CATEGORY_COLOR_OPTIONS } from './categories.js?v=2.9.39';
+import { planningMonthKey,planningMonthDate,shiftPlanningMonth,planningMonthInput,planningLocalISO,listPlanningMonth,listPlanningByMonths,createPlanningItem,updatePlanningItem,cancelPlanningItem,completePlanningItem,movePlanningItem,movePendingPlanningMonth,planningNextMonthDate,planningStatusLabel,planningNature,summarizePlanning,summarizePlanningPeriod } from './planning-v18.js?v=2.9.39';
+import { listNotifications,markNotificationRead,markAllNotificationsRead,markNotificationsForTarget,syncFinancialNotifications,subscribeNotifications } from './notifications.js?v=2.9.39';
+import { setAuthMode,showAuth,showApp,showModule,setAuthError,setAuthBusy,setAppBusy,toast,setLoading,formatBRL,formatDate,monthLabel,escapeHTML,openDialog,closeDialog,setFormError,emptyState,applyTheme,captureDashboardMoneyState,prepareDashboardMoneyChange,playDashboardMoneyChange,settleDashboardMoneyChange } from './ui.js?v=2.9.39';
+import { getReportMonthOptions,downloadFinancialReportPDF } from './reports.js?v=2.9.39';
+import { beginDownloadMotion } from './download-motion-v16.js?v=2.9.39';
+import { familyMonthKey,familyDateFromMonth,shiftFamilyMonth,buildFamilyMonitorModel,filterFamilyTransactions,captureFamilyMetricState,animateFamilyMetricChange } from './family-monitor-v17.js?v=2.9.39';
+import { buildFinancialMonthLedger,isCardInvoicePayment,isCardInvoiceReversal,isCardPurchaseRefund,classifyTransaction } from './financial-ledger.js?v=2.9.39';
+import { needsLegacyReview, legacyReview, ownTransferReview } from './financial-integrity.js?v=2.9.39';
+import { downloadFinancialRowsCSV } from './report-export.js?v=2.9.39';
+import { suggestNature,natureLabel } from './transaction-nature.js?v=2.9.39';
+import { goalProgress, financialViewSummary } from './goal-integration.js?v=2.9.39';
+import { buildReservePosition } from './reserve-position.js?v=2.9.39';
+import { saveReserveReconciliation } from './reserve-reconciliation.js?v=2.9.39';
+import { analysisMonthKey,analysisMonthDate,shiftAnalysisMonth,yearMonthKeys,equivalentComparisonSpec,availableAnalysisYears,buildAnalysisPeriod,comparePeriodTotals,compareCategories,compareCards,aggregateBudgetComparison,strongestCategoryChanges,buildMonthlyInsights,buildYearInsights,groupCategoryRowsWithRemainder } from './analytics.js?v=2.9.39';
+import { buildDashboardOverview } from './dashboard-overview.js?v=2.9.39';
+import { buildDashboardCashView, buildDashboardCardView, paidInvoiceMonthsForPurchase } from './dashboard-cash.js?v=2.9.39';
+import { initUpdateCenter, promptAppUpdateIfNeeded } from './update-center.js?v=2.9.39';
 
 let authMode='login', authBusy=false, appActionBusy=false, reportDownloadBusy=false, enterAppPromise=null, refreshBusy=false, bootstrapGeneration=0, notificationChannel=null, familyMonitorChannel=null;
 let currentUser=null, currentProfile=null;
@@ -799,7 +799,7 @@ function analysisComparisonBars(rows,labelA,labelB,labelKey='label'){
   }).join('')}</div>`;
 }
 
-function analysisLineChart(months,series){
+function analysisLineChart(months,series,{fillArea=false}={}){
   if(!months?.length||!series?.length)return analysisEmpty();
   const width=Math.max(600,months.length*60),height=300,left=54,right=18,top=18,bottom=50,plotW=width-left-right,plotH=height-top-bottom;
   const values=series.flatMap(item=>months.map(month=>Math.max(0,Number(item.value(month)||0))));
@@ -808,13 +808,22 @@ function analysisLineChart(months,series){
   const y=value=>top+plotH-(Math.max(0,Number(value||0))/max)*plotH;
   const grid=Array.from({length:5},(_,i)=>{const gy=top+(plotH/4)*i;const val=max*(1-i/4);return `<line x1="${left}" y1="${gy}" x2="${width-right}" y2="${gy}" class="chart-grid"/><text x="${left-8}" y="${gy+4}" text-anchor="end" class="chart-axis">${escapeHTML(analysisShortMoney(val))}</text>`}).join('');
   const labels=months.map((month,i)=>`<text x="${x(i)}" y="${height-18}" text-anchor="middle" class="chart-axis chart-month">${escapeHTML(month.date.toLocaleDateString('pt-BR',{month:'short'}).replace('.',''))}</text>`).join('');
+  const gradientId=fillArea?`analysis-area-${crypto.randomUUID()}`:'';
+  const gradients=fillArea?`<defs>${series.map((item,sidx)=>{
+    const seriesTop=Math.min(...months.map(month=>y(item.value(month))));
+    return `<linearGradient id="${gradientId}-${sidx}" gradientUnits="userSpaceOnUse" x1="0" y1="${seriesTop}" x2="0" y2="${y(0)}" class="chart-area-gradient series-${sidx}"><stop offset="0%" class="chart-area-start"/><stop offset="100%" class="chart-area-end"/></linearGradient>`;
+  }).join('')}</defs>`:'';
+  const areas=fillArea?series.map((item,sidx)=>{
+    const points=months.map((month,i)=>`${x(i)},${y(item.value(month))}`);
+    return `<polygon points="${x(0)},${y(0)} ${points.join(' ')} ${x(months.length-1)},${y(0)}" class="chart-area series-${sidx}" fill="url(#${gradientId}-${sidx})" aria-hidden="true" pointer-events="none"/>`;
+  }).join(''):'';
   const paths=series.map((item,sidx)=>{
     const points=months.map((month,i)=>`${x(i)},${y(item.value(month))}`);
     const circles=months.map((month,i)=>`<circle cx="${x(i)}" cy="${y(item.value(month))}" r="4" class="chart-point series-${sidx}"><title>${escapeHTML(item.label)} · ${escapeHTML(monthLabel(month.date))}: ${formatBRL(item.value(month))}</title></circle>`).join('');
     return `<polyline points="${points.join(' ')}" class="chart-line series-${sidx}"/>${circles}`;
   }).join('');
   const legend=`<div class="analytics-chart-legend">${series.map((item,i)=>`<span><i class="series-dot series-${i}"></i>${escapeHTML(item.label)}</span>`).join('')}</div>`;
-  return `${legend}<div class="analytics-svg-wrap"><svg class="analytics-line-chart" data-points="${months.length}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Evolução financeira">${grid}${paths}${labels}</svg></div>`;
+  return `${legend}<div class="analytics-svg-wrap"><svg class="analytics-line-chart" data-points="${months.length}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Evolução financeira">${gradients}${areas}${grid}${paths}${labels}</svg></div>`;
 }
 function analysisDonut(items,title='Distribuição'){
   const source=(items||[]).filter(item=>Number(item.total||0)>0);
@@ -961,7 +970,7 @@ async function renderAnalytics(){
         const change=comparison.totalExpense;
         if(change.percent!==null)insights.unshift(`Os gastos de ${labels.a} estão ${Math.abs(change.percent).toFixed(1)}% ${change.delta>=0?'acima':'abaixo'} de ${labels.b}.`);
       }else insights=buildMonthlyInsights(periodA,periodB,labels.a,labels.b,formatBRL);
-      host.innerHTML=`<div class="analytics-metrics">${analysisMetric('Receitas',comparison.income,{goodUp:true})}${analysisMetric('Despesas',comparison.totalExpense,{goodUp:false})}${analysisMetric('Resultado',comparison.result,{goodUp:true})}${analysisMetric('Cartão',comparison.cardExpense,{goodUp:false})}</div><div class="analytics-grid two">${analysisPanel('Evolução',analysisLineChart(context.months,[{label:'Receitas',value:m=>m.income},{label:'Despesas',value:m=>m.totalExpense}]),{controls:analysisTrendControl()})}${analysisPanel('Comparação direta',analysisComparisonBars(direct,labels.a,labels.b),{icon:'card'})}</div>${analysisPanel('Onde você gastou mais ou menos',analysisVariations(periodA,periodB),{icon:'trending-up',extraClass:'analytics-variations-panel',subtitle:`${labels.a} × ${labels.b}`,controls:'<button class="text-btn" data-analysis-go="categories" type="button">Ver categorias →</button>'})}${analysisExplanation('O que mudou',insights)}`;
+      host.innerHTML=`<div class="analytics-metrics">${analysisMetric('Receitas',comparison.income,{goodUp:true})}${analysisMetric('Despesas',comparison.totalExpense,{goodUp:false})}${analysisMetric('Resultado',comparison.result,{goodUp:true})}${analysisMetric('Cartão',comparison.cardExpense,{goodUp:false})}</div><div class="analytics-grid two">${analysisPanel('Evolução',analysisLineChart(context.months,[{label:'Receitas',value:m=>m.income},{label:'Despesas',value:m=>m.totalExpense}],{fillArea:true}),{controls:analysisTrendControl()})}${analysisPanel('Comparação direta',analysisComparisonBars(direct,labels.a,labels.b),{icon:'card'})}</div>${analysisPanel('Onde você gastou mais ou menos',analysisVariations(periodA,periodB),{icon:'trending-up',extraClass:'analytics-variations-panel',subtitle:`${labels.a} × ${labels.b}`,controls:'<button class="text-btn" data-analysis-go="categories" type="button">Ver categorias →</button>'})}${analysisExplanation('O que mudou',insights)}`;
     }else if(analysisTab==='categories'){
       const rows=compareCategories(periodA,periodB,6).map(item=>({...item,label:item.category}));
       const detailedRows=analysisCategoryRows(periodA);
