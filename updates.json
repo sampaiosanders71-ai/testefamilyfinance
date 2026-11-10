@@ -1,23 +1,22 @@
 {
-  "version": "2.9.35",
-  "publishedAt": "05/11/2026",
+  "version": "2.9.36",
+  "publishedAt": "10/11/2026",
   "improvementCount": 2,
-  "title": "Faturas pendentes em primeiro lugar",
-  "summary": "O Início acompanha o que falta pagar e calcula a previsão pelos vencimentos.",
+  "title": "Lançamentos com uma organização mais clara",
+  "summary": "Interface adaptada ao computador e ao celular, com a paleta e os recursos existentes.",
   "highlights": [
     {
-      "title": "Faturas a pagar",
-      "text": "Mantém a fatura pendente mais antiga de cada cartão até sua quitação. Pagamento parcial mostra apenas o restante; depois passa à próxima fatura cadastrada com saldo."
+      "title": "Computador com colunas",
+      "text": "Busca, filtros e Novo lançamento ficam próximos. Categoria, data, valor e ações ganham colunas para facilitar a leitura."
     },
     {
-      "title": "Previsão pelo vencimento",
-      "text": "O saldo previsto considera todas as faturas pendentes vencidas ou com vencimento até o fim do mês selecionado. Faturas de meses seguintes ficam para a previsão correspondente."
+      "title": "Celular mais organizado",
+      "text": "Busca em linha própria e filtros lado a lado. Etiquetas acima das descrições, com valores e ações adaptados à largura da tela."
     }
   ],
   "details": [
-    "A consulta mostra competência, vencimento e situação da fatura, com quatro registros por página.",
-    "Histórico e faturas futuras continuam acessíveis no módulo Cartões.",
-    "Preserva pagamentos, dados e cálculos de consumo.",
-    "Separa o cache offline do teste e do oficial pelo endereço do app."
+    "Mantém os ícones de categoria, as classificações e as ações permitidas.",
+    "Preserva busca, filtros, paginação e Carregar mais.",
+    "Disponível nos temas claro e escuro, sem alterar os cálculos financeiros."
   ]
 }
