@@ -1,8 +1,8 @@
-import {goalAppearance,normalizeGoalIcon,isGoalColor} from './goal-appearance.js?v=2.9.36';
-import { operationIds, insertOnce } from './request-operation.js?v=2.9.36';
-import { listAllRows } from './pagination.js?v=2.9.36';
-import { supabase } from './supabase.js?v=2.9.36';
-import { getCurrentUser } from './database.js?v=2.9.36';
+import {goalAppearance,normalizeGoalIcon,isGoalColor} from './goal-appearance.js?v=2.9.37';
+import { operationIds, insertOnce } from './request-operation.js?v=2.9.37';
+import { listAllRows } from './pagination.js?v=2.9.37';
+import { supabase } from './supabase.js?v=2.9.37';
+import { getCurrentUser } from './database.js?v=2.9.37';
 
 export async function listGoals() {
   const user = await getCurrentUser();

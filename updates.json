@@ -1,22 +1,22 @@
 {
-  "version": "2.9.36",
+  "version": "2.9.37",
   "publishedAt": "10/11/2026",
   "improvementCount": 2,
-  "title": "Lançamentos com uma organização mais clara",
-  "summary": "Interface adaptada ao computador e ao celular, com a paleta e os recursos existentes.",
+  "title": "Metas e Limites mais organizados no Início",
+  "summary": "Resumos mais claros, mantendo as cores, os ícones e os cálculos do app.",
   "highlights": [
     {
-      "title": "Computador com colunas",
-      "text": "Busca, filtros e Novo lançamento ficam próximos. Categoria, data, valor e ações ganham colunas para facilitar a leitura."
+      "title": "Metas em linhas compactas",
+      "text": "Ícone da meta, valor guardado, objetivo e percentual reunidos acima da barra de progresso."
     },
     {
-      "title": "Celular mais organizado",
-      "text": "Busca em linha própria e filtros lado a lado. Etiquetas acima das descrições, com valores e ações adaptados à largura da tela."
+      "title": "Limites com leitura direta",
+      "text": "Valor utilizado em destaque, percentual ao lado e gastos em categorias sem limite abaixo da barra."
     }
   ],
   "details": [
-    "Mantém os ícones de categoria, as classificações e as ações permitidas.",
-    "Preserva busca, filtros, paginação e Carregar mais.",
-    "Disponível nos temas claro e escuro, sem alterar os cálculos financeiros."
+    "Preserva os ícones personalizados e as cores das metas, com os temas claro e escuro.",
+    "Mantém os valores reais, os aportes e resgates vinculados e os avisos de limite excedido.",
+    "Ver metas, edição da meta e Ajustar continuam disponíveis."
   ]
 }
