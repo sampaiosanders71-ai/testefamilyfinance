@@ -1,22 +1,18 @@
 {
-  "version": "2.9.37",
+  "version": "2.9.38",
   "publishedAt": "10/11/2026",
-  "improvementCount": 2,
-  "title": "Metas e Limites mais organizados no Início",
-  "summary": "Resumos mais claros, mantendo as cores, os ícones e os cálculos do app.",
+  "improvementCount": 1,
+  "title": "Últimos lançamentos com a mesma organização do histórico",
+  "summary": "O resumo do Início agora acompanha o visual do módulo Lançamentos.",
   "highlights": [
     {
-      "title": "Metas em linhas compactas",
-      "text": "Ícone da meta, valor guardado, objetivo e percentual reunidos acima da barra de progresso."
-    },
-    {
-      "title": "Limites com leitura direta",
-      "text": "Valor utilizado em destaque, percentual ao lado e gastos em categorias sem limite abaixo da barra."
+      "title": "Linhas compactas no dashboard",
+      "text": "Natureza acima da descrição, ícone da categoria e valores com ações à direita, com separadores entre registros."
     }
   ],
   "details": [
-    "Preserva os ícones personalizados e as cores das metas, com os temas claro e escuro.",
-    "Mantém os valores reais, os aportes e resgates vinculados e os avisos de limite excedido.",
-    "Ver metas, edição da meta e Ajustar continuam disponíveis."
+    "Mantém os cinco registros recentes do mês selecionado e o acesso Ver todos.",
+    "Preserva a edição, a exclusão e as restrições dos lançamentos vinculados a cartões.",
+    "Usa a paleta atual nos temas claro e escuro, com adaptação ao celular e ao computador."
   ]
 }

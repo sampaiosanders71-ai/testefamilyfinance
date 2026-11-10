@@ -1,5 +1,5 @@
-import {buildCardInvoices,cardToday} from './card-domain.js?v=2.9.37';
-import { isCardInvoicePayment,isCardInvoiceReversal } from './financial-ledger.js?v=2.9.37';
+import {buildCardInvoices,cardToday} from './card-domain.js?v=2.9.38';
+import { isCardInvoicePayment,isCardInvoiceReversal } from './financial-ledger.js?v=2.9.38';
 function monthPrefix(refDate){
   return `${refDate.getFullYear()}-${String(refDate.getMonth()+1).padStart(2,'0')}`;
 }

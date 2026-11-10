@@ -1,7 +1,7 @@
-import {recordCardAdjustment,reconcileCardLegacy,editCardInvoice} from './cards.js?v=2.9.37';
-import {cardAdjustmentLabel,parseCardInvoiceAmount,cardToday,cardMonth,cardDate,buildCardInvoices} from './card-domain.js?v=2.9.37';
-import {formOperation,clearFormOperation} from './request-operation.js?v=2.9.37';
-import {formatBRL,formatDate,monthLabel,escapeHTML,openDialog,closeDialog,setFormError,toast} from './ui.js?v=2.9.37';
+import {recordCardAdjustment,reconcileCardLegacy,editCardInvoice} from './cards.js?v=2.9.38';
+import {cardAdjustmentLabel,parseCardInvoiceAmount,cardToday,cardMonth,cardDate,buildCardInvoices} from './card-domain.js?v=2.9.38';
+import {formOperation,clearFormOperation} from './request-operation.js?v=2.9.38';
+import {formatBRL,formatDate,monthLabel,escapeHTML,openDialog,closeDialog,setFormError,toast} from './ui.js?v=2.9.38';
 const e=escapeHTML,$=id=>document.getElementById(id);
 export function initCardAdjustments({getState,onRefresh,onOperation,onInvoiceEdited}){
  let context=null,busy=false,negativeApproved=false,reconciliationInvoice=null,invoiceEditor=null;
