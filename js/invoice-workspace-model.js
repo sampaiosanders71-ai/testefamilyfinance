@@ -1,5 +1,5 @@
-import { invoiceComposition } from './total-composition.js?v=2.9.39';
-import { cardAdjustmentLabel } from './card-domain.js?v=2.9.39';
+import { invoiceComposition } from './total-composition.js?v=2.9.40';
+import { cardAdjustmentLabel } from './card-domain.js?v=2.9.40';
 
 // Presentation of the existing ledger; the persisted invoice remains authoritative.
 export function invoiceWorkspaceModel(invoice, adjustments=[], payments=[]) {

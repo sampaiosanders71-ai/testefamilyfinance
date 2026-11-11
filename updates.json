@@ -1,18 +1,22 @@
 {
-  "version": "2.9.39",
-  "publishedAt": "10/11/2026",
-  "improvementCount": 1,
-  "title": "Evolução com preenchimento em degradê",
-  "summary": "O gráfico de receitas e despesas agora acompanha a referência visual aprovada.",
+  "version": "2.9.40",
+  "publishedAt": "11/11/2026",
+  "improvementCount": 2,
+  "title": "Limites por categoria com uma leitura mais limpa",
+  "summary": "Informações organizadas sem repetições, com adaptação ao computador e ao celular.",
   "highlights": [
     {
-      "title": "Áreas com as cores das linhas",
-      "text": "Laranja para receitas e azul para despesas, desaparecendo até a base, com intensidade ajustada ao tema."
+      "title": "Cada informação em um lugar",
+      "text": "Realizado, Comprometido e Disponível reunidos em três campos, com a barra somente nas categorias que têm limite."
+    },
+    {
+      "title": "Categorias sem limite mais claras",
+      "text": "Disponível aparece como um traço e Sem limite definido aparece apenas junto ao nome. Percentuais positivos abaixo de 1% são indicados como <1%."
     }
   ],
   "details": [
-    "Mantém as linhas, os pontos, a grade, os períodos e os valores existentes.",
-    "Disponível nos temas claro e escuro, no celular e no computador.",
-    "A mudança é visual e preserva os cálculos financeiros."
+    "Preserva valores, ícones, cores e os acessos para definir, editar e remover limites.",
+    "Mantém o destaque de excedente e os temas claro e escuro.",
+    "A contagem informa quantos limites estão definidos, sem confundir com a quantidade de categorias exibidas."
   ]
 }

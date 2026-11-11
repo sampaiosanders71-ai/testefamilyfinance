@@ -1,40 +1,40 @@
-import {GOAL_DEFAULT_ICON,goalAppearance,normalizeGoalIcon,nextGoalColor} from './goal-appearance.js?v=2.9.39';
-import {GOAL_ICON_OPTIONS,goalIconSVG} from './goal-icons.js?v=2.9.39';
-import { initTotalWorkspace } from './total-workspace.js?v=2.9.39';
-import { pagedList, recentRecords, clearListPages, revealListRecord } from './list-pagination.js?v=2.9.39';
-import { initCardsWorkspace,cardErrorMessage,showCardError } from './cards-workspace.js?v=2.9.39';
-import { adjustmentsAsInstallments,buildCardInvoices,cardToday,cardMonth } from './card-domain.js?v=2.9.39';
-import { formOperation, clearFormOperation } from './request-operation.js?v=2.9.39';
-import { canonicalCategoryName, canonicalCategoryAmounts, canonicalCategoryLimits } from './category-alias.js?v=2.9.39';
-import { spendingInPastMonths } from './budget-suggestion.js?v=2.9.39';
-import { signIn,signUp,signOut,getSession,onAuthChange } from './auth.js?v=2.9.39';
-import { ensureProfile,foundationHealthCheck } from './database.js?v=2.9.39';
-import { listFamilyData,sendFamilyInvite,respondFamilyInvite,cancelFamilyInvite,updateFamilyPermissions,removeFamilyLink,loadFamilyOverview,subscribeFamilyOverview,getFamilyAccess,familyAccessSignature } from './family.js?v=2.9.39';
-import { getLegacyMigrationStatus,claimLegacyAccount } from './migration.js?v=2.9.39';
-import { updateProfileSettings } from './settings.js?v=2.9.39';
-import { initPWA, activateAppUpdate } from './pwa.js?v=2.9.39';
-import { localISO,listTransactions,createTransaction,updateTransaction,deleteTransaction,applyBalanceAdjustment,calculateCashStats,filterTransactions } from './finance.js?v=2.9.39';
-import { listCards,createCard,updateCard,deleteCard,createPurchase,updatePurchase,deletePurchase,getPurchase,listPurchases,listInstallments,listInvoiceStatuses,setInvoicePaid,listCardPayments,listCardAdjustments,listCardReconciliations } from './cards.js?v=2.9.39';
-import { listGoals,createGoal,updateGoal,deleteGoal } from './goals.js?v=2.9.39';
-import { getBudget,listBudgetsByMonths,saveBudget,budgetSummary } from './budget.js?v=2.9.39';
-import { listCategories,activeCategories,createCategory,updateCategory,setCategoryActive,deleteCustomCategory,categoryIconSVG,normalizeCategoryIconKey,CATEGORY_ICON_OPTIONS,CATEGORY_COLOR_OPTIONS } from './categories.js?v=2.9.39';
-import { planningMonthKey,planningMonthDate,shiftPlanningMonth,planningMonthInput,planningLocalISO,listPlanningMonth,listPlanningByMonths,createPlanningItem,updatePlanningItem,cancelPlanningItem,completePlanningItem,movePlanningItem,movePendingPlanningMonth,planningNextMonthDate,planningStatusLabel,planningNature,summarizePlanning,summarizePlanningPeriod } from './planning-v18.js?v=2.9.39';
-import { listNotifications,markNotificationRead,markAllNotificationsRead,markNotificationsForTarget,syncFinancialNotifications,subscribeNotifications } from './notifications.js?v=2.9.39';
-import { setAuthMode,showAuth,showApp,showModule,setAuthError,setAuthBusy,setAppBusy,toast,setLoading,formatBRL,formatDate,monthLabel,escapeHTML,openDialog,closeDialog,setFormError,emptyState,applyTheme,captureDashboardMoneyState,prepareDashboardMoneyChange,playDashboardMoneyChange,settleDashboardMoneyChange } from './ui.js?v=2.9.39';
-import { getReportMonthOptions,downloadFinancialReportPDF } from './reports.js?v=2.9.39';
-import { beginDownloadMotion } from './download-motion-v16.js?v=2.9.39';
-import { familyMonthKey,familyDateFromMonth,shiftFamilyMonth,buildFamilyMonitorModel,filterFamilyTransactions,captureFamilyMetricState,animateFamilyMetricChange } from './family-monitor-v17.js?v=2.9.39';
-import { buildFinancialMonthLedger,isCardInvoicePayment,isCardInvoiceReversal,isCardPurchaseRefund,classifyTransaction } from './financial-ledger.js?v=2.9.39';
-import { needsLegacyReview, legacyReview, ownTransferReview } from './financial-integrity.js?v=2.9.39';
-import { downloadFinancialRowsCSV } from './report-export.js?v=2.9.39';
-import { suggestNature,natureLabel } from './transaction-nature.js?v=2.9.39';
-import { goalProgress, financialViewSummary } from './goal-integration.js?v=2.9.39';
-import { buildReservePosition } from './reserve-position.js?v=2.9.39';
-import { saveReserveReconciliation } from './reserve-reconciliation.js?v=2.9.39';
-import { analysisMonthKey,analysisMonthDate,shiftAnalysisMonth,yearMonthKeys,equivalentComparisonSpec,availableAnalysisYears,buildAnalysisPeriod,comparePeriodTotals,compareCategories,compareCards,aggregateBudgetComparison,strongestCategoryChanges,buildMonthlyInsights,buildYearInsights,groupCategoryRowsWithRemainder } from './analytics.js?v=2.9.39';
-import { buildDashboardOverview } from './dashboard-overview.js?v=2.9.39';
-import { buildDashboardCashView, buildDashboardCardView, paidInvoiceMonthsForPurchase } from './dashboard-cash.js?v=2.9.39';
-import { initUpdateCenter, promptAppUpdateIfNeeded } from './update-center.js?v=2.9.39';
+import {GOAL_DEFAULT_ICON,goalAppearance,normalizeGoalIcon,nextGoalColor} from './goal-appearance.js?v=2.9.40';
+import {GOAL_ICON_OPTIONS,goalIconSVG} from './goal-icons.js?v=2.9.40';
+import { initTotalWorkspace } from './total-workspace.js?v=2.9.40';
+import { pagedList, recentRecords, clearListPages, revealListRecord } from './list-pagination.js?v=2.9.40';
+import { initCardsWorkspace,cardErrorMessage,showCardError } from './cards-workspace.js?v=2.9.40';
+import { adjustmentsAsInstallments,buildCardInvoices,cardToday,cardMonth } from './card-domain.js?v=2.9.40';
+import { formOperation, clearFormOperation } from './request-operation.js?v=2.9.40';
+import { canonicalCategoryName, canonicalCategoryAmounts, canonicalCategoryLimits } from './category-alias.js?v=2.9.40';
+import { spendingInPastMonths } from './budget-suggestion.js?v=2.9.40';
+import { signIn,signUp,signOut,getSession,onAuthChange } from './auth.js?v=2.9.40';
+import { ensureProfile,foundationHealthCheck } from './database.js?v=2.9.40';
+import { listFamilyData,sendFamilyInvite,respondFamilyInvite,cancelFamilyInvite,updateFamilyPermissions,removeFamilyLink,loadFamilyOverview,subscribeFamilyOverview,getFamilyAccess,familyAccessSignature } from './family.js?v=2.9.40';
+import { getLegacyMigrationStatus,claimLegacyAccount } from './migration.js?v=2.9.40';
+import { updateProfileSettings } from './settings.js?v=2.9.40';
+import { initPWA, activateAppUpdate } from './pwa.js?v=2.9.40';
+import { localISO,listTransactions,createTransaction,updateTransaction,deleteTransaction,applyBalanceAdjustment,calculateCashStats,filterTransactions } from './finance.js?v=2.9.40';
+import { listCards,createCard,updateCard,deleteCard,createPurchase,updatePurchase,deletePurchase,getPurchase,listPurchases,listInstallments,listInvoiceStatuses,setInvoicePaid,listCardPayments,listCardAdjustments,listCardReconciliations } from './cards.js?v=2.9.40';
+import { listGoals,createGoal,updateGoal,deleteGoal } from './goals.js?v=2.9.40';
+import { getBudget,listBudgetsByMonths,saveBudget,budgetSummary } from './budget.js?v=2.9.40';
+import { listCategories,activeCategories,createCategory,updateCategory,setCategoryActive,deleteCustomCategory,categoryIconSVG,normalizeCategoryIconKey,CATEGORY_ICON_OPTIONS,CATEGORY_COLOR_OPTIONS } from './categories.js?v=2.9.40';
+import { planningMonthKey,planningMonthDate,shiftPlanningMonth,planningMonthInput,planningLocalISO,listPlanningMonth,listPlanningByMonths,createPlanningItem,updatePlanningItem,cancelPlanningItem,completePlanningItem,movePlanningItem,movePendingPlanningMonth,planningNextMonthDate,planningStatusLabel,planningNature,summarizePlanning,summarizePlanningPeriod } from './planning-v18.js?v=2.9.40';
+import { listNotifications,markNotificationRead,markAllNotificationsRead,markNotificationsForTarget,syncFinancialNotifications,subscribeNotifications } from './notifications.js?v=2.9.40';
+import { setAuthMode,showAuth,showApp,showModule,setAuthError,setAuthBusy,setAppBusy,toast,setLoading,formatBRL,formatDate,monthLabel,escapeHTML,openDialog,closeDialog,setFormError,emptyState,applyTheme,captureDashboardMoneyState,prepareDashboardMoneyChange,playDashboardMoneyChange,settleDashboardMoneyChange } from './ui.js?v=2.9.40';
+import { getReportMonthOptions,downloadFinancialReportPDF } from './reports.js?v=2.9.40';
+import { beginDownloadMotion } from './download-motion-v16.js?v=2.9.40';
+import { familyMonthKey,familyDateFromMonth,shiftFamilyMonth,buildFamilyMonitorModel,filterFamilyTransactions,captureFamilyMetricState,animateFamilyMetricChange } from './family-monitor-v17.js?v=2.9.40';
+import { buildFinancialMonthLedger,isCardInvoicePayment,isCardInvoiceReversal,isCardPurchaseRefund,classifyTransaction } from './financial-ledger.js?v=2.9.40';
+import { needsLegacyReview, legacyReview, ownTransferReview } from './financial-integrity.js?v=2.9.40';
+import { downloadFinancialRowsCSV } from './report-export.js?v=2.9.40';
+import { suggestNature,natureLabel } from './transaction-nature.js?v=2.9.40';
+import { goalProgress, financialViewSummary } from './goal-integration.js?v=2.9.40';
+import { buildReservePosition } from './reserve-position.js?v=2.9.40';
+import { saveReserveReconciliation } from './reserve-reconciliation.js?v=2.9.40';
+import { analysisMonthKey,analysisMonthDate,shiftAnalysisMonth,yearMonthKeys,equivalentComparisonSpec,availableAnalysisYears,buildAnalysisPeriod,comparePeriodTotals,compareCategories,compareCards,aggregateBudgetComparison,strongestCategoryChanges,buildMonthlyInsights,buildYearInsights,groupCategoryRowsWithRemainder } from './analytics.js?v=2.9.40';
+import { buildDashboardOverview } from './dashboard-overview.js?v=2.9.40';
+import { buildDashboardCashView, buildDashboardCardView, paidInvoiceMonthsForPurchase } from './dashboard-cash.js?v=2.9.40';
+import { initUpdateCenter, promptAppUpdateIfNeeded } from './update-center.js?v=2.9.40';
 
 let authMode='login', authBusy=false, appActionBusy=false, reportDownloadBusy=false, enterAppPromise=null, refreshBusy=false, bootstrapGeneration=0, notificationChannel=null, familyMonitorChannel=null;
 let currentUser=null, currentProfile=null;
@@ -358,29 +358,18 @@ function budgetCategoryRow(cat,bs){
   const spent=Math.max(0,Number(bs.spentMap[cat]||0));
   const pending=Math.max(0,Number(planningPendingExpenseMap()[cat]||0));
   const remaining=limit>0?limit-spent-pending:0;
-  const spentPercent=limit>0?(spent/limit)*100:0;
-  const plannedPercent=limit>0?(pending/limit)*100:0;
-  const record=budgetCategoryRecord(cat);
-  const hidden=record&&!record.is_active;
-  const limitText=limit>0?`Limite do mês: ${formatBRL(limit)}`:'Sem limite definido';
-  const desktop=`<div class="budget-desktop-limit-layout">
-    <div class="budget-category-identity">${categoryIconMarkup(record,cat)}<div><strong>${escapeHTML(cat)}</strong>${hidden?'<small class="category-hidden-badge">Categoria oculta</small>':''}<small>${limitText}</small></div></div>
-    <div class="layered-budget-main">${layeredLimitBarHTML({limit,spent,pending})}<div class="planning-layered-meta"><span class="realized"><b>${Math.round(spentPercent)}%</b> realizado · ${formatBRL(spent)}</span><span class="committed"><b>${Math.round(plannedPercent)}%</b> comprometido · ${formatBRL(pending)}</span></div></div>
-    <div class="layered-budget-stats"><div><span>Realizado</span><strong>${formatBRL(spent)}</strong><small>${limit>0?`${Math.round(spentPercent)}% do limite`:'Sem limite'}</small></div><div><span>Comprometido</span><strong>${formatBRL(pending)}</strong><small>${limit>0?`${Math.round(plannedPercent)}% do limite`:'Sem limite'}</small></div><div><span>${limit>0?(remaining>=0?'Disponível':'Excedente'):'Disponível'}</span><strong class="${limit>0?(remaining>=0?'positive':'negative'):'muted'}">${limit>0?formatBRL(Math.abs(remaining)):formatBRL(0)}</strong><small>${limit>0?`${Math.round(Math.abs(remaining)/limit*100)}% do limite`:'Sem limite'}</small></div></div>
-    <div class="budget-category-actions">${limit>0||record?.is_active!==false?`<button type="button" class="mini-btn" data-budget-edit="${escapeHTML(cat)}">${limit>0?'Editar':'Definir limite'}</button>`:''}${limit>0?`<button type="button" class="mini-btn danger" data-budget-remove="${escapeHTML(cat)}">Remover</button>`:''}</div>
-  </div>`;
-  const mobile=limit>0?`<div class="budget-mobile-limit-layout">
-    <div class="budget-mobile-limit-head"><div class="budget-category-identity">${categoryIconMarkup(record,cat)}<div><strong>${escapeHTML(cat)}</strong>${hidden?'<small class="category-hidden-badge">Categoria oculta</small>':''}<small>Limite mensal: ${formatBRL(limit)}</small></div></div><button type="button" class="budget-mobile-menu" data-budget-menu="${escapeHTML(cat)}" aria-label="Ações de ${escapeHTML(cat)}">•••</button></div>
-    <div class="budget-mobile-available"><span>${remaining>=0?'Disponível':'Excedente'}</span><strong class="${remaining>=0?'positive':'negative'}">${formatBRL(Math.abs(remaining))}</strong></div>
-    <div class="budget-mobile-layered">${layeredLimitBarHTML({limit,spent,pending})}</div>
-    <div class="budget-mobile-legend"><span class="realized"><i></i>Gasto <b>${Math.round(spentPercent)}%</b></span><span class="planned"><i></i>Planejado <b>${Math.round(plannedPercent)}%</b></span></div>
-    <div class="budget-mobile-values"><div><span>Gasto</span><strong>${formatBRL(spent)}</strong></div><div><span>Planejado</span><strong>${formatBRL(pending)}</strong></div></div>
-  </div>`:`<div class="budget-mobile-limit-layout no-limit">
-    <div class="budget-mobile-limit-head"><div class="budget-category-identity">${categoryIconMarkup(record,cat)}<div><strong>${escapeHTML(cat)}</strong>${hidden?'<small class="category-hidden-badge">Categoria oculta</small>':''}<small>Sem limite definido</small></div></div><button type="button" class="budget-mobile-menu" data-budget-menu="${escapeHTML(cat)}" aria-label="Ações de ${escapeHTML(cat)}">•••</button></div>
-    <div class="budget-mobile-values"><div><span>Gasto</span><strong>${formatBRL(spent)}</strong></div><div><span>Planejado</span><strong>${formatBRL(pending)}</strong></div></div>
-    ${record?.is_active!==false?`<button type="button" class="budget-mobile-define" data-budget-edit="${escapeHTML(cat)}">＋ Definir limite</button>`:''}
-  </div>`;
-  return `<article data-budget-category="${escapeHTML(cat)}" tabindex="-1" class="budget-category-row layered-budget-card ${limit>0&&remaining<0?'over':''}">${desktop}${mobile}</article>`;
+  const record=budgetCategoryRecord(cat),hidden=record&&!record.is_active;
+  const key=escapeHTML(cat);
+  // Display percentages at currency precision; financial values remain untouched.
+  const percentage=amount=>{const rounded=Math.round(Math.abs(amount)*100)/100;const pct=limit>0?rounded/limit*100:0;return pct>0&&pct<1?'&lt;1%':`${Math.round(pct)}%`;};
+  const metric=(label,amount,tone='')=>`<div><span>${label}</span><strong class="${tone}">${formatBRL(amount)}</strong>${limit>0?`<small>${percentage(amount)} do limite</small>`:''}</div>`;
+  const canEdit=limit>0||record?.is_active!==false;
+  return `<article data-budget-category="${key}" tabindex="-1" class="budget-category-row budget-limit-clean ${limit>0?'has-limit':'no-limit'} ${limit>0&&remaining<0?'over':''}">
+    <div class="budget-category-identity">${categoryIconMarkup(record,cat)}<div><strong>${key}</strong>${hidden?'<small class="category-hidden-badge">Categoria oculta</small>':''}<small>${limit>0?`Limite do mês: ${formatBRL(limit)}`:'Sem limite definido'}</small></div></div>
+    ${limit>0?`<div class="budget-clean-bar" aria-hidden="true">${layeredLimitBarHTML({limit,spent,pending})}</div>`:''}
+    <div class="budget-clean-stats">${metric('Realizado',spent,'budget-realized')}${metric('Comprometido',pending,'budget-committed')}${limit>0?metric(remaining>=0?'Disponível':'Excedente',Math.abs(remaining),remaining>=0?'positive':'negative'):'<div><span>Disponível</span><strong class="muted" aria-label="Disponível não se aplica sem limite definido">—</strong></div>'}</div>
+    <div class="budget-clean-actions"><div class="budget-clean-desktop-actions">${canEdit?`<button type="button" class="mini-btn" data-budget-edit="${key}">${limit>0?'Editar':'Definir limite'}</button>`:''}${limit>0?`<button type="button" class="mini-btn danger" data-budget-remove="${key}">Remover</button>`:''}</div><button type="button" class="budget-mobile-menu budget-clean-menu" data-budget-menu="${key}" aria-label="Ações de ${key}">•••</button></div>
+  </article>`;
 }
 function openBudgetMobileActions(category){
   budgetActionCategory=category||'';
@@ -414,7 +403,7 @@ function renderBudgetDraft(){
   document.getElementById('budget-available-percent').textContent=totalLimit>0?(available>=0?`${formatBRL(available)} ainda disponível`:`${formatBRL(Math.abs(available))} acima dos limites`):'Defina seus limites';
   document.getElementById('budget-category-count').textContent=String(budgetedCount);document.getElementById('budget-category-count-label').textContent=Number(document.getElementById('budget-category-count').textContent)===1?'categoria':'categorias';
   document.getElementById('budget-active-category-count').textContent=`de ${activeExpenseCount} categorias ativas`;
-  document.getElementById('budget-category-title-count').textContent=`(${budgetedCount})`;
+  document.getElementById('budget-category-title-count').textContent=`${budgetedCount} ${budgetedCount===1?'limite definido':'limites definidos'}`;
   document.getElementById('budget-items').innerHTML=active.length?active.map(cat=>budgetCategoryRow(cat,bs)).join(''):`<div class="empty-state budget-manager-empty"><strong>Nenhum limite definido</strong><span>Use “Novo limite” e escolha uma das suas categorias ativas.</span></div>`;
 }
 function renderBudget(){
