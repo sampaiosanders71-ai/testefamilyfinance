@@ -1,22 +1,22 @@
 {
-  "version": "2.9.40",
-  "publishedAt": "11/11/2026",
+  "version": "2.9.41",
+  "publishedAt": "12/11/2026",
   "improvementCount": 2,
-  "title": "Limites por categoria com uma leitura mais limpa",
-  "summary": "Informações organizadas sem repetições, com adaptação ao computador e ao celular.",
+  "title": "Valores automáticos e novo registro de pagamento",
+  "summary": "Digite os números e o app organiza reais e centavos. O pagamento de fatura agora registra o valor efetivamente pago.",
   "highlights": [
     {
-      "title": "Cada informação em um lugar",
-      "text": "Realizado, Comprometido e Disponível reunidos em três campos, com a barra somente nas categorias que têm limite."
+      "title": "Dinheiro com um padrão único",
+      "text": "Os dois últimos números representam os centavos. A formatação acompanha digitação, edição e valores colados nos campos monetários."
     },
     {
-      "title": "Categorias sem limite mais claras",
-      "text": "Disponível aparece como um traço e Sem limite definido aparece apenas junto ao nome. Percentuais positivos abaixo de 1% são indicados como <1%."
+      "title": "Pagamento com valor e data",
+      "text": "Parcial ou integral, saldo pendente como referência e valor pago em branco. Diferenças identificam encargos desta quitação ou crédito."
     }
   ],
   "details": [
-    "Preserva valores, ícones, cores e os acessos para definir, editar e remover limites.",
-    "Mantém o destaque de excedente e os temas claro e escuro.",
-    "A contagem informa quantos limites estão definidos, sem confundir com a quantidade de categorias exibidas."
+    "Padroniza lançamentos, saldo, cartões, compras, faturas, ajustes, conciliações, metas, limites e planejamento.",
+    "A data começa com hoje e usa o dia do registro quando ficar vazia.",
+    "O saldo diminui pelo valor efetivamente pago. Encargos e pagamento são gravados na mesma operação, sem duplicar a saída de caixa."
   ]
 }

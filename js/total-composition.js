@@ -1,6 +1,6 @@
-import { classifyTransaction,localISODate,ledgerMonthKey,monthCutoffISO } from './financial-ledger.js?v=2.9.40';
-import { goalProgress } from './goal-integration.js?v=2.9.40';
-import { canonicalCategoryName } from './category-alias.js?v=2.9.40';
+import { classifyTransaction,localISODate,ledgerMonthKey,monthCutoffISO } from './financial-ledger.js?v=2.9.41';
+import { goalProgress } from './goal-integration.js?v=2.9.41';
+import { canonicalCategoryName } from './category-alias.js?v=2.9.41';
 
 export const compositionRow=(id,label,amount,meta='',action=null)=>({id:String(id),label:String(label||'Registro'),amount:Number(amount||0),meta:String(meta||''),action});
 export function composition(title,total,rows,options={}){
