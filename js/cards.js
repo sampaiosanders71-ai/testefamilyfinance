@@ -1,9 +1,9 @@
-import { buildCardInvoices, cardMonth,cardCalendarDates,cardDate } from './card-domain.js?v=2.9.41';
-import { operationIds, insertOnce } from './request-operation.js?v=2.9.41';
-import { listAllRows } from './pagination.js?v=2.9.41';
-import { supabase } from './supabase.js?v=2.9.41';
-import { getCurrentUser } from './database.js?v=2.9.41';
-import { monthISO } from './finance.js?v=2.9.41';
+import { buildCardInvoices, cardMonth,cardCalendarDates,cardDate } from './card-domain.js?v=2.9.42';
+import { operationIds, insertOnce } from './request-operation.js?v=2.9.42';
+import { listAllRows } from './pagination.js?v=2.9.42';
+import { supabase } from './supabase.js?v=2.9.42';
+import { getCurrentUser } from './database.js?v=2.9.42';
+import { monthISO } from './finance.js?v=2.9.42';
 
 export async function listCards() {
   const user = await getCurrentUser();

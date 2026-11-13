@@ -9,36 +9,39 @@
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
 <meta content="Family Finance" name="apple-mobile-web-app-title"/>
-<link href="manifest.json" rel="manifest"/>
+<script>
+// Manifest IDs resolve against the origin: keep staging separate from the official legacy ID.
+(()=>{const isTest=location.pathname==='/testefamilyfinance'||location.pathname.startsWith('/testefamilyfinance/');const manifest=document.createElement('link');manifest.rel='manifest';manifest.href=isTest?'manifest-test.json':'manifest.json';document.head.appendChild(manifest);})();
+</script>
 <link href="icons/favicon-32-ff.png" rel="icon" sizes="32x32" type="image/png"/>
 <link href="icons/apple-touch-icon-ff.png" rel="apple-touch-icon" sizes="180x180"/>
 <title>Family Finance</title>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@700;800&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
-<link href="css/app.css?v=2.9.41" rel="stylesheet"><link href="css/nature.css?v=2.9.41" rel="stylesheet">
-<link href="css/motion-v15.css?v=2.9.41" rel="stylesheet">
-<link href="css/download-motion-v16.css?v=2.9.41" rel="stylesheet">
-<link href="css/family-monitor-v17.css?v=2.9.41" rel="stylesheet"/>
-<link href="css/planning-v18.css?v=2.9.41" rel="stylesheet"/>
-<link href="css/categories-budget.css?v=2.9.41" rel="stylesheet"/>
-<link href="css/context-help.css?v=2.9.41" rel="stylesheet"/>
-<link href="css/dashboard-v29.css?v=2.9.41" rel="stylesheet"/>
-<link rel="stylesheet" href="./css/financial-view-293.css?v=2.9.41"/><link rel="stylesheet" href="./css/reserve-299.css?v=2.9.41"/><link rel="stylesheet" href="./css/ui-295.css?v=2.9.41"/>
-<link href="css/report-export.css?v=2.9.41" rel="stylesheet"/>
-<link href="css/cards-workspace.css?v=2.9.41" rel="stylesheet"/>
-<link rel="stylesheet" href="css/analytics-redesign.css?v=2.9.41"/>
-<link rel="stylesheet" href="css/family-pagination.css?v=2.9.41"/>
-<link rel="stylesheet" href="css/brand.css?v=2.9.41"/>
-<link rel="stylesheet" href="css/total-details.css?v=2.9.41"/>
-<link rel="stylesheet" href="css/invoice-workspace.css?v=2.9.41"/>
-<link rel="stylesheet" href="css/cards-refresh.css?v=2.9.41"/>
-<link rel="stylesheet" href="css/interfaces-2931.css?v=2.9.41"/>
-<link rel="stylesheet" href="css/transactions-refresh.css?v=2.9.41"/>
-<link rel="stylesheet" href="css/home-summaries.css?v=2.9.41"/>
-<link rel="stylesheet" href="css/home-transactions.css?v=2.9.41"/>
-<link rel="stylesheet" href="css/limits-refresh.css?v=2.9.41"/>
-<link rel="stylesheet" href="css/money-payment.css?v=2.9.41"/>
+<link href="css/app.css?v=2.9.42" rel="stylesheet"><link href="css/nature.css?v=2.9.42" rel="stylesheet">
+<link href="css/motion-v15.css?v=2.9.42" rel="stylesheet">
+<link href="css/download-motion-v16.css?v=2.9.42" rel="stylesheet">
+<link href="css/family-monitor-v17.css?v=2.9.42" rel="stylesheet"/>
+<link href="css/planning-v18.css?v=2.9.42" rel="stylesheet"/>
+<link href="css/categories-budget.css?v=2.9.42" rel="stylesheet"/>
+<link href="css/context-help.css?v=2.9.42" rel="stylesheet"/>
+<link href="css/dashboard-v29.css?v=2.9.42" rel="stylesheet"/>
+<link rel="stylesheet" href="./css/financial-view-293.css?v=2.9.42"/><link rel="stylesheet" href="./css/reserve-299.css?v=2.9.42"/><link rel="stylesheet" href="./css/ui-295.css?v=2.9.42"/>
+<link href="css/report-export.css?v=2.9.42" rel="stylesheet"/>
+<link href="css/cards-workspace.css?v=2.9.42" rel="stylesheet"/>
+<link rel="stylesheet" href="css/analytics-redesign.css?v=2.9.42"/>
+<link rel="stylesheet" href="css/family-pagination.css?v=2.9.42"/>
+<link rel="stylesheet" href="css/brand.css?v=2.9.42"/>
+<link rel="stylesheet" href="css/total-details.css?v=2.9.42"/>
+<link rel="stylesheet" href="css/invoice-workspace.css?v=2.9.42"/>
+<link rel="stylesheet" href="css/cards-refresh.css?v=2.9.42"/>
+<link rel="stylesheet" href="css/interfaces-2931.css?v=2.9.42"/>
+<link rel="stylesheet" href="css/transactions-refresh.css?v=2.9.42"/>
+<link rel="stylesheet" href="css/home-summaries.css?v=2.9.42"/>
+<link rel="stylesheet" href="css/home-transactions.css?v=2.9.42"/>
+<link rel="stylesheet" href="css/limits-refresh.css?v=2.9.42"/>
+<link rel="stylesheet" href="css/money-payment.css?v=2.9.42"/>
 </head>
 <body>
 <svg aria-hidden="true" class="icon-sprite" focusable="false">
@@ -411,7 +414,7 @@
 <p class="muted settings-help" id="pwa-install-status">Verificando compatibilidade de instalação…</p>
 <div class="settings-inline-note"><strong>Dica:</strong><span>Depois de instalado, o Family Finance pode ser aberto direto pela tela inicial ou pelo menu de aplicativos.</span></div>
 <div class="settings-update-grid">
-<div class="settings-update-version"><span>Versão instalada</span><strong id="install-current-version">2.9.41</strong></div>
+<div class="settings-update-version"><span>Versão instalada</span><strong id="install-current-version">2.9.42</strong></div>
 <div class="settings-update-version"><span>Versão disponível</span><strong id="install-available-version">Verificando…</strong></div>
 </div>
 <div class="settings-update-state"><span class="status-pill" id="install-update-status">Verificando atualizações…</span></div>
@@ -739,7 +742,7 @@
 </div>
 </dialog>
 <dialog class="modal" id="reserve-dialog"><div class="modal-card reserve-dialog-card"><div class="modal-head"><div><span class="eyebrow">RESERVAS E INVESTIMENTOS</span><h3>Saldo guardado</h3></div><button class="modal-close" type="button" data-close-dialog="reserve-dialog" aria-label="Fechar">×</button></div><div id="reserve-detail-body"></div></div></dialog>
-<script defer src="js/context-help.js?v=2.9.41"></script><script src="js/app.js?v=2.9.41" type="module"></script>
+<script defer src="js/context-help.js?v=2.9.42"></script><script src="js/app.js?v=2.9.42" type="module"></script>
 <dialog class="modal" id="goal-history-dialog"><div class="modal-card"><div class="modal-head"><div><span class="eyebrow">META</span><h3 id="goal-history-title">Histórico</h3></div><button type="button" class="modal-close" data-close-dialog="goal-history-dialog" aria-label="Fechar">×</button></div><div id="goal-history-content"></div></div></dialog>
 <dialog id="total-detail-dialog" aria-labelledby="total-detail-title"><header class="total-detail-head"><div class="total-detail-heading"><span class="total-detail-main-icon" id="total-detail-icon" aria-hidden="true"></span><div><h2 id="total-detail-title" tabindex="-1">Composição do total</h2><p id="total-detail-subtitle"></p></div><button id="total-detail-close" type="button" aria-label="Fechar consulta">×</button></div><strong id="total-detail-value"></strong><p id="total-detail-note" role="status" hidden></p></header><div id="total-detail-rows"></div><footer class="total-detail-footer"><nav id="total-detail-nav" aria-label="Páginas da composição" hidden><button id="total-detail-previous" type="button">‹ Anterior</button><span id="total-detail-page" tabindex="-1" aria-live="polite" aria-atomic="true"></span><button id="total-detail-next" type="button">Próxima ›</button></nav><div class="total-detail-sum"><span>Total da composição</span><strong id="total-detail-sum"></strong></div></footer></dialog>
 </body>
