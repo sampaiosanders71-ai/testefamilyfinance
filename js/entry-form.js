@@ -1,5 +1,5 @@
-import {moneyValue,setMoney} from './money-input.js?v=2.9.43';
-import {closeDialog} from './ui.js?v=2.9.43';
+import {moneyValue,setMoney} from './money-input.js?v=2.9.44';
+import {closeDialog} from './ui.js?v=2.9.44';
 
 // One entry point, with the existing cash and card purchase persistence paths.
 // Drafts live only while switching a new entry between these two forms.

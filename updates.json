@@ -1,27 +1,27 @@
 {
-  "version": "2.9.43",
+  "version": "2.9.44",
   "publishedAt": "24/11/2026",
   "improvementCount": 3,
-  "title": "Novo lançamento mais simples",
-  "summary": "Formulário reorganizado para celular e computador, com Receita, Despesa e Cartão no topo.",
+  "title": "Faturas e compras mais organizadas",
+  "summary": "Novas telas de detalhes com ícones de contorno, resumos compactos e acessos mais claros.",
   "highlights": [
     {
-      "title": "Escolha o tipo no topo",
-      "text": "Receita, Despesa e Cartão reunidos, com opções agrupadas à esquerda no computador."
+      "title": "Fatura com leitura mais clara",
+      "text": "Total em destaque, status e vencimento alinhados, resumos de pagamento e registros separados por abas."
     },
     {
-      "title": "Preenchimento mais organizado",
-      "text": "Campos compactos, data brasileira, centavos automáticos e ações sempre acessíveis."
+      "title": "Detalhes da compra renovados",
+      "text": "Valor e parcelamento agrupados, ícones de cartão, data e categoria, e parcelas alinhadas."
     },
     {
-      "title": "Suas regras preservadas",
-      "text": "Categorias, natureza, metas e recorrência continuam disponíveis. Compras seguem o fluxo de faturas e parcelamento."
+      "title": "Acessos sem repetição",
+      "text": "Ver fatura permanece como acesso principal; o histórico fica discreto e o gráfico exibe o resumo do mês sem abrir janelas."
     }
   ],
   "details": [
-    "No celular, os campos aparecem em uma coluna; no computador, Data e Valor ficam lado a lado.",
-    "A descrição, o valor e a data acompanham a troca entre lançamento e compra antes de salvar.",
-    "A opção Cartão usa os cartões cadastrados e registra a compra na fatura, sem descontar o saldo da conta antecipadamente.",
-    "Compras com histórico protegido mantêm as regras de edição. A atualização não modifica registros existentes."
+    "Histórico de faturas, registros da fatura e parcelas da compra usam até quatro itens por página.",
+    "A janela se adapta à quantidade de conteúdo e preserva os temas claro e escuro.",
+    "Os ícones da referência acompanham as informações e as ações de editar e excluir.",
+    "Pagamento, ajustes, estornos, conciliação, crédito disponível e proteções do histórico mantêm as regras existentes. Nenhum registro financeiro é reescrito pela atualização."
   ]
 }

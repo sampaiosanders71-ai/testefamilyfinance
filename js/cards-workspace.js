@@ -1,15 +1,15 @@
-import {moneyValue,setMoney} from './money-input.js?v=2.9.43';
-import {invoiceWorkspaceModel,invoiceWorkspacePage} from './invoice-workspace-model.js?v=2.9.43';
-import { limitComposition } from './total-composition.js?v=2.9.43';
-import {pagedList,recentRecords} from './list-pagination.js?v=2.9.43';
-import {initCardAdjustments} from './card-adjustments-workspace.js?v=2.9.43';
-import { buildCardInvoices,cardLimitSummary,cardToday,cardMonth,cardDate,invoiceStatusLabel,cardAdjustmentLabel } from './card-domain.js?v=2.9.43';
-import { payCardInvoice,reverseCardPayment,deleteCard } from './cards.js?v=2.9.43';
-import { formOperation,clearFormOperation } from './request-operation.js?v=2.9.43';
-import { calculateCashStats } from './finance.js?v=2.9.43';
-import { formatBRL,formatDate,monthLabel,escapeHTML,openDialog,closeDialog,setFormError,toast } from './ui.js?v=2.9.43';
-import { categoryIconSVG } from './categories.js?v=2.9.43';
-import { canonicalCategoryName } from './category-alias.js?v=2.9.43';
+import {moneyValue,setMoney} from './money-input.js?v=2.9.44';
+import {invoiceWorkspaceModel,invoiceWorkspacePage} from './invoice-workspace-model.js?v=2.9.44';
+import { limitComposition } from './total-composition.js?v=2.9.44';
+import {pagedList,recentRecords} from './list-pagination.js?v=2.9.44';
+import {initCardAdjustments} from './card-adjustments-workspace.js?v=2.9.44';
+import { buildCardInvoices,cardLimitSummary,cardToday,cardMonth,cardDate,invoiceStatusLabel,cardAdjustmentLabel } from './card-domain.js?v=2.9.44';
+import { payCardInvoice,reverseCardPayment,deleteCard } from './cards.js?v=2.9.44';
+import { formOperation,clearFormOperation } from './request-operation.js?v=2.9.44';
+import { calculateCashStats } from './finance.js?v=2.9.44';
+import { formatBRL,formatDate,monthLabel,escapeHTML,openDialog,closeDialog,setFormError,toast } from './ui.js?v=2.9.44';
+import { categoryIconSVG } from './categories.js?v=2.9.44';
+import { canonicalCategoryName } from './category-alias.js?v=2.9.44';
 const e=escapeHTML;
 const icon=(name)=>`<svg class="ui-icon" aria-hidden="true"><use href="#i-${name}"></use></svg>`;
 const shortMonth=key=>new Intl.DateTimeFormat('pt-BR',{month:'short',year:'numeric'}).format(cardDate(key)).replace('.','').replace(' de ','/');
@@ -18,6 +18,8 @@ export function initCardsWorkspace({totalDetails,getState,onRefresh,onOperation,
  let selectedCardId=null,activeInvoice=null,activePurchase=null,paying=false,negativeApproved=false,lastRenderedCardId=null,historyCardId=null,historyFilter='all',chartPeriod='all';
  const adjustmentsUI=initCardAdjustments({getState,onRefresh,onOperation,onInvoiceEdited:result=>{if(activeInvoice)activeInvoice.key=result.invoice_month;}});
  let invoiceTab='purchases',invoicePages={purchases:0,payments:0,adjustments:0},returnToHistory=false,invoiceOpener=null,resetting=false,editingPurchases=false;
+ let historyPage=0,purchasePage=0,activePurchaseRecord=null;
+ const chartSelections=new Map();
  const state=()=>getState();
  const findCard=id=>state().cards.find(card=>card.id===id);
  const invoices=card=>buildCardInvoices(card,state().installments,state().invoiceStatuses);
@@ -32,12 +34,21 @@ export function initCardsWorkspace({totalDetails,getState,onRefresh,onOperation,
   return registered.filter(i=>i.invoiceMonth>=lower&&i.invoiceMonth<=current);
  }
  const canEditInvoice=inv=>inv&&!inv.settledAt&&inv.paidAmount===0&&inv.rows.some(r=>r.ff2_card_purchases?.record_kind==='invoice_opening');
+ function recordPages(page,kind){
+  if(page.pages<=1)return '';
+  return `<nav class="card-record-pages" aria-label="Paginação de ${kind==='history'?'faturas':'parcelas'}"><button type="button" data-card-${kind}-page="-1" ${page.page===0?'disabled':''}>‹ Anterior</button><span id="card-${kind}-page-status" tabindex="-1" role="status" aria-live="polite">Página ${page.page+1} de ${page.pages}</span><button type="button" data-card-${kind}-page="1" ${page.page===page.pages-1?'disabled':''}>Próxima ›</button></nav>`;
+ }
+ function chartSummary(inv){
+  return `${e(monthLabel(cardDate(inv.invoiceMonth)))} · <strong>${e(formatBRL(inv.total))}</strong> · ${e(inv.creditBalance>0?'Crédito disponível':invoiceStatusLabel(inv.status))}`;
+ }
  function chart(card,items){
   const months=filteredChartMonths(items);if(!months.length)return empty('Nenhuma fatura registrada neste período.');
   const max=Math.max(...months.map(inv=>Math.max(0,inv.total)),1)*1.18;
   const compact=v=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',notation:'compact',maximumFractionDigits:1}).format(v);
-  const bars=months.map(inv=>`<button type="button" class="card-chart-column ${inv.invoiceMonth===cardMonth()?'current':inv.invoiceMonth>cardMonth()?'future':'past'}" data-card-invoice="${e(card.id)}" data-card-month="${inv.invoiceMonth}" aria-label="${e(monthLabel(cardDate(inv.invoiceMonth)))}: fatura de ${e(formatBRL(inv.total))}, ${e(invoiceStatusLabel(inv.status))}"><span class="card-chart-track"><span class="card-chart-fill" style="height:${Math.max(0,Math.min(100,inv.total/max*100)).toFixed(3)}%"><span class="card-chart-value"><span class="card-chart-value-full">${e(formatBRL(inv.total))}</span><span class="card-chart-value-compact">${e(compact(inv.total))}</span></span></span></span><span class="card-chart-month">${e(shortMonth(inv.invoiceMonth))}</span></button>`).join('');
-  return `<div class="card-chart-layout"><div class="card-barchart"><div class="card-chart-scale" aria-hidden="true">${[1,.75,.5,.25,0].map(r=>`<span>${e(compact(max*r))}</span>`).join('')}</div><div class="card-chart-scroll" role="region" aria-label="Faturas registradas; selecione uma barra para abrir a fatura" tabindex="0"><div class="card-chart-bars" style="--card-months:${months.length}">${bars}</div></div></div><div class="card-chart-legend"><span><i class="card-legend-current"></i>Atual</span><span><i class="card-legend-other"></i>Outros meses</span></div></div>`;
+  const selected=months.find(inv=>inv.invoiceMonth===chartSelections.get(card.id))||months.find(inv=>inv.invoiceMonth===cardMonth())||months.at(-1);
+  chartSelections.set(card.id,selected.invoiceMonth);
+  const bars=months.map(inv=>`<button type="button" class="card-chart-column ${inv.invoiceMonth===cardMonth()?'current':inv.invoiceMonth>cardMonth()?'future':'past'}" data-card-chart-month="${inv.invoiceMonth}" aria-pressed="${inv.invoiceMonth===selected.invoiceMonth}" aria-controls="card-chart-summary" aria-label="Consultar resumo de ${e(monthLabel(cardDate(inv.invoiceMonth)))}: ${e(formatBRL(inv.total))}, ${e(invoiceStatusLabel(inv.status))}"><span class="card-chart-track"><span class="card-chart-fill" style="height:${Math.max(0,Math.min(100,inv.total/max*100)).toFixed(3)}%"><span class="card-chart-value"><span class="card-chart-value-full">${e(formatBRL(inv.total))}</span><span class="card-chart-value-compact">${e(compact(inv.total))}</span></span></span></span><span class="card-chart-month">${e(shortMonth(inv.invoiceMonth))}</span></button>`).join('');
+  return `<div class="card-chart-layout"><div class="card-barchart"><div class="card-chart-scale" aria-hidden="true">${[1,.75,.5,.25,0].map(r=>`<span>${e(compact(max*r))}</span>`).join('')}</div><div class="card-chart-scroll" role="region" aria-label="Faturas registradas; selecione uma barra para consultar o resumo do mês" tabindex="0"><div class="card-chart-bars" style="--card-months:${months.length}">${bars}</div></div></div><div class="card-chart-legend"><span><i class="card-legend-current"></i>Atual</span><span><i class="card-legend-other"></i>Outros meses</span></div><p class="card-chart-summary" id="card-chart-summary" role="status" aria-live="polite">${chartSummary(selected)}</p></div>`;
 
  }
  function purchaseRow(row){
@@ -83,13 +94,14 @@ export function initCardsWorkspace({totalDetails,getState,onRefresh,onOperation,
   const current=cardMonth(),items=invoices(card).slice().reverse().filter(inv=>historyFilter==='all'||historyFilter==='past'&&inv.invoiceMonth<current||historyFilter==='current'&&inv.invoiceMonth===current||historyFilter==='future'&&inv.invoiceMonth>current);
   document.querySelectorAll('[data-card-history-filter]').forEach(button=>{button.setAttribute('aria-pressed',String(button.dataset.cardHistoryFilter===historyFilter));});
   document.getElementById('card-history-result').textContent=`${items.length} ${items.length===1?'fatura':'faturas'}`;
-  list.innerHTML=pagedList(`invoice-history:${card.id}`,items,inv=>`<button type="button" class="card-invoice-history-row ${inv.invoiceMonth===current?'is-current':''}" data-card-invoice="${e(card.id)}" data-card-month="${inv.invoiceMonth}"><span class="card-history-month-tile" aria-hidden="true"><span>${e(new Intl.DateTimeFormat('pt-BR',{month:'short'}).format(cardDate(inv.invoiceMonth)).replace('.',''))}</span><strong>${inv.invoiceMonth.slice(0,4)}</strong></span><span class="card-row-copy"><strong>${e(monthLabel(cardDate(inv.invoiceMonth)))}</strong><small>Vencimento ${formatDate(inv.dueOn)}${inv.invoiceMonth===current?' · Mês atual':''}</small>${statusBadge(inv)}</span><span class="card-invoice-history-value"><strong>${e(formatBRL(inv.total))}</strong>${inv.paidAmount>0&&inv.balanceDue>0?`<small>Falta ${e(formatBRL(inv.balanceDue))}</small>`:''}</span><span class="card-row-arrow" aria-hidden="true">›</span></button>`,{context:historyFilter,label:'faturas'})||empty('Nenhuma fatura registrada neste cartão.');
+  const page=invoiceWorkspacePage(items,historyPage);historyPage=page.page;
+  list.innerHTML=(page.rows.map(inv=>`<button type="button" class="card-invoice-history-row ${inv.invoiceMonth===current?'is-current':''}" data-card-invoice="${e(card.id)}" data-card-month="${inv.invoiceMonth}"><span class="card-history-month-tile" aria-hidden="true"><span>${e(new Intl.DateTimeFormat('pt-BR',{month:'short'}).format(cardDate(inv.invoiceMonth)).replace('.',''))}</span><strong>${inv.invoiceMonth.slice(0,4)}</strong></span><span class="card-row-copy"><strong>${e(monthLabel(cardDate(inv.invoiceMonth)))}</strong><small>Vencimento ${formatDate(inv.dueOn)}${inv.invoiceMonth===current?' · Mês atual':''}</small>${statusBadge(inv)}</span><span class="card-invoice-history-value"><strong>${e(formatBRL(inv.total))}</strong>${inv.paidAmount>0&&inv.balanceDue>0?`<small>Falta ${e(formatBRL(inv.balanceDue))}</small>`:''}</span><span class="card-row-arrow" aria-hidden="true">${icon('chevron-right')}</span></button>`).join('')||empty('Nenhuma fatura registrada neste cartão.'))+recordPages(page,'history');
   list.scrollTop=scroll;
   if(focused)list.querySelector(`[data-card-month="${focused}"]`)?.focus({preventScroll:true});
  }
  function openInvoiceHistory(filter='all'){
   if(!findCard(selectedCardId))return;
-  historyFilter=filter;historyCardId=selectedCardId;renderInvoiceHistory();
+  historyFilter=filter;historyPage=0;historyCardId=selectedCardId;renderInvoiceHistory();
   document.getElementById('card-invoice-history-list').scrollTop=0;
   openDialog('card-invoice-history-dialog');
  }
@@ -136,10 +148,10 @@ export function initCardsWorkspace({totalDetails,getState,onRefresh,onOperation,
   invoicePages[invoiceTab]=page.page;
   const dialog=document.getElementById('invoice-dialog');dialog.classList.add('unified-invoice-dialog');
   document.getElementById('invoice-title').textContent=monthLabel(cardDate(inv.invoiceMonth));
-  document.getElementById('invoice-card-name').textContent=inv.card.name;
+  document.getElementById('invoice-card-name').innerHTML=icon('card')+`<span>${e(inv.card.name)}</span>`;
   const sourceLabel=model.hasOpening?'Composição':'Compras';
-  document.getElementById('invoice-content').innerHTML=`${returnToHistory?'<button type="button" class="card-history-link invoice-history-return" data-card-history-return>‹ Voltar ao histórico</button>':''}<div class="invoice-status">${statusBadge(inv)}<span>Vence ${formatDate(inv.dueOn)}</span></div>
-  <section class="invoice-amount"><span>Total da fatura</span><strong>${e(formatBRL(inv.total))}</strong><div class="invoice-facts"><button type="button" data-invoice-tab="payments" aria-label="Consultar pagamentos: ${e(formatBRL(inv.paidAmount))}"><span>Pago</span><b class="positive">${e(formatBRL(inv.paidAmount))}</b></button><div><span>${inv.creditBalance>0?'Crédito disponível':'Falta pagar'}</span><b>${e(formatBRL(inv.creditBalance>0?inv.creditBalance:inv.balanceDue))}</b></div><div><span>Fechamento</span><b>${formatDate(inv.closingOn)}</b></div></div></section>
+  document.getElementById('invoice-content').innerHTML=`${returnToHistory?'<button type="button" class="card-history-link invoice-history-return" data-card-history-return>‹ Voltar ao histórico</button>':''}<div class="invoice-top-summary"><section class="invoice-amount"><span>Total da fatura</span><strong>${e(formatBRL(inv.total))}</strong></section><div class="invoice-status">${statusBadge(inv)}<span>Vence ${formatDate(inv.dueOn)}</span></div></div>
+  <div class="invoice-facts"><button type="button" data-invoice-tab="payments" aria-label="Consultar pagamentos: ${e(formatBRL(inv.paidAmount))}"><span>Pago</span><b class="positive">${e(formatBRL(inv.paidAmount))}</b></button><div><span>${inv.creditBalance>0?'Crédito disponível':'Falta pagar'}</span><b>${e(formatBRL(inv.creditBalance>0?inv.creditBalance:inv.balanceDue))}</b></div><div><span>Fechamento</span><b>${formatDate(inv.closingOn)}</b></div></div>
   <div class="invoice-tabs" role="tablist" aria-label="Registros da fatura">${[['purchases',sourceLabel,model.purchases.length],['payments','Pagamentos',model.payments.length],['adjustments','Ajustes',model.adjustments.length]].map(([key,label,count])=>`<button type="button" id="invoice-tab-${key}" role="tab" aria-selected="${invoiceTab===key}" aria-controls="invoice-records" tabindex="${invoiceTab===key?0:-1}" data-invoice-tab="${key}">${e(label)}<span>${count}</span></button>`).join('')}</div>
   <section class="invoice-list" id="invoice-records" role="tabpanel" aria-labelledby="invoice-tab-${invoiceTab}" tabindex="-1">${page.rows.map(row=>invoiceRow(row,inv)).join('')||empty('Nenhum registro nesta aba.')}</section>
   ${page.pages>1?`<nav class="invoice-pages" aria-label="Paginação dos registros"><button type="button" data-invoice-page="-1" ${page.page===0?'disabled':''}>‹ Anterior</button><span id="invoice-page-status" tabindex="-1" role="status" aria-live="polite">Página ${page.page+1} de ${page.pages}</span><button type="button" data-invoice-page="1" ${page.page===page.pages-1?'disabled':''}>Próxima ›</button></nav>`:''}
@@ -157,22 +169,25 @@ export function initCardsWorkspace({totalDetails,getState,onRefresh,onOperation,
  }
  function wireCardTotals(card,limit){
   if(totalDetails)for(const [selector,field]of [['.card-available','available'],['.card-limit-meta>span:first-child>b','committed']])totalDetails.attach(document.querySelector(selector),'card:'+card.id+':'+field,()=>{const latest=findCard(card.id);if(!latest)return null;const items=invoices(latest);return limitComposition(latest,items,cardLimitSummary(latest,items),field)},field==='available'?'Limite disponível':'Limite comprometido');
-  const value=document.querySelector('.card-current-value>strong');if(!value)return;
-  value.classList.add('total-detail-trigger');value.setAttribute('role','button');value.tabIndex=0;value.setAttribute('aria-haspopup','dialog');value.setAttribute('aria-controls','invoice-dialog');value.title='Consultar fatura';value.setAttribute('aria-label','Consultar fatura do mês: '+value.textContent.trim());
-  value.addEventListener('click',()=>openInvoice(card.id));value.addEventListener('keydown',event=>{if(['Enter',' '].includes(event.key)){event.preventDefault();openInvoice(card.id);}});
  }
  async function openPurchase(id){
   if(!onLoadPurchase)return;
   const purchase=await onOperation('Carregando compra…','Buscando os dados da compra selecionada.',()=>onLoadPurchase(id));
   if(!purchase)return;
   activePurchase=id;
+  activePurchaseRecord=purchase;purchasePage=0;
+  renderPurchaseDetails();openDialog('card-purchase-dialog');
+ }
+ function renderPurchaseDetails(){
+  const purchase=activePurchaseRecord;if(!purchase)return;
+  const id=purchase.id;
   const card=findCard(purchase.card_id);const rows=state().installments.filter(row=>!row.card_adjustment&&row.purchase_id===id).sort((a,b)=>a.installment_no-b.installment_no);
   const locked=rows.some(row=>{const inv=selectedInvoice(purchase.card_id,row.invoice_month);return inv?.paidAmount>0||inv?.settledAt})||state().cardAdjustments.some(a=>a.purchase_id===id)||state().cardReconciliations.some(r=>rows.some(row=>row.id===r.installment_id))||purchase.record_kind==='invoice_opening';
   document.getElementById('card-purchase-title').textContent=purchase.description;
-  document.getElementById('card-purchase-detail').innerHTML=`<dl class="card-purchase-facts"><div><dt>Cartão</dt><dd>${e(card?.name||purchase.ff2_cards?.name||'Cartão')}</dd></div><div><dt>Data original</dt><dd>${formatDate(purchase.purchase_date)}</dd></div><div><dt>Valor total</dt><dd>${e(formatBRL(purchase.total_amount))}</dd></div><div><dt>Categoria</dt><dd>${e(purchase.category||'Outros')}</dd></div><div><dt>Parcelamento</dt><dd>${Number(purchase.installment_count)===1?'À vista':`${Number(purchase.installment_count)} parcelas`}</dd></div></dl><h4>Parcelas e faturas</h4><div class="card-purchase-invoices">${pagedList(`purchase-installments:${purchase.id}`,rows,row=>`<button type="button" class="card-related-invoice" data-card-related-invoice="${e(purchase.card_id)}" data-card-month="${row.invoice_month}"><span>${e(shortMonth(row.invoice_month))} · ${row.installment_no} de ${purchase.installment_count}</span><strong>${e(formatBRL(row.amount))}</strong><span aria-hidden="true">›</span></button>`,{context:'',label:'parcelas'})}</div>${locked?'<p class="card-lock-note">O histórico financeiro desta compra está protegido. Descrição e categoria podem ser corrigidas; valores exigem ajuste ou estorno separado.</p>':''}`;
+  const page=invoiceWorkspacePage(rows,purchasePage);purchasePage=page.page;
+  document.getElementById('card-purchase-detail').innerHTML=`<dl class="purchase-reference-summary"><div><dt>Valor total</dt><dd>${e(formatBRL(purchase.total_amount))}</dd></div><div><dt>Parcelamento</dt><dd>${Number(purchase.installment_count)===1?'À vista':`${Number(purchase.installment_count)} parcelas`}</dd></div></dl><dl class="purchase-reference-facts"><div class="purchase-fact-card">${icon('card')}<span><dt>Cartão</dt><dd>${e(card?.name||purchase.ff2_cards?.name||'Cartão')}</dd></span></div><div class="purchase-fact-date">${icon('calendar-simple')}<span><dt>Data original</dt><dd>${formatDate(purchase.purchase_date)}</dd></span></div><div class="purchase-fact-category">${icon('tag')}<span><dt>Categoria</dt><dd>${e(purchase.category||'Outros')}</dd></span></div></dl><h4 class="purchase-installments-title">${icon('calendar-simple')}Parcelas e faturas</h4><div class="card-purchase-invoices">${page.rows.map(row=>`<button type="button" class="card-related-invoice purchase-installment-line" data-card-related-invoice="${e(purchase.card_id)}" data-card-month="${row.invoice_month}"><span>${e(shortMonth(row.invoice_month))}</span><small>${row.installment_no} de ${purchase.installment_count}</small><strong>${e(formatBRL(row.amount))}</strong><span aria-hidden="true">${icon('chevron-right')}</span></button>`).join('')||empty('Nenhuma parcela disponível.')}</div>${recordPages(page,'purchase')}${locked?'<p class="card-lock-note">O histórico financeiro desta compra está protegido. Descrição e categoria podem ser corrigidas; valores exigem ajuste ou estorno separado.</p>':''}`;
   document.getElementById('card-purchase-edit').disabled=purchase.record_kind==='invoice_opening';document.getElementById('card-purchase-delete').disabled=locked;
   document.getElementById('card-purchase-refund').disabled=purchase.record_kind==='invoice_opening';
-  openDialog('card-purchase-dialog');
  }
  function paymentFieldsChanged({keepNegative=false}={}){
   if(!keepNegative){negativeApproved=false;document.getElementById('card-payment-warning').classList.add('hidden');setFormError('card-payment-error','');}
@@ -238,7 +253,15 @@ export function initCardsWorkspace({totalDetails,getState,onRefresh,onOperation,
    if(button.hasAttribute('data-card-create'))return document.getElementById('new-card-btn').click();
    if(button.hasAttribute('data-card-new-purchase'))return onNewPurchase(selectedCardId);
    if(button.hasAttribute('data-card-settings'))return onEditCard(selectedCardId);
-   if(button.dataset.cardHistoryFilter){historyFilter=button.dataset.cardHistoryFilter;document.getElementById('card-invoice-history-list').scrollTop=0;return renderInvoiceHistory();}
+   if(button.dataset.cardChartMonth){
+    const inv=selectedInvoice(selectedCardId,button.dataset.cardChartMonth);if(!inv)return;
+    chartSelections.set(selectedCardId,inv.invoiceMonth);
+    document.querySelectorAll('[data-card-chart-month]').forEach(bar=>bar.setAttribute('aria-pressed',String(bar.dataset.cardChartMonth===inv.invoiceMonth)));
+    document.getElementById('card-chart-summary').innerHTML=chartSummary(inv);return;
+   }
+   if(button.dataset.cardHistoryFilter){historyFilter=button.dataset.cardHistoryFilter;historyPage=0;document.getElementById('card-invoice-history-list').scrollTop=0;return renderInvoiceHistory();}
+   if(button.dataset.cardHistoryPage){historyPage+=Number(button.dataset.cardHistoryPage);renderInvoiceHistory();document.getElementById('card-history-page-status')?.focus({preventScroll:true});return;}
+   if(button.dataset.cardPurchasePage){purchasePage+=Number(button.dataset.cardPurchasePage);renderPurchaseDetails();document.getElementById('card-purchase-page-status')?.focus({preventScroll:true});return;}
    if(button.dataset.invoiceTab){editingPurchases=false;return setInvoiceTab(button.dataset.invoiceTab);}
    if(button.dataset.invoicePage)return changeInvoicePage(Number(button.dataset.invoicePage));
    if(button.hasAttribute('data-card-edit-purchases')){
@@ -300,7 +323,7 @@ export function initCardsWorkspace({totalDetails,getState,onRefresh,onOperation,
  document.getElementById('card-payment-type-fix').addEventListener('click',event=>{const mode=event.currentTarget.dataset.mode;document.querySelector(`[name="card-payment-type"][value="${mode}"]`).checked=true;document.getElementById('card-payment-mode').value=mode;paymentFieldsChanged();});
  document.getElementById('card-reversal-form').addEventListener('submit',submitReversal);
  for(const id of ['card-payment-dialog','card-reversal-dialog'])document.getElementById(id).addEventListener('cancel',event=>{if(paying)event.preventDefault()});
- return {render,openInvoice,openInvoiceById,locateInvoiceItem,reset(){resetting=true;returnToHistory=false;invoiceOpener=null;editingPurchases=false;delete document.getElementById('card-invoice-history-dialog').dataset.invoiceSuspended;adjustmentsUI.reset();selectedCardId=null;activeInvoice=null;activePurchase=null;historyCardId=null;for(const id of ['card-invoice-history-dialog','invoice-dialog','card-payment-dialog','card-purchase-dialog','card-reversal-dialog'])closeDialog(id);queueMicrotask(()=>{resetting=false});},isBusy:()=>paying||adjustmentsUI.isBusy()};
+ return {render,openInvoice,openInvoiceById,locateInvoiceItem,reset(){resetting=true;returnToHistory=false;invoiceOpener=null;editingPurchases=false;historyPage=0;purchasePage=0;activePurchaseRecord=null;chartSelections.clear();delete document.getElementById('card-invoice-history-dialog').dataset.invoiceSuspended;adjustmentsUI.reset();selectedCardId=null;activeInvoice=null;activePurchase=null;historyCardId=null;for(const id of ['card-invoice-history-dialog','invoice-dialog','card-payment-dialog','card-purchase-dialog','card-reversal-dialog'])closeDialog(id);queueMicrotask(()=>{resetting=false});},isBusy:()=>paying||adjustmentsUI.isBusy()};
 }
 export function cardErrorMessage(error){
  const messages={PURCHASE_NOT_FOUND:'Esta compra não está disponível ou foi excluída. Atualize a fatura.',AUTH_REQUIRED:'Entre novamente para editar a compra.',SESSION_CHANGED:'Sua sessão mudou. Entre novamente para editar a compra.',SETTLED_INVOICE_IMMUTABLE:'Esta fatura possui histórico quitado e não pode ser reescrita. Registre um ajuste em outra competência.',PURCHASE_HAS_ADJUSTMENTS:'Esta compra possui ajustes ou conciliação. Corrija somente descrição e categoria.',INVOICE_ALREADY_PAID:'Esta fatura já está quitada. Atualize os dados.',INVOICE_HAS_PAYMENTS:'Corrija os pagamentos desta fatura antes de alterar a compra.',PAYMENT_BALANCE_CHANGED:'O saldo da fatura mudou. Feche o pagamento e confira os valores atualizados.',PAYMENT_TYPE_MISMATCH:'Confira se o pagamento é parcial ou integral.',PAYMENT_DIFFERENCE_REQUIRED:'Identifique o motivo da diferença.',INVALID_PAYMENT_AMOUNT:'Informe um valor de pagamento válido.',INVALID_PAYMENT_DATE:'Informe uma data de pagamento até hoje.',CARD_HAS_BALANCE:'Quite todas as faturas antes de arquivar o cartão.',CARD_PAYMENT_LINKED:'Corrija este pagamento nos detalhes da fatura.',RECONCILIATION_LOCKED:'Este registro é um saldo de conciliação e mantém o histórico anterior.',REQUEST_CONFLICT:'Esta operação mudou. Feche o formulário e tente novamente.',INVALID_INSTALLMENTS:'Revise a quantidade de parcelas e o valor da compra.'};

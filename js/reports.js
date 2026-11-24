@@ -1,8 +1,8 @@
-import {cardAdjustmentLabel} from './card-domain.js?v=2.9.43';
-import { buildFinancialMonthLedger, classifyTransaction } from './financial-ledger.js?v=2.9.43';
-import { canonicalCategoryName, canonicalCategoryAmounts, canonicalCategoryLimits } from './category-alias.js?v=2.9.43';
-import { ownTransferReview, legacyReview, reviewedPeriodRows } from './financial-integrity.js?v=2.9.43';
-import { buildVisualPdf, PDF_PAGE } from './pdf.js?v=2.9.43';
+import {cardAdjustmentLabel} from './card-domain.js?v=2.9.44';
+import { buildFinancialMonthLedger, classifyTransaction } from './financial-ledger.js?v=2.9.44';
+import { canonicalCategoryName, canonicalCategoryAmounts, canonicalCategoryLimits } from './category-alias.js?v=2.9.44';
+import { ownTransferReview, legacyReview, reviewedPeriodRows } from './financial-integrity.js?v=2.9.44';
+import { buildVisualPdf, PDF_PAGE } from './pdf.js?v=2.9.44';
 
 const C = {
   ink:'#171717', muted:'#6f7379', subtle:'#9b9da1', panel:'#f5f2ed', line:'#dedbd5',
