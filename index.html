@@ -19,31 +19,31 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@700;800&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
-<link href="css/app.css?v=2.9.45" rel="stylesheet"><link href="css/nature.css?v=2.9.45" rel="stylesheet">
-<link href="css/motion-v15.css?v=2.9.45" rel="stylesheet">
-<link href="css/download-motion-v16.css?v=2.9.45" rel="stylesheet">
-<link href="css/family-monitor-v17.css?v=2.9.45" rel="stylesheet"/>
-<link href="css/planning-v18.css?v=2.9.45" rel="stylesheet"/>
-<link href="css/categories-budget.css?v=2.9.45" rel="stylesheet"/>
-<link href="css/context-help.css?v=2.9.45" rel="stylesheet"/>
-<link href="css/dashboard-v29.css?v=2.9.45" rel="stylesheet"/>
-<link rel="stylesheet" href="./css/financial-view-293.css?v=2.9.45"/><link rel="stylesheet" href="./css/reserve-299.css?v=2.9.45"/><link rel="stylesheet" href="./css/ui-295.css?v=2.9.45"/>
-<link href="css/report-export.css?v=2.9.45" rel="stylesheet"/>
-<link href="css/cards-workspace.css?v=2.9.45" rel="stylesheet"/>
-<link rel="stylesheet" href="css/analytics-redesign.css?v=2.9.45"/>
-<link rel="stylesheet" href="css/family-pagination.css?v=2.9.45"/>
-<link rel="stylesheet" href="css/brand.css?v=2.9.45"/>
-<link rel="stylesheet" href="css/total-details.css?v=2.9.45"/>
-<link rel="stylesheet" href="css/invoice-workspace.css?v=2.9.45"/>
-<link rel="stylesheet" href="css/cards-refresh.css?v=2.9.45"/>
-<link rel="stylesheet" href="css/interfaces-2931.css?v=2.9.45"/>
-<link rel="stylesheet" href="css/transactions-refresh.css?v=2.9.45"/>
-<link rel="stylesheet" href="css/home-summaries.css?v=2.9.45"/>
-<link rel="stylesheet" href="css/home-transactions.css?v=2.9.45"/>
-<link rel="stylesheet" href="css/limits-refresh.css?v=2.9.45"/>
-<link rel="stylesheet" href="css/money-payment.css?v=2.9.45"/>
-<link rel="stylesheet" href="css/entry-form.css?v=2.9.45"/>
-<link rel="stylesheet" href="css/card-records.css?v=2.9.45"/>
+<link href="css/app.css?v=2.9.46" rel="stylesheet"><link href="css/nature.css?v=2.9.46" rel="stylesheet">
+<link href="css/motion-v15.css?v=2.9.46" rel="stylesheet">
+<link href="css/download-motion-v16.css?v=2.9.46" rel="stylesheet">
+<link href="css/family-monitor-v17.css?v=2.9.46" rel="stylesheet"/>
+<link href="css/planning-v18.css?v=2.9.46" rel="stylesheet"/>
+<link href="css/categories-budget.css?v=2.9.46" rel="stylesheet"/>
+<link href="css/context-help.css?v=2.9.46" rel="stylesheet"/>
+<link href="css/dashboard-v29.css?v=2.9.46" rel="stylesheet"/>
+<link rel="stylesheet" href="./css/financial-view-293.css?v=2.9.46"/><link rel="stylesheet" href="./css/reserve-299.css?v=2.9.46"/><link rel="stylesheet" href="./css/ui-295.css?v=2.9.46"/>
+<link href="css/report-export.css?v=2.9.46" rel="stylesheet"/>
+<link href="css/cards-workspace.css?v=2.9.46" rel="stylesheet"/>
+<link rel="stylesheet" href="css/analytics-redesign.css?v=2.9.46"/>
+<link rel="stylesheet" href="css/family-pagination.css?v=2.9.46"/>
+<link rel="stylesheet" href="css/brand.css?v=2.9.46"/>
+<link rel="stylesheet" href="css/total-details.css?v=2.9.46"/>
+<link rel="stylesheet" href="css/invoice-workspace.css?v=2.9.46"/>
+<link rel="stylesheet" href="css/cards-refresh.css?v=2.9.46"/>
+<link rel="stylesheet" href="css/interfaces-2931.css?v=2.9.46"/>
+<link rel="stylesheet" href="css/transactions-refresh.css?v=2.9.46"/>
+<link rel="stylesheet" href="css/home-summaries.css?v=2.9.46"/>
+<link rel="stylesheet" href="css/home-transactions.css?v=2.9.46"/>
+<link rel="stylesheet" href="css/limits-refresh.css?v=2.9.46"/>
+<link rel="stylesheet" href="css/money-payment.css?v=2.9.46"/>
+<link rel="stylesheet" href="css/entry-form.css?v=2.9.46"/>
+<link rel="stylesheet" href="css/card-records.css?v=2.9.46"/>
 </head>
 <body>
 <svg aria-hidden="true" class="icon-sprite" focusable="false">
@@ -419,7 +419,7 @@
 <p class="muted settings-help" id="pwa-install-status">Verificando compatibilidade de instalação…</p>
 <div class="settings-inline-note"><strong>Dica:</strong><span>Depois de instalado, o Family Finance pode ser aberto direto pela tela inicial ou pelo menu de aplicativos.</span></div>
 <div class="settings-update-grid">
-<div class="settings-update-version"><span>Versão instalada</span><strong id="install-current-version">2.9.45</strong></div>
+<div class="settings-update-version"><span>Versão instalada</span><strong id="install-current-version">2.9.46</strong></div>
 <div class="settings-update-version"><span>Versão disponível</span><strong id="install-available-version">Verificando…</strong></div>
 </div>
 <div class="settings-update-state"><span class="status-pill" id="install-update-status">Verificando atualizações…</span></div>
@@ -648,19 +648,21 @@
 </div>
 </div>
 </dialog>
-<dialog class="modal" id="planning-dialog">
+<dialog class="modal entry-dialog" id="planning-dialog" aria-labelledby="planning-dialog-title">
 <form class="modal-card" id="planning-form" method="dialog">
-<div class="modal-head"><div><span class="eyebrow">PLANEJAMENTO</span><h3 id="planning-dialog-title">Novo item</h3></div><button class="modal-close" data-close-dialog="planning-dialog" type="button">×</button></div>
+<div class="modal-head"><h3 id="planning-dialog-title">Novo plano</h3><button class="modal-close" data-close-dialog="planning-dialog" type="button" aria-label="Fechar planejamento">×</button></div>
 <input id="planning-id" type="hidden"/>
-<div class="form-grid two">
-<div class="field"><label for="planning-direction">Tipo</label><select id="planning-direction"><option value="1">A receber</option><option value="-1">A pagar</option></select></div>
-<div class="field"><label for="planning-date">Data prevista</label><input id="planning-date" required="" type="date"/></div>
-</div>
-<div class="field"><label for="planning-description">Descrição</label><input id="planning-description" maxlength="140" placeholder="Ex.: Formatura, bolsa, consulta" required="" type="text"/></div>
-<div class="form-grid two"><div class="field"><label for="planning-amount">Valor previsto</label><input id="planning-amount" min="0.01" required="" step="0.01" type="text" data-money=""/></div><div class="field"><label for="planning-category">Categoria</label><select id="planning-category"></select></div></div>
-<div class="field hidden" id="planning-nature-wrap"><label for="planning-nature">Natureza da saída</label><select id="planning-nature"><option value="consumption">Despesa de consumo</option><option value="allocation">Reserva / Investimento</option><option value="transfer">Transferência própria</option></select><p class="nature-hint">Reservas e transferências não entram nas despesas de consumo.</p></div>
-<div class="field"><label for="planning-notes">Observação <span class="muted">(opcional)</span></label><input id="planning-notes" maxlength="220" type="text"/></div>
-<p class="form-error hidden" id="planning-form-error"></p>
+<select id="planning-direction" hidden aria-hidden="true" tabindex="-1"><option value="1">A receber</option><option value="-1">A pagar</option></select>
+<fieldset class="entry-types"><legend>Tipo de planejamento</legend><label><input type="radio" name="planning-entry-type" value="1" data-entry-type checked/>A receber</label><label><input type="radio" name="planning-entry-type" value="-1" data-entry-type/>A pagar</label></fieldset>
+<div class="entry-body"><div class="entry-fields">
+<div class="field entry-field-date"><label for="planning-date">Data prevista</label><input id="planning-date" required type="date" lang="pt-BR"/></div>
+<div class="field entry-field-description"><label for="planning-description">Descrição</label><input id="planning-description" maxlength="140" placeholder="Ex.: Bolsa de estudos" required type="text"/></div>
+<div class="field entry-field-amount"><label for="planning-amount">Valor previsto</label><input id="planning-amount" min="0.01" required step="0.01" type="text" data-money=""/></div>
+<div class="field planning-entry-category"><label for="planning-category">Categoria</label><select id="planning-category"></select></div>
+<div class="field hidden" id="planning-nature-wrap"><label for="planning-nature">Natureza da saída</label><select id="planning-nature"><option value="consumption">Despesa de consumo</option><option value="allocation">Reserva / Investimento</option><option value="transfer">Transferência própria</option></select></div>
+<div class="field entry-field-wide"><label for="planning-notes">Observação</label><input id="planning-notes" maxlength="220" placeholder="Opcional" type="text"/></div>
+</div></div>
+<p class="form-error hidden" id="planning-form-error" role="alert"></p>
 <div class="modal-actions"><button class="secondary-btn" data-close-dialog="planning-dialog" type="button">Cancelar</button><button class="primary-compact" id="planning-save-btn" type="submit">Salvar</button></div>
 </form>
 </dialog>
@@ -759,7 +761,7 @@
 </div>
 </dialog>
 <dialog class="modal" id="reserve-dialog"><div class="modal-card reserve-dialog-card"><div class="modal-head"><div><span class="eyebrow">RESERVAS E INVESTIMENTOS</span><h3>Saldo guardado</h3></div><button class="modal-close" type="button" data-close-dialog="reserve-dialog" aria-label="Fechar">×</button></div><div id="reserve-detail-body"></div></div></dialog>
-<script defer src="js/context-help.js?v=2.9.45"></script><script src="js/app.js?v=2.9.45" type="module"></script>
+<script defer src="js/context-help.js?v=2.9.46"></script><script src="js/app.js?v=2.9.46" type="module"></script>
 <dialog class="modal" id="goal-history-dialog"><div class="modal-card"><div class="modal-head"><div><span class="eyebrow">META</span><h3 id="goal-history-title">Histórico</h3></div><button type="button" class="modal-close" data-close-dialog="goal-history-dialog" aria-label="Fechar">×</button></div><div id="goal-history-content"></div></div></dialog>
 <dialog id="total-detail-dialog" aria-labelledby="total-detail-title"><header class="total-detail-head"><div class="total-detail-heading"><span class="total-detail-main-icon" id="total-detail-icon" aria-hidden="true"></span><div><h2 id="total-detail-title" tabindex="-1">Composição do total</h2><p id="total-detail-subtitle"></p></div><button id="total-detail-close" type="button" aria-label="Fechar consulta">×</button></div><strong id="total-detail-value"></strong><p id="total-detail-note" role="status" hidden></p></header><div id="total-detail-rows"></div><footer class="total-detail-footer"><nav id="total-detail-nav" aria-label="Páginas da composição" hidden><button id="total-detail-previous" type="button">‹ Anterior</button><span id="total-detail-page" tabindex="-1" aria-live="polite" aria-atomic="true"></span><button id="total-detail-next" type="button">Próxima ›</button></nav><div class="total-detail-sum"><span>Total da composição</span><strong id="total-detail-sum"></strong></div></footer></dialog>
 </body>

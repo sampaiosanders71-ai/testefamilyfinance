@@ -13,6 +13,8 @@
 .entry-dialog [data-entry-type=income] .entry-types label:has(input:checked){color:var(--green)}
 .entry-dialog [data-entry-type=income] .entry-types input:checked{border-color:var(--green);background:var(--green)}
 .entry-types label:has(input:disabled){opacity:.5;cursor:default}
+#planning-dialog .entry-types{justify-content:flex-start;gap:28px}
+#planning-form[data-entry-type=income] .planning-entry-category{grid-column:1/-1}
 .entry-dialog input:focus-visible,.entry-dialog select:focus-visible,.entry-dialog button:focus-visible{outline:2px solid var(--orange);outline-offset:3px}
 .entry-body{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding:2px 5px 2px 2px;margin:0 -5px 0 -2px}
 .entry-fields{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}

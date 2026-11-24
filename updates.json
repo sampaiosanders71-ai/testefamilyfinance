@@ -1,23 +1,23 @@
 {
-  "version": "2.9.45",
+  "version": "2.9.46",
   "publishedAt": "24/11/2026",
   "improvementCount": 2,
-  "title": "Frente do cartão conforme a prévia",
-  "summary": "Completa a aplicação da prévia aprovada na tela principal do cartão.",
+  "title": "Planejamentos com o novo padrão de formulário",
+  "summary": "Criar e editar planos agora segue a mesma organização visual dos novos lançamentos.",
   "highlights": [
     {
-      "title": "Resumo da fatura renovado",
-      "text": "Mês em linha separada, rótulo Total da fatura visível, valor em destaque e ações com cores sólidas e ícones."
+      "title": "Mesma interface de preenchimento",
+      "text": "A receber e A pagar no topo, campos compactos, data brasileira, centavos automáticos e ações acessíveis."
     },
     {
-      "title": "Gráfico com leitura mais limpa",
-      "text": "A seleção destaca uma barra e apresenta mês, valor e situação no resumo, sem repetir os valores sobre cada coluna."
+      "title": "Adaptado ao planejamento",
+      "text": "Preserva a data prevista, categorias por tipo, natureza das saídas e observações, nos temas claro e escuro."
     }
   ],
   "details": [
-    "O ícone do cartão volta ao cabeçalho e a faixa lateral antiga foi retirada.",
-    "Ver fatura permanece como acesso principal e o histórico continua discreto.",
-    "Limite disponível, nova compra, filtros e histórico de compras continuam acessíveis.",
-    "Mantém as novas telas internas da versão 2.9.44, a paginação de quatro registros e todas as regras financeiras existentes."
+    "No computador, Data prevista e Valor previsto ficam lado a lado; no celular, os campos seguem em uma coluna.",
+    "O cabeçalho foi simplificado e o formulário mantém o padrão de Cancelar, Salvar e fechar.",
+    "Criar ou editar uma previsão não movimenta o saldo. A efetivação do plano continua no fluxo existente.",
+    "Datas futuras, opções de categoria e natureza, histórico e restrições de edição continuam com as regras atuais."
   ]
 }

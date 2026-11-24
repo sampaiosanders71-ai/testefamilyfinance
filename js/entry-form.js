@@ -1,14 +1,15 @@
-import {moneyValue,setMoney} from './money-input.js?v=2.9.45';
-import {closeDialog} from './ui.js?v=2.9.45';
+import {moneyValue,setMoney} from './money-input.js?v=2.9.46';
+import {closeDialog} from './ui.js?v=2.9.46';
 
-// One entry point, with the existing cash and card purchase persistence paths.
+// Shared presentation, with the existing cash, card and planning persistence paths.
 // Drafts live only while switching a new entry between these two forms.
 export function initEntryForms({getCards,onNewTransaction,onNewPurchase,onPurchaseChange}){
  const cash=document.getElementById('transaction-form');
  const purchase=document.getElementById('purchase-form');
+ const planning=document.getElementById('planning-form');
  const byId=id=>document.getElementById(id);
  let switching=false,cashDraft=null,purchaseDraft=null;
- const dateInputs=[byId('transaction-date'),byId('purchase-date')];
+ const dateInputs=[byId('transaction-date'),byId('purchase-date'),byId('planning-date')];
 
  function syncDates(){
   for(const input of dateInputs){
@@ -39,6 +40,10 @@ export function initEntryForms({getCards,onNewTransaction,onNewPurchase,onPurcha
    radio.checked=radio.value==='card';
    radio.disabled=radio.value!=='card'&&!!byId('purchase-id').value;
   }
+  const planningDirection=byId('planning-direction').value;
+  planning.dataset.entryType=planningDirection==='1'?'income':'expense';
+  byId('planning-description').placeholder=planningDirection==='1'?'Ex.: Bolsa de estudos':'Ex.: Consulta, formatura';
+  for(const radio of planning.querySelectorAll('[data-entry-type]'))radio.checked=radio.value===planningDirection;
  }
  function fillCards(){
   const select=byId('purchase-card-select'),selected=byId('purchase-card-id').value;
@@ -50,6 +55,7 @@ export function initEntryForms({getCards,onNewTransaction,onNewPurchase,onPurcha
   byId('purchase-empty-cards').classList.toggle('hidden',!!cards.length||!!selected);
  }
  function beforeOpen(kind){
+  if(kind==='planning'){syncTypes();syncDates();return;}
   if(!switching){cashDraft=null;purchaseDraft=null;}
   if(kind==='purchase'){fillCards();onPurchaseChange();}
   byId('transaction-recurring-count').disabled=!!byId('transaction-id').value||!byId('transaction-recurring').checked;
@@ -132,6 +138,13 @@ export function initEntryForms({getCards,onNewTransaction,onNewPurchase,onPurcha
   byId('purchase-card-id').value=event.target.value;onPurchaseChange();
  });
  byId('transaction-direction').addEventListener('change',syncTypes);
+ planning.querySelector('.entry-types').addEventListener('change',event=>{
+  if(!event.target.matches('[data-entry-type]'))return;
+  const direction=byId('planning-direction');direction.value=event.target.value;
+  direction.dispatchEvent(new Event('change',{bubbles:true}));
+ });
+ byId('planning-direction').addEventListener('change',syncTypes);
+ planning.addEventListener('reset',()=>queueMicrotask(()=>{syncTypes();syncDates();}));
  byId('transaction-recurring').addEventListener('change',event=>{byId('transaction-recurring-count').disabled=!event.target.checked;});
  return{beforeOpen};
 }

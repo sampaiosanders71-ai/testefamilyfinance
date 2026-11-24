@@ -1,42 +1,42 @@
-import {initEntryForms} from './entry-form.js?v=2.9.45';
-import {moneyValue,setMoney,initMoneyInputs} from './money-input.js?v=2.9.45';
-import {GOAL_DEFAULT_ICON,goalAppearance,normalizeGoalIcon,nextGoalColor} from './goal-appearance.js?v=2.9.45';
-import {GOAL_ICON_OPTIONS,goalIconSVG} from './goal-icons.js?v=2.9.45';
-import { initTotalWorkspace } from './total-workspace.js?v=2.9.45';
-import { pagedList, recentRecords, clearListPages, revealListRecord } from './list-pagination.js?v=2.9.45';
-import { initCardsWorkspace,cardErrorMessage,showCardError } from './cards-workspace.js?v=2.9.45';
-import { adjustmentsAsInstallments,buildCardInvoices,cardToday,cardMonth } from './card-domain.js?v=2.9.45';
-import { formOperation, clearFormOperation } from './request-operation.js?v=2.9.45';
-import { canonicalCategoryName, canonicalCategoryAmounts, canonicalCategoryLimits } from './category-alias.js?v=2.9.45';
-import { spendingInPastMonths } from './budget-suggestion.js?v=2.9.45';
-import { signIn,signUp,signOut,getSession,onAuthChange } from './auth.js?v=2.9.45';
-import { ensureProfile,foundationHealthCheck } from './database.js?v=2.9.45';
-import { listFamilyData,sendFamilyInvite,respondFamilyInvite,cancelFamilyInvite,updateFamilyPermissions,removeFamilyLink,loadFamilyOverview,subscribeFamilyOverview,getFamilyAccess,familyAccessSignature } from './family.js?v=2.9.45';
-import { getLegacyMigrationStatus,claimLegacyAccount } from './migration.js?v=2.9.45';
-import { updateProfileSettings } from './settings.js?v=2.9.45';
-import { initPWA, activateAppUpdate } from './pwa.js?v=2.9.45';
-import { localISO,listTransactions,createTransaction,updateTransaction,deleteTransaction,applyBalanceAdjustment,calculateCashStats,filterTransactions } from './finance.js?v=2.9.45';
-import { listCards,createCard,updateCard,deleteCard,createPurchase,updatePurchase,deletePurchase,getPurchase,listPurchases,listInstallments,listInvoiceStatuses,setInvoicePaid,listCardPayments,listCardAdjustments,listCardReconciliations } from './cards.js?v=2.9.45';
-import { listGoals,createGoal,updateGoal,deleteGoal } from './goals.js?v=2.9.45';
-import { getBudget,listBudgetsByMonths,saveBudget,budgetSummary } from './budget.js?v=2.9.45';
-import { listCategories,activeCategories,createCategory,updateCategory,setCategoryActive,deleteCustomCategory,categoryIconSVG,normalizeCategoryIconKey,CATEGORY_ICON_OPTIONS,CATEGORY_COLOR_OPTIONS } from './categories.js?v=2.9.45';
-import { planningMonthKey,planningMonthDate,shiftPlanningMonth,planningMonthInput,planningLocalISO,listPlanningMonth,listPlanningByMonths,createPlanningItem,updatePlanningItem,cancelPlanningItem,completePlanningItem,movePlanningItem,movePendingPlanningMonth,planningNextMonthDate,planningStatusLabel,planningNature,summarizePlanning,summarizePlanningPeriod } from './planning-v18.js?v=2.9.45';
-import { listNotifications,markNotificationRead,markAllNotificationsRead,markNotificationsForTarget,syncFinancialNotifications,subscribeNotifications } from './notifications.js?v=2.9.45';
-import { setAuthMode,showAuth,showApp,showModule,setAuthError,setAuthBusy,setAppBusy,toast,setLoading,formatBRL,formatDate,monthLabel,escapeHTML,openDialog,closeDialog,setFormError,emptyState,applyTheme,captureDashboardMoneyState,prepareDashboardMoneyChange,playDashboardMoneyChange,settleDashboardMoneyChange } from './ui.js?v=2.9.45';
-import { getReportMonthOptions,downloadFinancialReportPDF } from './reports.js?v=2.9.45';
-import { beginDownloadMotion } from './download-motion-v16.js?v=2.9.45';
-import { familyMonthKey,familyDateFromMonth,shiftFamilyMonth,buildFamilyMonitorModel,filterFamilyTransactions,captureFamilyMetricState,animateFamilyMetricChange } from './family-monitor-v17.js?v=2.9.45';
-import { buildFinancialMonthLedger,isCardInvoicePayment,isCardInvoiceReversal,isCardPurchaseRefund,classifyTransaction } from './financial-ledger.js?v=2.9.45';
-import { needsLegacyReview, legacyReview, ownTransferReview } from './financial-integrity.js?v=2.9.45';
-import { downloadFinancialRowsCSV } from './report-export.js?v=2.9.45';
-import { suggestNature,natureLabel } from './transaction-nature.js?v=2.9.45';
-import { goalProgress, financialViewSummary } from './goal-integration.js?v=2.9.45';
-import { buildReservePosition } from './reserve-position.js?v=2.9.45';
-import { saveReserveReconciliation } from './reserve-reconciliation.js?v=2.9.45';
-import { analysisMonthKey,analysisMonthDate,shiftAnalysisMonth,yearMonthKeys,equivalentComparisonSpec,availableAnalysisYears,buildAnalysisPeriod,comparePeriodTotals,compareCategories,compareCards,aggregateBudgetComparison,strongestCategoryChanges,buildMonthlyInsights,buildYearInsights,groupCategoryRowsWithRemainder } from './analytics.js?v=2.9.45';
-import { buildDashboardOverview } from './dashboard-overview.js?v=2.9.45';
-import { buildDashboardCashView, buildDashboardCardView, paidInvoiceMonthsForPurchase } from './dashboard-cash.js?v=2.9.45';
-import { initUpdateCenter, promptAppUpdateIfNeeded } from './update-center.js?v=2.9.45';
+import {initEntryForms} from './entry-form.js?v=2.9.46';
+import {moneyValue,setMoney,initMoneyInputs} from './money-input.js?v=2.9.46';
+import {GOAL_DEFAULT_ICON,goalAppearance,normalizeGoalIcon,nextGoalColor} from './goal-appearance.js?v=2.9.46';
+import {GOAL_ICON_OPTIONS,goalIconSVG} from './goal-icons.js?v=2.9.46';
+import { initTotalWorkspace } from './total-workspace.js?v=2.9.46';
+import { pagedList, recentRecords, clearListPages, revealListRecord } from './list-pagination.js?v=2.9.46';
+import { initCardsWorkspace,cardErrorMessage,showCardError } from './cards-workspace.js?v=2.9.46';
+import { adjustmentsAsInstallments,buildCardInvoices,cardToday,cardMonth } from './card-domain.js?v=2.9.46';
+import { formOperation, clearFormOperation } from './request-operation.js?v=2.9.46';
+import { canonicalCategoryName, canonicalCategoryAmounts, canonicalCategoryLimits } from './category-alias.js?v=2.9.46';
+import { spendingInPastMonths } from './budget-suggestion.js?v=2.9.46';
+import { signIn,signUp,signOut,getSession,onAuthChange } from './auth.js?v=2.9.46';
+import { ensureProfile,foundationHealthCheck } from './database.js?v=2.9.46';
+import { listFamilyData,sendFamilyInvite,respondFamilyInvite,cancelFamilyInvite,updateFamilyPermissions,removeFamilyLink,loadFamilyOverview,subscribeFamilyOverview,getFamilyAccess,familyAccessSignature } from './family.js?v=2.9.46';
+import { getLegacyMigrationStatus,claimLegacyAccount } from './migration.js?v=2.9.46';
+import { updateProfileSettings } from './settings.js?v=2.9.46';
+import { initPWA, activateAppUpdate } from './pwa.js?v=2.9.46';
+import { localISO,listTransactions,createTransaction,updateTransaction,deleteTransaction,applyBalanceAdjustment,calculateCashStats,filterTransactions } from './finance.js?v=2.9.46';
+import { listCards,createCard,updateCard,deleteCard,createPurchase,updatePurchase,deletePurchase,getPurchase,listPurchases,listInstallments,listInvoiceStatuses,setInvoicePaid,listCardPayments,listCardAdjustments,listCardReconciliations } from './cards.js?v=2.9.46';
+import { listGoals,createGoal,updateGoal,deleteGoal } from './goals.js?v=2.9.46';
+import { getBudget,listBudgetsByMonths,saveBudget,budgetSummary } from './budget.js?v=2.9.46';
+import { listCategories,activeCategories,createCategory,updateCategory,setCategoryActive,deleteCustomCategory,categoryIconSVG,normalizeCategoryIconKey,CATEGORY_ICON_OPTIONS,CATEGORY_COLOR_OPTIONS } from './categories.js?v=2.9.46';
+import { planningMonthKey,planningMonthDate,shiftPlanningMonth,planningMonthInput,planningLocalISO,listPlanningMonth,listPlanningByMonths,createPlanningItem,updatePlanningItem,cancelPlanningItem,completePlanningItem,movePlanningItem,movePendingPlanningMonth,planningNextMonthDate,planningStatusLabel,planningNature,summarizePlanning,summarizePlanningPeriod } from './planning-v18.js?v=2.9.46';
+import { listNotifications,markNotificationRead,markAllNotificationsRead,markNotificationsForTarget,syncFinancialNotifications,subscribeNotifications } from './notifications.js?v=2.9.46';
+import { setAuthMode,showAuth,showApp,showModule,setAuthError,setAuthBusy,setAppBusy,toast,setLoading,formatBRL,formatDate,monthLabel,escapeHTML,openDialog,closeDialog,setFormError,emptyState,applyTheme,captureDashboardMoneyState,prepareDashboardMoneyChange,playDashboardMoneyChange,settleDashboardMoneyChange } from './ui.js?v=2.9.46';
+import { getReportMonthOptions,downloadFinancialReportPDF } from './reports.js?v=2.9.46';
+import { beginDownloadMotion } from './download-motion-v16.js?v=2.9.46';
+import { familyMonthKey,familyDateFromMonth,shiftFamilyMonth,buildFamilyMonitorModel,filterFamilyTransactions,captureFamilyMetricState,animateFamilyMetricChange } from './family-monitor-v17.js?v=2.9.46';
+import { buildFinancialMonthLedger,isCardInvoicePayment,isCardInvoiceReversal,isCardPurchaseRefund,classifyTransaction } from './financial-ledger.js?v=2.9.46';
+import { needsLegacyReview, legacyReview, ownTransferReview } from './financial-integrity.js?v=2.9.46';
+import { downloadFinancialRowsCSV } from './report-export.js?v=2.9.46';
+import { suggestNature,natureLabel } from './transaction-nature.js?v=2.9.46';
+import { goalProgress, financialViewSummary } from './goal-integration.js?v=2.9.46';
+import { buildReservePosition } from './reserve-position.js?v=2.9.46';
+import { saveReserveReconciliation } from './reserve-reconciliation.js?v=2.9.46';
+import { analysisMonthKey,analysisMonthDate,shiftAnalysisMonth,yearMonthKeys,equivalentComparisonSpec,availableAnalysisYears,buildAnalysisPeriod,comparePeriodTotals,compareCategories,compareCards,aggregateBudgetComparison,strongestCategoryChanges,buildMonthlyInsights,buildYearInsights,groupCategoryRowsWithRemainder } from './analytics.js?v=2.9.46';
+import { buildDashboardOverview } from './dashboard-overview.js?v=2.9.46';
+import { buildDashboardCashView, buildDashboardCardView, paidInvoiceMonthsForPurchase } from './dashboard-cash.js?v=2.9.46';
+import { initUpdateCenter, promptAppUpdateIfNeeded } from './update-center.js?v=2.9.46';
 
 initMoneyInputs();
 let authMode='login', authBusy=false, appActionBusy=false, reportDownloadBusy=false, enterAppPromise=null, refreshBusy=false, bootstrapGeneration=0, notificationChannel=null, familyMonitorChannel=null;
@@ -715,8 +715,8 @@ async function loadPlanningMonth(date=planningDate,{quiet=false}={}){
   planningDate=planningMonthDate(date);budgetDate=new Date(planningDate);if(!quiet)setLoading(true);try{const [items,budget]=await Promise.all([listPlanningMonth(planningDate),getBudget(budgetDate)]);planningItems=items;state.budget=budget;if(planningSameMonth(planningDate,dashboardDate)){state.planning=planningItems;renderPlanningHome()}renderBudget();renderPlanning()}finally{if(!quiet)setLoading(false)}
 }
 function updatePlanningNatureVisibility(){const income=Number(document.getElementById('planning-direction').value)>0;const wrap=document.getElementById('planning-nature-wrap');if(wrap)wrap.classList.toggle('hidden',income);if(income)document.getElementById('planning-nature').value='consumption';}
-function openNewPlanning(){const form=document.getElementById('planning-form');form.reset();document.getElementById('planning-id').value='';document.getElementById('planning-dialog-title').textContent='Novo item';document.getElementById('planning-date').value=planningDefaultDate();updatePlanningNatureVisibility();fillCategorySelect('planning-category','',categoryKindFromDirection(document.getElementById('planning-direction').value));setFormError('planning-form-error','');openDialog('planning-dialog')}
-function openEditPlanning(id){const item=planningItems.find(row=>row.id===id);if(!item||item.status!=='pending')return;document.getElementById('planning-id').value=item.id;document.getElementById('planning-dialog-title').textContent='Editar item';document.getElementById('planning-direction').value=String(item.direction);document.getElementById('planning-description').value=item.description||'';setMoney('planning-amount',item.amount||'');document.getElementById('planning-date').value=item.planned_on;document.getElementById('planning-nature').value=planningNature(item)==='income'?'consumption':planningNature(item);updatePlanningNatureVisibility();fillCategorySelect('planning-category',item.category||'Outros',categoryKindFromDirection(item.direction));document.getElementById('planning-notes').value=item.notes||'';setFormError('planning-form-error','');openDialog('planning-dialog')}
+function openNewPlanning(){const form=document.getElementById('planning-form');form.reset();document.getElementById('planning-id').value='';document.getElementById('planning-dialog-title').textContent='Novo plano';document.getElementById('planning-date').value=planningDefaultDate();updatePlanningNatureVisibility();fillCategorySelect('planning-category','',categoryKindFromDirection(document.getElementById('planning-direction').value));setFormError('planning-form-error','');entryForms?.beforeOpen('planning');openDialog('planning-dialog')}
+function openEditPlanning(id){const item=planningItems.find(row=>row.id===id);if(!item||item.status!=='pending')return;document.getElementById('planning-id').value=item.id;document.getElementById('planning-dialog-title').textContent='Editar plano';document.getElementById('planning-direction').value=String(item.direction);document.getElementById('planning-description').value=item.description||'';setMoney('planning-amount',item.amount||'');document.getElementById('planning-date').value=item.planned_on;document.getElementById('planning-nature').value=planningNature(item)==='income'?'consumption':planningNature(item);updatePlanningNatureVisibility();fillCategorySelect('planning-category',item.category||'Outros',categoryKindFromDirection(item.direction));document.getElementById('planning-notes').value=item.notes||'';setFormError('planning-form-error','');entryForms?.beforeOpen('planning');openDialog('planning-dialog')}
 async function onPlanningSubmit(event){event.preventDefault();const submittedForm=event.currentTarget;const btn=document.getElementById('planning-save-btn');setButtonBusy(btn,true);setFormError('planning-form-error','');try{const id=document.getElementById('planning-id').value;const input={direction:Number(document.getElementById('planning-direction').value),description:document.getElementById('planning-description').value,amount:Number(moneyValue('planning-amount')),date:document.getElementById('planning-date').value,category:document.getElementById('planning-category').value,financialNature:Number(document.getElementById('planning-direction').value)>0?'income':document.getElementById('planning-nature').value,notes:document.getElementById('planning-notes').value};if(!input.description.trim()||!input.date||input.amount<=0)throw new Error('Preencha descrição, data prevista e um valor maior que zero.');if(!input.category)throw new Error('Ative ou crie uma categoria em Configurações > Categorias antes de salvar.');await runAppOperation(id?'Atualizando planejamento…':'Salvando planejamento…','Guardando esta previsão sem alterar seus lançamentos reais.',async()=>{if(id)await updatePlanningItem(id,input);else await createPlanningItem({...input,operation:formOperation(submittedForm,input)});closeDialog('planning-dialog');await loadPlanningMonth(planningDate,{quiet:true});toast(id?'Item atualizado.':'Item adicionado ao planejamento.','success')})}catch(error){console.error(error);setFormError('planning-form-error',error?.message||'Não foi possível salvar este item.')}finally{setButtonBusy(btn,false)}}
 async function setPlanningMonth(date){if(appActionBusy)return;await runAppOperation('Carregando planejamento…',`Buscando as previsões de ${monthLabel(date)}.`,async()=>{await loadPlanningMonth(date,{quiet:true})})}
 async function completePlanningAction(id){const item=planningItems.find(row=>row.id===id);if(!item||item.status!=='pending')return;const isIncome=Number(item.direction)>0,nature=planningNature(item),verb=isIncome?'recebido':nature==='allocation'?'reservado':'pago';if(!confirm(`Marcar ${item.description} como ${verb} hoje e registrar ${isIncome?'uma receita':nature==='allocation'?'uma reserva':nature==='transfer'?'uma transferência':'uma despesa'} de ${formatBRL(item.amount)}?`))return;await runAppOperation(isIncome?'Registrando recebimento…':'Registrando pagamento…',`Criando o lançamento real com a data de hoje e concluindo o item do planejamento.`,async()=>{await completePlanningItem(id,planningLocalISO(new Date()),nature);await refreshAll();await loadPlanningMonth(planningDate,{quiet:true});toast(isIncome?'Recebimento registrado.':'Pagamento registrado.','success')},{animateDashboard:true})}
