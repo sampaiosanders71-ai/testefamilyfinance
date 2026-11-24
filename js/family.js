@@ -1,8 +1,8 @@
-import {adjustmentsAsInstallments} from './card-domain.js?v=2.9.44';
-import { listAllRows } from './pagination.js?v=2.9.44';
-import { supabase } from './supabase.js?v=2.9.44';
-import { getCurrentUser } from './database.js?v=2.9.44';
-import { monthISO } from './finance.js?v=2.9.44';
+import {adjustmentsAsInstallments} from './card-domain.js?v=2.9.45';
+import { listAllRows } from './pagination.js?v=2.9.45';
+import { supabase } from './supabase.js?v=2.9.45';
+import { getCurrentUser } from './database.js?v=2.9.45';
+import { monthISO } from './finance.js?v=2.9.45';
 
 export async function listFamilyData() {
   const user = await getCurrentUser();

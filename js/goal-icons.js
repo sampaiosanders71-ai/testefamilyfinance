@@ -1,5 +1,5 @@
-import {CATEGORY_ICON_OPTIONS,categoryIconSVG} from './categories.js?v=2.9.44';
-import {GOAL_DEFAULT_ICON,normalizeGoalIcon} from './goal-appearance.js?v=2.9.44';
+import {CATEGORY_ICON_OPTIONS,categoryIconSVG} from './categories.js?v=2.9.45';
+import {GOAL_DEFAULT_ICON,normalizeGoalIcon} from './goal-appearance.js?v=2.9.45';
 
 export const GOAL_ICON_OPTIONS=[[GOAL_DEFAULT_ICON,'Meta'],...CATEGORY_ICON_OPTIONS];
 export function goalIconSVG(value){

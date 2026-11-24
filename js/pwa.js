@@ -1,4 +1,4 @@
-import { APP_VERSION } from './version.js?v=2.9.44';
+import { APP_VERSION } from './version.js?v=2.9.45';
 
 let deferredInstallPrompt=null;
 let registrationRef=null;
