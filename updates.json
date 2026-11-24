@@ -1,18 +1,27 @@
 {
-  "version": "2.9.42",
-  "publishedAt": "12/11/2026",
-  "improvementCount": 1,
-  "title": "Instalação do teste separada do oficial",
-  "summary": "O app de teste ganha uma identidade de instalação própria, mantendo o nome, o ícone e a paleta.",
+  "version": "2.9.43",
+  "publishedAt": "24/11/2026",
+  "improvementCount": 3,
+  "title": "Novo lançamento mais simples",
+  "summary": "Formulário reorganizado para celular e computador, com Receita, Despesa e Cartão no topo.",
   "highlights": [
     {
-      "title": "Cada link com seu aplicativo",
-      "text": "A identidade do teste e seu endereço de abertura ficam separados do oficial."
+      "title": "Escolha o tipo no topo",
+      "text": "Receita, Despesa e Cartão reunidos, com opções agrupadas à esquerda no computador."
+    },
+    {
+      "title": "Preenchimento mais organizado",
+      "text": "Campos compactos, data brasileira, centavos automáticos e ações sempre acessíveis."
+    },
+    {
+      "title": "Suas regras preservadas",
+      "text": "Categorias, natureza, metas e recorrência continuam disponíveis. Compras seguem o fluxo de faturas e parcelamento."
     }
   ],
   "details": [
-    "Se instalou o teste antes desta correção, desinstale somente esse app e instale novamente pelo link de teste, no navegador. A instalação antiga conserva a identidade compartilhada.",
-    "O link oficial deve abrir no navegador enquanto apenas o teste estiver instalado.",
-    "Essa correção não altera seus lançamentos."
+    "No celular, os campos aparecem em uma coluna; no computador, Data e Valor ficam lado a lado.",
+    "A descrição, o valor e a data acompanham a troca entre lançamento e compra antes de salvar.",
+    "A opção Cartão usa os cartões cadastrados e registra a compra na fatura, sem descontar o saldo da conta antecipadamente.",
+    "Compras com histórico protegido mantêm as regras de edição. A atualização não modifica registros existentes."
   ]
 }

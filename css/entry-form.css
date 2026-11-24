@@ -1,0 +1,69 @@
+/* Approved entry form: the same surfaces and tokens in both app themes. */
+.entry-dialog{width:min(650px,calc(100vw - 28px));max-height:calc(100dvh - 28px);overflow:visible}
+.entry-dialog .modal-card{display:flex;flex-direction:column;width:100%;max-height:calc(100dvh - 28px);overflow:hidden;padding:24px;border:1px solid var(--line);border-radius:22px;background:var(--surface);color:var(--text)}
+.entry-dialog .modal-head{flex:none;align-items:center;gap:12px;margin:0 0 16px}
+.entry-dialog .modal-head h3{font-size:1.35rem;line-height:1.3;margin:0}
+.entry-dialog .modal-close{flex:none;display:grid;place-items:center;width:40px;height:40px;border:0;background:transparent;color:var(--muted);font-size:1.7rem}
+.entry-types{display:flex;flex:none;justify-content:flex-start;align-items:center;gap:28px;margin:0 0 20px;padding:0;border:0;min-width:0}
+.entry-types legend{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.entry-types label{display:flex;align-items:center;gap:8px;min-height:40px;font-size:.95rem;cursor:pointer;color:var(--text)}
+.entry-types input[type=radio]{appearance:none;flex:none;width:20px;height:20px;margin:0;border:2px solid var(--muted);border-radius:50%;background:transparent}
+.entry-types input[type=radio]:checked{border-color:var(--orange);background:var(--orange);box-shadow:inset 0 0 0 3px var(--surface)}
+.entry-types label:has(input:checked){color:var(--orange);font-weight:600}
+.entry-dialog [data-entry-type=income] .entry-types label:has(input:checked){color:var(--green)}
+.entry-dialog [data-entry-type=income] .entry-types input:checked{border-color:var(--green);background:var(--green)}
+.entry-types label:has(input:disabled){opacity:.5;cursor:default}
+.entry-dialog input:focus-visible,.entry-dialog select:focus-visible,.entry-dialog button:focus-visible{outline:2px solid var(--orange);outline-offset:3px}
+.entry-body{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding:2px 5px 2px 2px;margin:0 -5px 0 -2px}
+.entry-fields{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.entry-fields>.field,.entry-fields .field{margin:0;min-width:0;gap:7px}
+.entry-fields .field label{font-size:.86rem;font-weight:600;line-height:1.4}
+.entry-fields .field input,.entry-fields .field select{min-width:0;min-height:45px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface2);color:var(--text);font-size:1rem;box-shadow:none}
+.entry-fields .field select{overflow:hidden;text-overflow:ellipsis}
+.entry-fields .field input::placeholder{color:var(--muted);opacity:1}
+.entry-fields .field input:focus,.entry-fields .field select:focus{border-color:var(--orange)}
+.entry-field-date{grid-column:1;grid-row:1}
+.entry-field-description{grid-column:1/-1;grid-row:2}
+.entry-field-amount{grid-column:2;grid-row:1}
+.entry-field-wide{grid-column:1/-1}
+.entry-fields #transaction-nature-wrap{margin-top:0}
+.entry-fields .money-control{border-radius:10px;background:var(--surface2)}
+.entry-fields .money-prefix{font-size:1rem;color:var(--text)}
+.entry-fields .money-control input.money-input{min-height:43px}
+.entry-date-control{position:relative;display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:45px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface2);font-size:1rem;line-height:1.4}
+.entry-date-control>.ui-icon{flex:none;width:18px;height:18px;color:var(--muted)}
+.entry-fields .entry-date-control>input[type=date]{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer}
+.entry-date-control:focus-within{outline:2px solid var(--orange);outline-offset:3px}
+.entry-date-control:has(input:disabled){opacity:.65}
+.entry-fields .check-row{min-height:40px;padding:4px 0;font-size:.9rem;line-height:1.4;color:var(--text)}
+.entry-fields .check-row input[type=checkbox]{width:19px;height:19px;margin:0}
+.entry-fields #recurring-fields{display:grid;gap:12px}
+.entry-fields .transaction-goal-option{padding:0;border:0;background:transparent}
+.entry-fields .transaction-goal-option>.field{margin-top:8px}
+.entry-fields .nature-hint{font-size:.76rem;line-height:1.5;margin:0;color:var(--muted)}
+.entry-fields .nature-hint.suggested{color:var(--orange2)}
+.entry-fields .purchase-summary{margin:0;color:var(--muted);font-size:.76rem;line-height:1.5}
+.entry-fields .card-lock-note{margin:0}
+.entry-dialog .form-error{flex:none;font-size:.8rem;line-height:1.4;margin:14px 0 0}
+.entry-dialog .modal-actions{position:static;flex:none;display:flex;justify-content:flex-end;gap:12px;padding:16px 0 0;margin:4px 0 0;background:var(--surface)}
+.entry-dialog .modal-actions>button{min-height:45px;padding:11px 20px;border-radius:11px;font-size:.93rem}
+.entry-dialog .modal-actions>.secondary-btn{background:var(--surface2);border:1px solid var(--line);color:var(--text)}
+.entry-dialog .modal-actions>.primary-compact{background:var(--orange);color:#211305;box-shadow:none}
+.entry-dialog .modal-actions>.primary-compact:hover{background:var(--orange2)}
+.entry-dialog .field input:disabled,.entry-dialog .field select:disabled{opacity:.65}
+@media(max-width:600px){
+ .entry-dialog{width:calc(100vw - 24px);max-height:calc(100dvh - 24px)}
+ .entry-dialog .modal-card{max-height:calc(100dvh - 24px);padding:20px;border-radius:20px}
+ .entry-dialog .modal-head{margin-bottom:12px}
+ .entry-dialog .modal-head h3{font-size:1.2rem}
+ .entry-types{justify-content:space-between;gap:8px;margin-bottom:18px}
+ .entry-types label{font-size:.9rem;gap:7px}
+ .entry-fields{grid-template-columns:minmax(0,1fr);gap:15px}
+ .entry-field-date,.entry-field-description,.entry-field-amount,.entry-field-wide{grid-column:1;grid-row:auto}
+ .entry-dialog .modal-actions>button{flex:1;min-height:44px;padding:10px 14px}
+}
+@media(max-width:360px){
+ .entry-dialog .modal-card{padding:16px}
+ .entry-types{gap:5px}
+ .entry-types label{font-size:.85rem;gap:5px}
+}

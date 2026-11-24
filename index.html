@@ -19,29 +19,30 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@700;800&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
-<link href="css/app.css?v=2.9.42" rel="stylesheet"><link href="css/nature.css?v=2.9.42" rel="stylesheet">
-<link href="css/motion-v15.css?v=2.9.42" rel="stylesheet">
-<link href="css/download-motion-v16.css?v=2.9.42" rel="stylesheet">
-<link href="css/family-monitor-v17.css?v=2.9.42" rel="stylesheet"/>
-<link href="css/planning-v18.css?v=2.9.42" rel="stylesheet"/>
-<link href="css/categories-budget.css?v=2.9.42" rel="stylesheet"/>
-<link href="css/context-help.css?v=2.9.42" rel="stylesheet"/>
-<link href="css/dashboard-v29.css?v=2.9.42" rel="stylesheet"/>
-<link rel="stylesheet" href="./css/financial-view-293.css?v=2.9.42"/><link rel="stylesheet" href="./css/reserve-299.css?v=2.9.42"/><link rel="stylesheet" href="./css/ui-295.css?v=2.9.42"/>
-<link href="css/report-export.css?v=2.9.42" rel="stylesheet"/>
-<link href="css/cards-workspace.css?v=2.9.42" rel="stylesheet"/>
-<link rel="stylesheet" href="css/analytics-redesign.css?v=2.9.42"/>
-<link rel="stylesheet" href="css/family-pagination.css?v=2.9.42"/>
-<link rel="stylesheet" href="css/brand.css?v=2.9.42"/>
-<link rel="stylesheet" href="css/total-details.css?v=2.9.42"/>
-<link rel="stylesheet" href="css/invoice-workspace.css?v=2.9.42"/>
-<link rel="stylesheet" href="css/cards-refresh.css?v=2.9.42"/>
-<link rel="stylesheet" href="css/interfaces-2931.css?v=2.9.42"/>
-<link rel="stylesheet" href="css/transactions-refresh.css?v=2.9.42"/>
-<link rel="stylesheet" href="css/home-summaries.css?v=2.9.42"/>
-<link rel="stylesheet" href="css/home-transactions.css?v=2.9.42"/>
-<link rel="stylesheet" href="css/limits-refresh.css?v=2.9.42"/>
-<link rel="stylesheet" href="css/money-payment.css?v=2.9.42"/>
+<link href="css/app.css?v=2.9.43" rel="stylesheet"><link href="css/nature.css?v=2.9.43" rel="stylesheet">
+<link href="css/motion-v15.css?v=2.9.43" rel="stylesheet">
+<link href="css/download-motion-v16.css?v=2.9.43" rel="stylesheet">
+<link href="css/family-monitor-v17.css?v=2.9.43" rel="stylesheet"/>
+<link href="css/planning-v18.css?v=2.9.43" rel="stylesheet"/>
+<link href="css/categories-budget.css?v=2.9.43" rel="stylesheet"/>
+<link href="css/context-help.css?v=2.9.43" rel="stylesheet"/>
+<link href="css/dashboard-v29.css?v=2.9.43" rel="stylesheet"/>
+<link rel="stylesheet" href="./css/financial-view-293.css?v=2.9.43"/><link rel="stylesheet" href="./css/reserve-299.css?v=2.9.43"/><link rel="stylesheet" href="./css/ui-295.css?v=2.9.43"/>
+<link href="css/report-export.css?v=2.9.43" rel="stylesheet"/>
+<link href="css/cards-workspace.css?v=2.9.43" rel="stylesheet"/>
+<link rel="stylesheet" href="css/analytics-redesign.css?v=2.9.43"/>
+<link rel="stylesheet" href="css/family-pagination.css?v=2.9.43"/>
+<link rel="stylesheet" href="css/brand.css?v=2.9.43"/>
+<link rel="stylesheet" href="css/total-details.css?v=2.9.43"/>
+<link rel="stylesheet" href="css/invoice-workspace.css?v=2.9.43"/>
+<link rel="stylesheet" href="css/cards-refresh.css?v=2.9.43"/>
+<link rel="stylesheet" href="css/interfaces-2931.css?v=2.9.43"/>
+<link rel="stylesheet" href="css/transactions-refresh.css?v=2.9.43"/>
+<link rel="stylesheet" href="css/home-summaries.css?v=2.9.43"/>
+<link rel="stylesheet" href="css/home-transactions.css?v=2.9.43"/>
+<link rel="stylesheet" href="css/limits-refresh.css?v=2.9.43"/>
+<link rel="stylesheet" href="css/money-payment.css?v=2.9.43"/>
+<link rel="stylesheet" href="css/entry-form.css?v=2.9.43"/>
 </head>
 <body>
 <svg aria-hidden="true" class="icon-sprite" focusable="false">
@@ -414,7 +415,7 @@
 <p class="muted settings-help" id="pwa-install-status">Verificando compatibilidade de instalação…</p>
 <div class="settings-inline-note"><strong>Dica:</strong><span>Depois de instalado, o Family Finance pode ser aberto direto pela tela inicial ou pelo menu de aplicativos.</span></div>
 <div class="settings-update-grid">
-<div class="settings-update-version"><span>Versão instalada</span><strong id="install-current-version">2.9.42</strong></div>
+<div class="settings-update-version"><span>Versão instalada</span><strong id="install-current-version">2.9.43</strong></div>
 <div class="settings-update-version"><span>Versão disponível</span><strong id="install-available-version">Verificando…</strong></div>
 </div>
 <div class="settings-update-state"><span class="status-pill" id="install-update-status">Verificando atualizações…</span></div>
@@ -480,21 +481,26 @@
 <button class="mobile-nav-item" data-module="goals"><span class="mobile-nav-icon"><svg aria-hidden="true" class="ui-icon"><use href="#i-target"></use></svg></span><small>Metas</small></button>
 <button class="mobile-nav-item" id="mobile-more-btn"><span class="mobile-nav-icon"><svg aria-hidden="true" class="ui-icon"><use href="#i-more"></use></svg></span><small>Mais</small></button>
 </nav>
-<dialog class="modal" id="transaction-dialog">
+<dialog class="modal entry-dialog" id="transaction-dialog" aria-labelledby="transaction-dialog-title">
 <form class="modal-card" id="transaction-form" method="dialog">
-<div class="modal-head"><div><span class="eyebrow">LANÇAMENTO</span><h3 id="transaction-dialog-title">Novo lançamento</h3></div><button class="modal-close" data-close-dialog="transaction-dialog" type="button">×</button></div>
+<div class="modal-head"><h3 id="transaction-dialog-title">Novo lançamento</h3><button class="modal-close" data-close-dialog="transaction-dialog" type="button" aria-label="Fechar lançamento">×</button></div>
 <input id="transaction-id" type="hidden"/>
-<div class="form-grid two"><div class="field"><label for="transaction-direction">Tipo</label><select id="transaction-direction"><option value="1">Receita</option><option value="-1">Despesa</option></select></div><div class="field"><label for="transaction-date">Data</label><input id="transaction-date" required="" type="date"/></div></div>
-<div class="field"><label for="transaction-description">Descrição</label><input id="transaction-description" maxlength="120" placeholder="Ex: Salário" required="" type="text"/></div>
-<div class="form-grid two"><div class="field"><label for="transaction-amount">Valor</label><input id="transaction-amount" min="0.01" required="" step="0.01" type="text" data-money=""/></div><div class="field"><label for="transaction-category">Categoria</label><select id="transaction-category"></select></div></div>
-<div class="field" id="transaction-nature-wrap"><label for="transaction-nature">Natureza do lançamento</label><select id="transaction-nature"><option value="consumption">Despesa de consumo</option><option value="allocation">Reserva / Investimento</option><option value="transfer">Transferência entre contas próprias</option><option value="resgate">Resgate de reserva ou investimento</option><option value="income">Receita</option></select><p id="transaction-nature-suggestion" class="nature-hint" aria-live="polite">A classificação define como o valor aparece nos relatórios.</p></div>
-<div class="transaction-goal-option hidden" id="transaction-goal-wrap">
+<select id="transaction-direction" hidden aria-hidden="true" tabindex="-1"><option value="1">Receita</option><option value="-1">Despesa</option></select>
+<fieldset class="entry-types"><legend>Tipo de lançamento</legend><label><input type="radio" name="transaction-entry-type" value="1" data-entry-type checked/>Receita</label><label><input type="radio" name="transaction-entry-type" value="-1" data-entry-type/>Despesa</label><label><input type="radio" name="transaction-entry-type" value="card" data-entry-type/>Cartão</label></fieldset>
+<div class="entry-body"><div class="entry-fields">
+<div class="field entry-field-date"><label for="transaction-date">Data</label><input id="transaction-date" required type="date" lang="pt-BR"/></div>
+<div class="field entry-field-description"><label for="transaction-description">Descrição</label><input id="transaction-description" maxlength="120" placeholder="Ex.: Salário" required type="text"/></div>
+<div class="field entry-field-amount"><label for="transaction-amount">Valor</label><input id="transaction-amount" min="0.01" required step="0.01" type="text" data-money=""/></div>
+<div class="field"><label for="transaction-category">Categoria</label><select id="transaction-category"></select></div>
+<div class="field" id="transaction-nature-wrap"><label for="transaction-nature">Natureza do lançamento</label><select id="transaction-nature"><option value="consumption">Despesa de consumo</option><option value="allocation">Reserva / Investimento</option><option value="transfer">Transferência entre contas próprias</option><option value="resgate">Resgate de reserva ou investimento</option><option value="income">Receita</option></select><p id="transaction-nature-suggestion" class="nature-hint hidden" aria-live="polite"></p></div>
+<div class="transaction-goal-option entry-field-wide hidden" id="transaction-goal-wrap">
 <label class="check-row"><input type="checkbox" id="transaction-goal-link"/><span>Vincular a uma meta <small class="goal-option-note">(opcional)</small></span></label>
 <div class="field hidden" id="transaction-goal-picker"><label for="transaction-goal-id">Selecione a meta</label><select id="transaction-goal-id"></select><p class="nature-hint">O aporte aumenta a meta e um resgate vinculado a reduz, respeitando a data do lançamento.</p></div>
 </div>
-<div class="field"><label for="transaction-notes">Observação</label><input id="transaction-notes" maxlength="500" placeholder="Opcional" type="text"/></div>
-<div id="recurring-fields"><label class="check-row"><input id="transaction-recurring" type="checkbox"/><span>Repetir mensalmente</span></label><div class="field hidden" id="recurring-count-wrap"><label for="transaction-recurring-count">Quantidade de meses</label><input id="transaction-recurring-count" max="60" min="2" type="number" value="12"/></div></div>
-<p class="form-error hidden" id="transaction-form-error"></p>
+<div class="field entry-field-wide"><label for="transaction-notes">Observação</label><input id="transaction-notes" maxlength="500" placeholder="Opcional" type="text"/></div>
+<div id="recurring-fields" class="entry-field-wide"><label class="check-row"><input id="transaction-recurring" type="checkbox"/><span>Repetir mensalmente</span></label><div class="field hidden" id="recurring-count-wrap"><label for="transaction-recurring-count">Quantidade de meses</label><input id="transaction-recurring-count" max="60" min="2" type="number" value="12"/></div></div>
+</div></div>
+<p class="form-error hidden" id="transaction-form-error" role="alert"></p>
 <div class="modal-actions"><button class="secondary-btn" data-close-dialog="transaction-dialog" type="button">Cancelar</button><button class="primary-compact" id="transaction-save-btn" type="submit">Salvar</button></div>
 </form>
 </dialog>
@@ -522,17 +528,24 @@
 <div class="modal-actions"><button class="secondary-btn" data-close-dialog="card-dialog" type="button">Cancelar</button><button class="text-btn danger hidden" id="card-archive-btn" type="button">Arquivar cartão</button><button class="primary-compact" id="card-save-btn" type="submit">Salvar cartão</button></div>
 </form>
 </dialog>
-<dialog class="modal" id="purchase-dialog">
+<dialog class="modal entry-dialog" id="purchase-dialog" aria-labelledby="purchase-dialog-title">
 <form class="modal-card" id="purchase-form" method="dialog">
-<div class="modal-head"><div><span class="eyebrow">CARTÃO DE CRÉDITO</span><h3 id="purchase-dialog-title">Nova compra</h3></div><button class="modal-close" data-close-dialog="purchase-dialog" type="button">×</button></div>
-<input id="purchase-id" type="hidden"/><input id="purchase-card-id" type="hidden"/><p class="purchase-card-caption" id="purchase-card-caption"></p>
-<div class="field"><label for="purchase-description">Descrição</label><input id="purchase-description" maxlength="120" required="" type="text"/></div>
-<div class="form-grid two"><div class="field"><label for="purchase-total">Valor total</label><input id="purchase-total" min="0.01" required="" step="0.01" type="text" data-money=""/></div><div class="field"><label for="purchase-date">Data</label><input id="purchase-date" required="" type="date"/></div></div>
+<div class="modal-head"><h3 id="purchase-dialog-title">Novo lançamento</h3><button class="modal-close" data-close-dialog="purchase-dialog" type="button" aria-label="Fechar compra">×</button></div>
+<input id="purchase-id" type="hidden"/><input id="purchase-card-id" type="hidden"/><span id="purchase-card-caption" hidden></span>
+<fieldset class="entry-types"><legend>Tipo de lançamento</legend><label><input type="radio" name="purchase-entry-type" value="1" data-entry-type/>Receita</label><label><input type="radio" name="purchase-entry-type" value="-1" data-entry-type/>Despesa</label><label><input type="radio" name="purchase-entry-type" value="card" data-entry-type checked/>Cartão</label></fieldset>
+<div class="entry-body"><div class="entry-fields">
+<div class="field entry-field-date"><label for="purchase-date">Data</label><input id="purchase-date" required type="date" lang="pt-BR"/></div>
+<div class="field entry-field-description"><label for="purchase-description">Descrição</label><input id="purchase-description" maxlength="120" placeholder="Ex.: Compra no supermercado" required type="text"/></div>
+<div class="field entry-field-amount"><label for="purchase-total">Valor total</label><input id="purchase-total" min="0.01" required step="0.01" type="text" data-money=""/></div>
+<div class="field"><label for="purchase-card-select">Cartão</label><select id="purchase-card-select" required></select></div>
 <div class="field"><label for="purchase-category">Categoria</label><select id="purchase-category"></select></div>
-<div class="form-grid two"><div class="field"><label for="purchase-mode">Parcelamento</label><select id="purchase-mode"><option value="single">À vista</option><option value="installments">Parcelado</option></select></div><div class="field hidden" id="purchase-installments-wrap"><label for="purchase-installments">Número de parcelas</label><input id="purchase-installments" max="60" min="2" type="number" value="2"/></div></div>
-<p class="purchase-summary" id="purchase-summary" aria-live="polite"></p>
-<p class="card-lock-note hidden" id="purchase-financial-lock">Esta compra possui histórico financeiro protegido. Você pode corrigir descrição e categoria. Para valores, registre um ajuste ou estorno separado.</p><p class="form-error hidden" id="purchase-form-error"></p>
-<div class="modal-actions"><button class="secondary-btn" data-close-dialog="purchase-dialog" type="button">Cancelar</button><button class="primary-compact" id="purchase-save-btn" type="submit">Salvar compra</button></div>
+<p class="purchase-summary entry-field-wide hidden" id="purchase-empty-cards" role="status">Cadastre um cartão no módulo Cartões para registrar a compra.</p>
+<div class="field"><label for="purchase-mode">Parcelamento</label><select id="purchase-mode"><option value="single">À vista</option><option value="installments">Parcelado</option></select></div><div class="field hidden" id="purchase-installments-wrap"><label for="purchase-installments">Número de parcelas</label><input id="purchase-installments" max="60" min="2" type="number" value="2"/></div>
+<p class="purchase-summary entry-field-wide" id="purchase-summary" aria-live="polite"></p>
+<p class="card-lock-note entry-field-wide hidden" id="purchase-financial-lock">Esta compra possui histórico financeiro protegido. Você pode corrigir descrição e categoria. Para valores, registre um ajuste ou estorno separado.</p>
+</div></div>
+<p class="form-error hidden" id="purchase-form-error" role="alert"></p>
+<div class="modal-actions"><button class="secondary-btn" data-close-dialog="purchase-dialog" type="button">Cancelar</button><button class="primary-compact" id="purchase-save-btn" type="submit">Salvar</button></div>
 </form>
 </dialog>
 <dialog class="modal notification-center-dialog" id="notification-center-dialog">
@@ -742,7 +755,7 @@
 </div>
 </dialog>
 <dialog class="modal" id="reserve-dialog"><div class="modal-card reserve-dialog-card"><div class="modal-head"><div><span class="eyebrow">RESERVAS E INVESTIMENTOS</span><h3>Saldo guardado</h3></div><button class="modal-close" type="button" data-close-dialog="reserve-dialog" aria-label="Fechar">×</button></div><div id="reserve-detail-body"></div></div></dialog>
-<script defer src="js/context-help.js?v=2.9.42"></script><script src="js/app.js?v=2.9.42" type="module"></script>
+<script defer src="js/context-help.js?v=2.9.43"></script><script src="js/app.js?v=2.9.43" type="module"></script>
 <dialog class="modal" id="goal-history-dialog"><div class="modal-card"><div class="modal-head"><div><span class="eyebrow">META</span><h3 id="goal-history-title">Histórico</h3></div><button type="button" class="modal-close" data-close-dialog="goal-history-dialog" aria-label="Fechar">×</button></div><div id="goal-history-content"></div></div></dialog>
 <dialog id="total-detail-dialog" aria-labelledby="total-detail-title"><header class="total-detail-head"><div class="total-detail-heading"><span class="total-detail-main-icon" id="total-detail-icon" aria-hidden="true"></span><div><h2 id="total-detail-title" tabindex="-1">Composição do total</h2><p id="total-detail-subtitle"></p></div><button id="total-detail-close" type="button" aria-label="Fechar consulta">×</button></div><strong id="total-detail-value"></strong><p id="total-detail-note" role="status" hidden></p></header><div id="total-detail-rows"></div><footer class="total-detail-footer"><nav id="total-detail-nav" aria-label="Páginas da composição" hidden><button id="total-detail-previous" type="button">‹ Anterior</button><span id="total-detail-page" tabindex="-1" aria-live="polite" aria-atomic="true"></span><button id="total-detail-next" type="button">Próxima ›</button></nav><div class="total-detail-sum"><span>Total da composição</span><strong id="total-detail-sum"></strong></div></footer></dialog>
 </body>
